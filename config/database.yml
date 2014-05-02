@@ -29,6 +29,9 @@ test: &test
 production:
   <<: *default
   database: db/production.societo
+  username: root
+  password: 'S0c1Et0'
+  host: localhost
 
 cucumber:
   <<: *test
