@@ -38,31 +38,33 @@
 
 development:
   adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: db/test.societo
+  encoding: unicode
+  database: db/development.societo
   pool: 5
+  username: root
+  password: 'S0c1Et0'
   host: localhost
-# socket: /tmp/mysql.sock
- 
+
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
+test: &test
   adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: DeanIo_test
+  encoding: unicode
+  database: db/test.societo
   pool: 5
-  host: localhost
-# socket: /tmp/mysql.sock
- 
-production:
-  adapter: mysql2
-  encoding: utf8
-  reconnect: false
-  database: db/production.societo
-  pool: 5
-  host: localhost
   username: root
   password: 'S0c1Et0'
+  host: localhost
+
+production:
+  adapter: mysql2
+  encoding: unicode
+  database: production.societo
+  pool: 5
+  username: root
+  password: 'S0c1Et0'
+  host: localhost
+
+cucumber:
+  <<: *test
