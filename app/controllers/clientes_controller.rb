@@ -25,7 +25,7 @@ class ClientesController < ApplicationController
   # POST /clientes.json
   def create
     @cliente = Cliente.new(cliente_params)
-
+    
     respond_to do |format|
       if @cliente.save && cliente_aceitou_termo?
         format.html { redirect_to @cliente, notice: 'Cliente was successfully created.' }
