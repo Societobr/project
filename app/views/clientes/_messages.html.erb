@@ -1,0 +1,21 @@
+<div class="col-md-12" data-appear-animation="bounceInRight">
+	<div class="alert alert-warning fade in">
+		<a class="close" data-dismiss="alert" href="#">&times;</a> <strong>Todos os campos</strong> são obrigatórios para se filiar
+	</div>
+      
+	<div class="alert alert-success fade in">
+		<a class="close" data-dismiss="alert" href="#">&times;</a>O pagamento será realizado <strong>após</strong> o cadastro
+	</div>
+
+	<% if @cliente.errors.any? %>
+		<div class="alert alert-error fade in">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<strong>Os seguintes erros ocorreram:</strong>
+			<ul>
+	      		<% @cliente.errors.full_messages.each do |message| %>
+	        		<li><%= message %></li>
+	      		<% end %>
+	      	</ul>
+		</div>
+	<% end %>
+</div>

@@ -1,0 +1,49 @@
+<%= form_for @contato do |f| %>
+  
+  <% flash.each do |key, message| %>
+    <div class="col-md-12" data-appear-animation="bounceInRight">
+      <div class="alert alert-<%= key %> fade in">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <%= message %>
+        <% unless @contato.valid? %>
+          <% @contato.errors.full_messages.each do |erros| %>
+              <li><%= erros %></li>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    
+  <% end %>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-6 col-sm-6">
+        <%= f.text_field :nome, {id: "nome", class: "form-control input-lg", placeholder: "Nome*"} %>
+      </div>
+      <div class="col-md-6 col-sm-6">
+        <%= f.email_field :email, {id: "email", class: "form-control input-lg", placeholder: "Email*"} %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-12">
+        <%= f.text_field :assunto, {id: "subject", class: "form-control input-lg", placeholder: "Assunto"} %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-12">
+        <%= f.text_area :mensagem, {id: "mensagem", class: "form-control input-lg", placeholder: "Mensagem", cols: "8", rows: "6"} %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-12">
+        <%= f.submit "Enviar", {id: "enviar", class: "btn btn-primary btn-lg"} %>
+      </div>
+    </div>
+  </div>
+<% end %>
