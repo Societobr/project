@@ -12,9 +12,6 @@
  *
  *= require ./css/bootstrap
  *= require ./css/style
- *= require prettyPhoto
- *= require owl.carousel
- *= require owl.theme
  *= require settings
  *= require ./colors/green
  */
