@@ -19,7 +19,7 @@
         <%= f.email_field :email, {class: "form-control input-lg", placeholder: "Email"} %>
       </div>
       <div class="col-md-6">
-        <%= f.text_field :cpf, {class: "form-control input-lg", placeholder: "CPF"} %>
+        <%= f.text_field :cpf, {class: "form-control input-lg"} %>
       </div>
     </div>
   </div>
@@ -90,3 +90,5 @@
 <!-- Script abaixo toma os elementos dia, mês e ano (gerados por date_select) e os envolve com
   a classe que os deixam na mesma linha -->
 <script> $('select[id*="cliente_nascimento"]').wrap('<div class="col-md-2 col-sm-3 col-xs-4">');</script> 
+
+<script> $('#cliente_cpf').cadMask(); </script>
