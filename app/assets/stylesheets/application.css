@@ -15,4 +15,5 @@
  *= require settings
  *= require ./colors/green
  *= require font-awesome
+ *= require ./css/animations
  */
