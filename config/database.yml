@@ -59,7 +59,6 @@ test: &test
 
 production:
   adapter: mysql2
-  encoding: utf8_unicode_ci
   database: production.societo
   pool: 5
   username: root
