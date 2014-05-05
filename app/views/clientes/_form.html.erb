@@ -19,7 +19,7 @@
         <%= f.email_field :email, {class: "form-control input-lg", placeholder: "Email"} %>
       </div>
       <div class="col-md-6">
-        <%= f.text_field :cpf, {class: "form-control input-lg", placeholder: "CPF"} %>
+        <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-lg", placeholder: "CPF"} %>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
           {class: "form-control input-lg"}) %>
 
       <div class="col-md-6">
-        <%= f.text_field :telefone, {pattern: "[0-9]+", class: "form-control input-lg", placeholder: "Telefone"} %>
+        <%= f.text_field :telefone, {pattern: '^\([0-9]{2}\) [0-9]{4}-[0-9]{4}$', class: "form-control input-lg", placeholder: "Telefone"} %>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-3">
-        <%= f.text_field :cep, {pattern: "[0-9]+", class: "form-control input-lg", placeholder: "CEP"} %>
+        <%= f.text_field :cep, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-lg", placeholder: "CEP"} %>
       </div>
 
       <div class="col-md-3 col-sm-3 col-xs-4">
@@ -89,6 +89,13 @@
 
 <!-- Script abaixo toma os elementos dia, mês e ano (gerados por date_select) e os envolve com
   a classe que os deixam na mesma linha -->
-<script> $('select[id*="cliente_nascimento"]').wrap('<div class="col-md-2 col-sm-3 col-xs-4">');</script> 
+<script type="text/javascript">
+  $('select[id*="cliente_nascimento"]').wrap('<div class="col-md-2 col-sm-3 col-xs-4">');
+</script> 
 
-<script> $('#cliente_cpf').cadMask(); </script>
+<!-- Scripts abaixo criam máscara para formulário -->
+<script type="text/javascript">
+  $('#cliente_cpf').mask('999.999.999-99');
+  $('#cliente_telefone').mask('(99) 9999-9999');
+  $('#cliente_cep').mask('99.999-999');
+</script>

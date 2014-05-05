@@ -10,8 +10,8 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require ./js/jquery-2.0.0.min
 //= require jquery_ujs
 //= require turbolinks
-//= require jquery.cadmask
+//= require jquery.maskedinput.min
 //= require_tree .
