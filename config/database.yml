@@ -58,7 +58,7 @@ test: &test
   host: localhost
 
 production:
-  adapter: postgresql
+  adapter: mysql2
   encoding: utf8
   database: production.societo
   pool: 5
