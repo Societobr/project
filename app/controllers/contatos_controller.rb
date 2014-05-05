@@ -11,7 +11,7 @@ class ContatosController < ApplicationController
       ContactMailer.mensagem_contato(@contato).deliver
       flash[:success] = 'Sua mensagem foi recebida com sucesso. Obrigado!'
   	else
-  		flash[:error] = 'Não foi possível enviar sua mensagem.'
+  		flash[:error] = "<strong>Não foi possível enviar sua mensagem.</strong>#{lista_de_erros}"
     end
     redirect_to :action => 'new'
   end
@@ -21,5 +21,13 @@ class ContatosController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def contato_params
       params.require(:contato).permit(:nome, :email, :assunto, :mensagem)
+    end
+
+    def lista_de_erros
+      erros = ""
+      @contato.errors.full_messages.each do |erro|
+        erros = "#{erros}\n- #{erro}"
+      end
+      return erros
     end
 end
