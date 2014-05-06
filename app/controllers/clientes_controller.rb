@@ -5,6 +5,11 @@ class ClientesController < ApplicationController
   # GET /clientes.json
   def index
     @clientes = Cliente.all
+
+    respond_to do |format|
+      format.html # show index.html.erb
+      format.csv { send_data @clientes.to_csv }
+    end
   end
 
   # GET /clientes/1

@@ -13,4 +13,13 @@ class Cliente < ActiveRecord::Base
 	validates_exclusion_of :estado, :in => %w( Estado ), :message => message
 	validates_presence_of :cidade, :message => message
 	validates_presence_of :endereco, :message => message
+
+	def self.to_csv
+		CSV.generate do |csv|
+			csv << column_names
+			all.each do |cliente|
+				csv << cliente.attributes.values_at(*column_names)
+			end
+		end
+	end
 end

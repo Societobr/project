@@ -1,0 +1,96 @@
+<% content_for :head do %>
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title><%= full_title("Planos") %></title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+  <!-- Mobile Specific Metas
+    ================================================== -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <!-- CSS
+    ================================================== -->
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  </head>
+<% end %>
+
+<div class="main" role="main">
+  <div id="content" class="content page-content full">
+    <div class="pages" id="pricing">
+      <div class="padding-tb75 lgray-color">
+        <div class="container margin-30">
+          <div class="row">
+            <div class="pricing-table three-cols margin-0">
+
+              <div class="pricing-column ">
+                <h3>Mensal</h3>
+                <div class="pricing-column-content">
+                	<p></p>
+              	  <span class="interval"></span>
+                  <h4> <span class="dollar-sign">R$</span> 16,99 </h4>
+                  <span class="interval">Por Mês</span>
+                  <ul class="features">
+                    <li>Todos os Societos</li>
+                    <li>Plano <strong>mensal</strong></li>
+                    <li><strong>Débito automático</strong> via <strong>Pagseguro</strong></li>
+                    <li>Uso ilimitado</li>
+                    <li>Retorno do investimento logo nas primeiras utilizações</li>      
+                  </ul>
+                  <a class="btn btn-primary" href="#">Sign up now!</a> </div>
+              </div>
+              
+              <div class="pricing-column highlight accent-color">
+                <h3>Plano Anual<span class="highlight-reason">PROMOÇÃO</span></h3>
+                <div class="pricing-column-content">
+                	<p></p>
+                	<span class="interval">R$<strike>12,99</strike></span>
+                  <h4> <span class="dollar-sign">R$</span> 7,99 </h4>
+                  <span class="interval">Por Mês</span>
+                  <ul class="features">
+                    <li>Todos os Societos</li>
+                    <li>Plano de <Strong>12 meses</Strong></li>
+                    <li>Pagamento via <strong>Pagseguro</strong></li>
+                    <li>Uso ilimitado</li>
+                    <li>Retorno do investimento logo nas primeiras utilizações</li>    
+                  </ul>
+                  <a class="btn btn-primary" href="#">Sign up now!</a> </div>
+              </div>
+
+              <div class="pricing-column">
+                <h3>Plano Amigo</h3>
+                <div class="pricing-column-content">
+                	<p></p>
+                	<span class="interval">Em Breve</span>
+                  <h4> <span class="dollar-sign">R$</span> 19,99 </h4>
+                  <span class="interval">Por Mês</span>
+                  <ul class="features">
+                    <li>Todos os Societos</li>
+                    <li>Plano de <Strong>12 meses</Strong></li>
+                    <li>Pagamento via <strong>Pagseguro</strong></li>
+                    <li>Uso ilimitado</li>
+                    <li>Retorno do investimento logo nas primeiras utilizações</li>
+                    <li>Cadastro de <strong>dois CPFs</strong></li>
+                    <li>Economia de <Strong>33%</Strong> no segundo plano</li>  
+                    </ul>
+                  <a class="btn btn-primary" href="#">Sign up now!</a> </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+    
+    <div class="centro">
+    	<div class="col-md-12">
+        <%= link_to 'Cadastre-se', cadastre_se_path, class:"btn btn-default btn-lg" %>
+        </div>
+		</div>
+		
+  </div>
+</div>

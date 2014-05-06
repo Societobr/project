@@ -1,9 +1,13 @@
 Rails.application.routes.draw do
 
+  resources :planos
+
   root to: "clientes#new"
 
   match '/contato', to: 'contatos#new', via: 'get', as: :contatos
   match '/contato', to: 'contatos#create', via: 'post'
+  match '/nossos-planos',  to: 'planos#choose', via: 'get'
+  match '/cadastre-se', to: 'clientes#new', via: 'get'
 
   resources :clientes
 
