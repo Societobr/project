@@ -15,8 +15,5 @@
 /log/*.log
 /tmp
 
-# Ignonora onde as variáveis de sistema estão definidas para impedir que senhas e dados importantes sejam publicadas
-.env
-
-# Importante para garantir que o Heroku não receba um R11 - Bad Bind Error
-Procfile
+# Ignora o arquivo que leva as variáveis de sistema, as quais guardam senhas
+/config/application.yml

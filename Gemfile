@@ -39,7 +39,6 @@ end
 
 group :development, :test do
 	gem 'debugger'
-	gem 'foreman'
 end
 
 gem 'active_attr'
