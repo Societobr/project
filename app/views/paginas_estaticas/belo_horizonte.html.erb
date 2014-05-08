@@ -1,0 +1,77 @@
+<% content_for :head do %>
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title> <%= full_title "Belo Horizonte" %> </title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="author" content="">
+  <!-- Mobile Specific Metas
+    ================================================== -->
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <!-- CSS
+      ================================================== -->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <!-- SCRIPTS
+      ================================================== -->
+  </head>
+<% end %>
+
+<div class="main" role="main">
+  <div id="content" class="content full">
+    <div class="container padding-tb75">
+      <div class="row"> 
+        <header class="col-md-12">
+          <div class="form-group pull-left">
+            <select class="form-control">
+              <option>Default sorting</option>
+              <option>Sort by sales</option>
+              <option>Sort by popularity</option>
+              <option>Sort by sales</option>
+            </select>
+          </div>
+        </header>
+        <div class="clearfix"></div>
+        <div class="row">
+          <ul class="parceiros-lista col-md-3 col-sm-6 col-xs-12">
+            <li>
+            <div class="parceiro-item">
+					  <div class="parceiro-imagem"> <%= image_tag("haus.jpg", alt: "") %> </div>
+              <div class="parceiro-detalhes">
+                <h3><a href="#">Nome Nome Nome Nome</a></h3>
+                <span class="parceiro-endereco"><i class="fa fa-map-marker"></i> Rodovia BR356, NL 45/46 - Belvedere. MG Belo Horizonte 
+                <br><i class="fa fa-phone"></i> (31)1234-1234
+              </div>
+              <div class="selos">
+              	 <span class="box-sm box-font-sm grey">30%</span></a>
+             		 <span class="box-sm box-font-sm grey">40%</span>
+             		 <span class="box-sm box-font-sm grey">50%</span>
+             		 <span class="box-sm box-font-sm label-danger">Sex</span>
+             		 <span class="box-sm box-font-sm label-danger">Sab</span>
+             		 <span class="box-sm box-font-sm label-danger">Dom</span>
+            	 	 <span class="box-md box-font-lg grey"><i class="fa fa-users fa-lg"></i>   4</span>
+            	 	 <span class="box-sm box-font-lg grey fa fa-phone"></span>
+              </div>
+            </div>
+          </li>
+         </ul>           
+      </div>
+    </div>
+          <div class="col-md-6 col-md-offset-3"> 
+           <ul class="pagination pagination-lg">
+            <li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+          </ul>
+          </div>
+      </div>
+  </div>
+</div>

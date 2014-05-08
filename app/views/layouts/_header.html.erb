@@ -14,7 +14,7 @@
             <li> <%= link_to 'Filie-se', nossos_planos_path %></li>
             <li> <%= link_to '#' do %> Cidades <%= icon('angle-down') %> <% end %>
               <ul class="dropdown">
-                <li> <%= link_to 'Belo Horizonte', '#' %>
+                <li> <%= link_to 'Belo Horizonte', cidades_belo_horizonte_path %>
                     <ul class="dropdown">
                         <li> <%= link_to 'Societo Beer &amp; Wine', '#' %> </li>
                         <li> <%= link_to 'Societo Gourmet', '#' %> </li>
@@ -25,7 +25,7 @@
               </ul>
             </li>
             <li> <%= link_to 'Fale Conosco', contatos_path %> </li>
-            <li> <a href="page-faqs.html">FAQ </a> </li>
+            <li> <%= link_to 'FAQ', faq_path %> </li>
           </ul>
         </nav>
       </div>

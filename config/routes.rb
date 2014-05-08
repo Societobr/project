@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
 
-  resources :planos
+  root to: "paginas_estaticas#index"
 
-  root to: "clientes#new"
+  resources :clientes
 
   match '/contato', to: 'contatos#new', via: 'get', as: :contatos
   match '/contato', to: 'contatos#create', via: 'post'
-  match '/nossos-planos',  to: 'planos#choose', via: 'get'
   match '/cadastre-se', to: 'clientes#new', via: 'get'
-
-  resources :clientes
+  match '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte', via: 'get'
+  match '/nossos-planos',  to: 'paginas_estaticas#planos', via: 'get'
+  match '/faq', to: 'paginas_estaticas#faq', via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
