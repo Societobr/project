@@ -13,6 +13,7 @@
 //= require ./js/jquery-2.0.0.min
 //= require jquery.turbolinks
 //= require jquery_ujs
+//= require twitter/bootstrap
 //= require turbolinks
 //= require jquery.maskedinput.min
 //= require_tree .
