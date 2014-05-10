@@ -51,7 +51,9 @@ gem 'font-awesome-sass'
 
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+# Bootstrap para Rails
+gem 'twitter-bootstrap-rails', '~> 2.2.8'
 
 # Use unicorn as the app server
 # gem 'unicorn'

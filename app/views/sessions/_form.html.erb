@@ -1,0 +1,25 @@
+<%= form_tag sessions_path do %>
+	<div class="row">
+		<div class="form-group">
+		  <div class="col-md-4 col-sm-4">
+		    <%= text_field_tag :username, nil, {id: "username", name: 'session[username]', class: "form-control input-lg", placeholder: "Usuário*"} %>
+		  </div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group">
+			<div class="col-md-4 col-sm-4">
+				<%= password_field_tag :password, nil, {id: "password", name: 'session[password]', class: "form-control input-lg", placeholder: "Senha*"} %>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+	    <div class="form-group">
+	      <div class="col-md-12">
+	        <%= submit_tag "Entrar", {class: "btn btn-primary btn-lg"} %>
+	      </div>
+	    </div>
+  </div>
+<% end %>

@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
 
+  get 'signup', to: 'users#new', as: 'signup'
+  get 'login', to: 'sessions#new', as: 'login'
+  get 'logout', to: 'sessions#destroy', as: 'logout'
+
   root to: "paginas_estaticas#index"
 
   resources :clientes
+  resources :users
+  resources :sessions
 
   match '/contato', to: 'contatos#new', via: 'get', as: :contatos
   match '/contato', to: 'contatos#create', via: 'post'
