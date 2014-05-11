@@ -39,7 +39,7 @@ group :test do
 end
 
 group :development, :test do
-	gem 'debugger'
+	gem 'byebug', '~> 3.1.2'
 end
 # Permite a criação de recursos sem persistência de objetos como se eles existissem
 gem 'active_attr'
@@ -54,6 +54,9 @@ gem 'font-awesome-sass'
 gem 'bcrypt', '~> 3.1.7'
 # Bootstrap para Rails
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
+# Necessários para executar twitter-bootstrap
+gem "less-rails"
+gem "therubyracer"
 
 # Use unicorn as the app server
 # gem 'unicorn'
