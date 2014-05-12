@@ -3,7 +3,7 @@
   <!-- Basic Page Needs
     ================================================== -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> <%= full_title() %> </title>
+    <title><%= full_title "Parceiros" %></title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <!-- CSS
       ================================================== -->
-    <%= stylesheet_link_tag "users" %>
+    <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
     <!-- SCRIPTS
@@ -21,7 +21,7 @@
   </head>
 <% end %>
 
-<div class="page-header">
-  <h1> Criar Parceiro </h1>
-</div>
-<%= render :partial => 'form' %>
+<h2>Criar Parceiro</h2>
+<%= render 'form' %>
+          
+          

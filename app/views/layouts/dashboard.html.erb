@@ -1,14 +1,23 @@
 <!DOCTYPE HTML>
-<html class="no-js">
+<html class="en">
 	<%= yield :head %>
 	<body>
-		<div class='container'>
-			<%= render 'layouts/dashboard_header' %>
-			<div class='row'>
-				<div class='span3'> <%= render 'layouts/dashboard_sidebar' %> </div>
-				<div class='span9'> <%= yield %> </div>
-			</div>
-
+		<div class="main" role="main">
+		  <div id="content" class="content page-content full">
+		    <div class="container">
+		      <%= render 'layouts/dashboard_header' %>
+		      <div class="row">
+		        <div class="col-md-2">
+		        	<%= render 'layouts/dashboard_sidebar' %>
+		          <div class="clearfix"></div>
+		          <div id="message"></div>
+		        </div>
+				<div class="col-md-10 sidebar right-sidebar">
+		          <%= yield %>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
 		</div>
 	</body>
 </html>

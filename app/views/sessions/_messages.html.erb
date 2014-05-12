@@ -1,0 +1,12 @@
+<div class="col-md-6" data-appear-animation="bounceInRight">
+	<% unless flash.empty? %>
+		<div class="alert alert-error fade in">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<ul>
+	      		<% flash.each do |name, msg| -%>
+			      <%= msg %>
+			    <% end -%>
+	      	</ul>
+		</div>
+	<% end %>
+</div>

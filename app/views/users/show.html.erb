@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <!-- CSS
       ================================================== -->
-    <%= stylesheet_link_tag "users" %>
+    <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
     <!-- SCRIPTS
@@ -21,36 +21,26 @@
   </head>
 <% end %>
 
-<div class="page-header">
-  <h1> Exibir Parceiro </h1>
-</div>
-
-<div class='form-horizontal'>
-  <div class="row">
-    <div class="form-group">
-      <div class="col-md-4 col-sm-4 pull-left">
-        <p class='text-left'> <strong> Usuário: </strong> <%= @user.username %> </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group">
-      <div class="col-md-4 col-sm-4">
-        <p class='text-left'> <strong> Senha: </strong> <%= @user.password_digest %> </p>
-      </div>
-    </div>
-  </div>
-</div>
+<h2>Criar Parceiro</h2>
 
 <div class="row">
-    <div class="form-group">
-      <div class="col-md-4 col-sm-4">
-        <p>
-          <%= link_to('Voltar', users_path, class: 'btn') %>
-          <%= link_to('Editar', edit_user_path, class: 'btn') %>
-          
-      </p>
-      </div>
-    </div>
-  </div>
+    <%= render partial: 'messages' %>
+</div>
+
+<div class="form-group">
+  <strong> Usuário: </strong> <%= @user.username %> </p>
+</div>
+
+<div class="form-group">
+  <strong> Senha: </strong> <%= @user.password_digest %> </p>
+</div>
+
+<div class="form-group">
+  <p>
+    <%= link_to('Voltar', users_path, class: 'btn btn-primary') %>
+    <%= link_to('Editar', edit_user_path, class: 'btn btn-primary') %>
+    <span class="btn-right">
+      <%= link_to('Excluir', user_path, method: 'delete', class: 'btn btn-danger') %>
+    </span>
+  </p>
+</div>

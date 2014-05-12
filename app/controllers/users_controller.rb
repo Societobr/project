@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 	layout 'dashboard'
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
+	before_filter :authorize
 
 	def new
 	  @user = User.new
@@ -18,11 +19,16 @@ class UsersController < ApplicationController
 	def show
 	end
 
+	def destroy
+		@user.destroy
+		redirect_to users_path, notice: 'Registro excluído com sucesso.'
+	end
+
 	def update
 	  if @user.update(user_params)
       	redirect_to @user, notice: 'Parceiro atualizado com sucesso.'
       else
-        format.html render action: 'edit'
+        render "edit"
       end
 	end
 

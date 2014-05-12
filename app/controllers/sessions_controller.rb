@@ -5,10 +5,10 @@ class SessionsController < ApplicationController
 	end
 
 	def create
-	  user = set_user
-	  if user && user.authenticate(session_params[:password_digest])
-	    session[:user_id] = user.id
-	    session[:user_username] = user.username
+	  @user = set_user
+	  if @user && @user.authenticate(session_params[:password_digest])
+	    session[:user_id] = @user.id
+	    session[:user_username] = @user.username
 	    redirect_to new_user_path, notice: "Logged in!"
 	  else
 	    flash.now.alert = "Usuário ou senha incorretos"
