@@ -48,15 +48,8 @@ gem 'devise'
 # Fontes/Imagens de redes sociais, telefones, carta, '>' e etc
 gem 'font-awesome-sass'
 
-
-
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
-# Bootstrap para Rails
-gem 'twitter-bootstrap-rails', '~> 2.2.8'
-# Necessários para executar twitter-bootstrap
-gem "less-rails"
-gem "therubyracer"
 
 # Use unicorn as the app server
 # gem 'unicorn'

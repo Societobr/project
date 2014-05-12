@@ -23,6 +23,6 @@ module Societo
     # config.i18n.default_locale = :de
     # config.i18n.available_locales = [:en, :"pt-BR"]
     # config.i18n.default_locale = :"pt-BR"
-    config.assets.precompile += %w( clientes.css users.css )
+    config.assets.precompile += %w( clientes.css )
   end
 end
