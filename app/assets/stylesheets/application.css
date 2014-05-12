@@ -16,4 +16,6 @@
  *= require ./colors/green
  *= require font-awesome
  *= require ./css/animations
+ *= require prettyPhoto
+ *= require owl.carousel
  */

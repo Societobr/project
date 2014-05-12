@@ -1090,7 +1090,7 @@ span.progress-bar-tooltip:after {
 	display:inline-block;
 	width:153px;
 	height:165px;
-	background:url(../images/bg_fact.png) no-repeat;
+	background:url(<%= asset_data_uri 'bg_fact.png' %>) no-repeat;
 	color:#333333;
 	line-height:180px;
 }
@@ -1152,7 +1152,7 @@ body{
 	font-weight:300;
 	font-family: 'Roboto', sans-serif;
 	line-height:20px;
-	background-image: url(<%= asset_data_uri 'pt15.png' %>);
+	background-image: url(<%=asset_data_uri 'patterns/pt15.jpg' %>);
 	background-repeat:repeat;
 	background-size:auto;
 }
@@ -2550,7 +2550,7 @@ body.boxed .header-style4 .main{
 	background-color:#f8f8f8;*/
 	background-attachment:fixed!important;
 	background-position:center center;
-	background-image: url(<%= asset_data_uri 'pt15.png' %>);
+	background-image: url(<%=asset_data_uri 'patterns/pt15.jpg' %>);
 	background-repeat:repeat;
 	background-size:cover;
 }
@@ -4229,7 +4229,7 @@ div.show-grid [class*="col-md-"] span.show-grid-block {
 }
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
 	.fact-ico{
-		background:url(../images/bg_fact@2x.png) no-repeat;
+		background:url(<%=asset_data_uri 'bg_fact@2x.png' %>) no-repeat;
 		background-size:153px 153px;
 	}
 }
