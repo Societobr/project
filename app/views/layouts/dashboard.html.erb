@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html class="no-js">
+	<%= yield :head %>
+	<body>
+		<div class='container'>
+			<%= render 'layouts/dashboard_header' %>
+			<div class='row'>
+				<div class='span3'> <%= render 'layouts/dashboard_sidebar' %> </div>
+				<div class='span9'> <%= yield %> </div>
+			</div>
+
+		</div>
+	</body>
+</html>

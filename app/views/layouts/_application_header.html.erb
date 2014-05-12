@@ -1,0 +1,40 @@
+<header class="site-header" id="sticky-nav">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <h1 class="logo"> <%= link_to image_tag("logo@2x.png", alt: "Societo Clube de Vantagens"), root_path %> </h1>
+      </div>
+      <div class="col-md-9">
+        <%= button_tag(type: 'button', class: 'mmenu-toggle') do %>
+          <%= link_to icon('bars', '', class: "fa-lg") %>
+        <% end %>
+        <nav class="main-menu">
+          <ul class="sf-menu" id="main-menu">
+            <li> <%= link_to 'Societo', root_path %> </li>
+            <li> <%= link_to 'Filie-se', nossos_planos_path %></li>
+            <li> <%= link_to '#' do %> Cidades <%= icon('angle-down') %> <% end %>
+              <ul class="dropdown">
+                <li> <%= link_to 'Belo Horizonte', cidades_belo_horizonte_path %>
+                    <ul class="dropdown">
+                        <li> <%= link_to 'Societo Beer &amp; Wine', '#' %> </li>
+                        <li> <%= link_to 'Societo Gourmet', '#' %> </li>
+                        <li> <%= link_to 'Societo Night', '#' %> </li>
+                        <li> <%= link_to 'Societo Shopping', '#' %> </li>
+                    </ul>
+                </li>
+              </ul>
+            </li>
+            <li> <%= link_to 'Fale Conosco', contatos_path %> </li>
+            <li> <%= link_to 'FAQ', faq_path %> </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <nav class="mobile-menu">
+    <div class="container">
+      <div class="row"></div>
+    </div>
+  </nav>
+</header>
