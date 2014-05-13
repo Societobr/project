@@ -31,6 +31,8 @@ gem 'spring',        group: :development
 # Inclui validações de padrões brasileiros como CPF, CNPJ e etc
 gem 'brazilian-rails', '~> 3.3.0'
 
+gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+
 group :test do
   #gem 'shoulda-matchers'
   gem 'cucumber-rails', require: false

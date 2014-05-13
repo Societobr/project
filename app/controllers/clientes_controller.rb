@@ -1,5 +1,7 @@
 class ClientesController < ApplicationController
+  layout 'dashboard', except: [:new] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
+  before_filter :authorize, except: [:new]
 
   # GET /clientes
   # GET /clientes.json
