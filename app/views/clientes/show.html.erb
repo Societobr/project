@@ -1,54 +1,74 @@
-<p id="notice"><%= notice %></p>
+<% content_for :head do %>
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> <%= full_title("Cliente") %> </title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <!-- CSS
+      ================================================== -->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <!-- SCRIPTS
+      ================================================== -->
+  </head>
+<% end %>
 
-<p>
-  <strong>Nome:</strong>
-  <%= @cliente.nome %>
-</p>
+<h2>Cliente</h2>
 
-<p>
-  <strong>Sobrenome:</strong>
-  <%= @cliente.sobrenome %>
-</p>
+<div class="form-group">
+  <strong> Nome: </strong> <%= @cliente.nome %>
+</div>
 
-<p>
-  <strong>Email:</strong>
-  <%= @cliente.email %>
-</p>
+<div class="form-group">
+  <strong> Sobrenome: </strong> <%= @cliente.sobrenome %>
+</div>
 
-<p>
-  <strong>Cpf:</strong>
-  <%= @cliente.cpf %>
-</p>
+<div class="form-group">
+  <strong> Email: </strong> <%= @cliente.email %>
+</div>
 
-<p>
-  <strong>Nascimento:</strong>
-  <%= @cliente.nascimento %>
-</p>
+<div class="form-group">
+  <strong> CPF: </strong> <%= @cliente.cpf %>
+</div>
 
-<p>
-  <strong>Telefone:</strong>
-  <%= @cliente.telefone %>
-</p>
+<div class="form-group">
+  <strong> Nascimento: </strong> <%= @cliente.nascimento %>
+</div>
 
-<p>
-  <strong>Cep:</strong>
-  <%= @cliente.cep %>
-</p>
+<div class="form-group">
+  <strong> Telefone: </strong> <%= @cliente.telefone %>
+</div>
 
-<p>
-  <strong>Estado:</strong>
-  <%= @cliente.estado %>
-</p>
+<div class="form-group">
+  <strong> CEP: </strong> <%= @cliente.cep %>
+</div>
 
-<p>
-  <strong>Cidade:</strong>
-  <%= @cliente.cidade %>
-</p>
+<div class="form-group">
+  <strong> Estado: </strong> <%= @cliente.estado %>
+</div>
 
-<p>
-  <strong>Endereco:</strong>
-  <%= @cliente.endereco %>
-</p>
+<div class="form-group">
+  <strong> Cidade: </strong> <%= @cliente.cidade %>
+</div>
 
-<%= link_to 'Edit', edit_cliente_path(@cliente) %> |
-<%= link_to 'Back', clientes_path %>
+<div class="form-group">
+  <strong> Endereco: </strong> <%= @cliente.endereco %>
+</div>
+
+<div class="form-group">
+  <p>
+    <%= link_to('Voltar', clientes_path, class: 'btn btn-primary') %>
+    <%= link_to('Editar', edit_cliente_path, class: 'btn btn-primary') %>
+    <span class="btn-right">
+      <%= link_to('Excluir', cliente_path, method: 'delete', class: 'btn btn-danger') %>
+    </span>
+  </p>
+</div>
