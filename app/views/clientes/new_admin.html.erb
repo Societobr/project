@@ -3,7 +3,7 @@
   <!-- Basic Page Needs
     ================================================== -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> <%= full_title("Parceiro") %> </title>
+    <title> <%= full_title("Cadastre-se no Clube de Vantagens") %> </title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
@@ -21,26 +21,6 @@
   </head>
 <% end %>
 
-<h2>Parceiro</h2>
+<h2>Cadastrar Cliente</h2>
 
-<div class="row">
-    <%= render partial: 'messages' %>
-</div>
-
-<div class="form-group">
-  <strong> Usuário: </strong> <%= @user.username %>
-</div>
-
-<div class="form-group">
-  <strong> Senha: </strong> <%= @user.password_digest %>
-</div>
-
-<div class="form-group">
-  <p>
-    <%= link_to('Voltar', users_path, class: 'btn btn-primary') %>
-    <%= link_to('Editar', edit_user_path, class: 'btn btn-primary') %>
-    <span class="btn-right">
-      <%= link_to('Excluir', user_path, method: 'delete', data: { confirm: 'Deletar registro?' }, class: 'btn btn-danger') %>
-    </span>
-  </p>
-</div>
+<%= render 'form_admin', :locals => {:url => :admin_clientes} %>

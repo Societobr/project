@@ -1,21 +1,26 @@
 Rails.application.routes.draw do
 
-  get 'signup', to: 'users#new', as: 'signup'
-  get 'login', to: 'sessions#new', as: 'login'
-  get 'logout', to: 'sessions#destroy', as: 'logout'
-
   root to: "paginas_estaticas#index"
 
-  resources :clientes
-  resources :users
-  resources :sessions
+  get 'login', to: 'sessions#new', as: 'login'
+  get 'logout', to: 'sessions#destroy', as: 'logout'
+  get '/contato', to: 'contatos#new', as: 'contatos'
+  post '/contato', to: 'contatos#create'
+  get '/cadastre-se', to: 'clientes#new', as: 'cadastre-se'
+  post '/cadastre-se', to: 'clientes#create', as: 'public_cliente'
+  get '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte'
+  get '/nossos-planos',  to: 'paginas_estaticas#planos'
+  get '/faq', to: 'paginas_estaticas#faq'
 
-  match '/contato', to: 'contatos#new', via: 'get', as: :contatos
-  match '/contato', to: 'contatos#create', via: 'post'
-  match '/cadastre-se', to: 'clientes#new', via: 'get'
-  match '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte', via: 'get'
-  match '/nossos-planos',  to: 'paginas_estaticas#planos', via: 'get'
-  match '/faq', to: 'paginas_estaticas#faq', via: 'get'
+  scope 'admin' do
+    resources :clientes, except: [:create, :new]
+    get 'cliente/new', to: 'clientes#new_admin', as: 'new_admin_cliente'
+    post 'cliente/new', to: 'clientes#create_admin', as: 'admin_clientes'
+    patch 'cliente/:id', to: 'clientes#update', as: 'update_clientes'
+    resources :users
+  end
+
+  resources :sessions, except: [:new, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

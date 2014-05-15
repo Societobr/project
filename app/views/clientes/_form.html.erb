@@ -1,6 +1,16 @@
-<%= form_for(@cliente) do |f| %>
+<%= form_for(@cliente, url: :public_cliente) do |f| %>
 
-  <%= render partial: 'messages' %>
+  <div class="col-md-12" data-appear-animation="bounceInRight">
+    <div class="alert alert-warning fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a> <strong>Todos os campos</strong> são obrigatórios para se filiar
+    </div>
+        
+    <div class="alert alert-success fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>O pagamento será realizado <strong>após</strong> o cadastro
+    </div>
+    
+    <%= render partial: 'messages' %>
+  </div>
 
   <div class="row">
     <div class="form-group">

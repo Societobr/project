@@ -81,28 +81,25 @@
         <div class="col-md-9">
           <button class="mmenu-toggle"><i class="fa fa-bars fa-lg"></i></button>
           <nav class="main-menu">
-            <ul class="sf-menu" id="main-menu">
-              <li><a href="index.html">Societo </i></a>
-              </li>
-              
-              <li><a href="planos.html">Filie-se </a></li>
-              
-			<li><a href="#">Cidades <i class="fa fa-angle-down"></i></a>
-                <ul class="dropdown">
-                  <li><a href="belo-horizonte.html">Belo Horizonte</a>
-                  		<ul class="dropdown">
-                      		<li><a href="#">Societo Beer &amp; Wine </a></li>
-                      		<li><a href="#">Societo Gourmet</a></li>
-                      		<li><a href="#">Societo Night</a></li>
-                      		<li><a href="#">Societo Shopping</a></li>
-                    	</ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="contato.html">Fale Conosco </a></li>
-              <li><a href="page-faqs.html">FAQ </a></li>
-                </ul>
-               </nav>
+          <ul class="sf-menu" id="main-menu">
+            <li> <%= link_to 'Societo', root_path %> </li>
+            <li> <%= link_to 'Filie-se', nossos_planos_path %></li>
+            <li> <%= link_to '#' do %> Cidades <%= icon('angle-down') %> <% end %>
+              <ul class="dropdown">
+                <li> <%= link_to 'Belo Horizonte', cidades_belo_horizonte_path %>
+                    <ul class="dropdown">
+                        <li> <%= link_to 'Societo Beer &amp; Wine', '#' %> </li>
+                        <li> <%= link_to 'Societo Gourmet', '#' %> </li>
+                        <li> <%= link_to 'Societo Night', '#' %> </li>
+                        <li> <%= link_to 'Societo Shopping', '#' %> </li>
+                    </ul>
+                </li>
+              </ul>
+            </li>
+            <li> <%= link_to 'Fale Conosco', contatos_path %> </li>
+            <li> <%= link_to 'FAQ', faq_path %> </li>
+          </ul>
+        </nav>
         </div>
       </div>
     </div>

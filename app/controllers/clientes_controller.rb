@@ -1,7 +1,7 @@
 class ClientesController < ApplicationController
-  layout 'dashboard', except: [:new] # new ~> layouts/application
+  layout 'dashboard', except: [:new, :create] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize, except: [:new]
+  before_filter :authorize, except: [:new, :create]
 
   # GET /clientes
   # GET /clientes.json
@@ -24,37 +24,44 @@ class ClientesController < ApplicationController
     @cliente = Cliente.new
   end
 
+  # Renderiza layout para cadastro de usuário pelo próprio admin
+  def new_admin
+    @cliente = Cliente.new
+  end
+
   # GET /clientes/1/edit
   def edit
   end
 
+  # Valida informações inseridas pelo admin no cadastro de usuário
+  def create_admin
+    @cliente = Cliente.new(cliente_params)
+
+    if @cliente.save
+      redirect_to @cliente, notice: 'Cliente criado com sucesso.'
+    else
+      render :new_admin
+    end
+  end
+
   # POST /clientes
-  # POST /clientes.json
   def create
     @cliente = Cliente.new(cliente_params)
     
-    respond_to do |format|
-      if @cliente.save && cliente_aceitou_termo?
-        format.html { redirect_to @cliente, notice: 'Cliente was successfully created.' }
-        format.json { render :show, status: :created, location: @cliente }
-      else
-        format.html { render :new }
-        format.json { render json: @cliente.errors, status: :unprocessable_entity }
-      end
+    if (@cliente.valid? || cliente_aceitou_termo?) && @cliente.save
+      redirect_to nossos_planos_path, alert: 'Quase acabando. Escolha seu plano.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /clientes/1
   # PATCH/PUT /clientes/1.json
   def update
-    respond_to do |format|
-      if @cliente.update(cliente_params)
-        format.html { redirect_to @cliente, notice: 'Cliente was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cliente }
-      else
-        format.html { render :edit }
-        format.json { render json: @cliente.errors, status: :unprocessable_entity }
-      end
+    if @cliente.update(cliente_params)
+      redirect_to @cliente, notice: 'Cliente atualizado.'
+    else
+      render :edit
     end
   end
 
@@ -62,10 +69,7 @@ class ClientesController < ApplicationController
   # DELETE /clientes/1.json
   def destroy
     @cliente.destroy
-    respond_to do |format|
-      format.html { redirect_to clientes_url }
-      format.json { head :no_content }
-    end
+    redirect_to clientes_url, notice: 'Cliente deletado.'
   end
 
   private

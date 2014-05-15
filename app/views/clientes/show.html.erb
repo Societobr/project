@@ -23,6 +23,10 @@
 
 <h2>Cliente</h2>
 
+<div class="row">
+    <%= render partial: 'messages' %>
+</div>
+
 <div class="form-group">
   <strong> Nome: </strong> <%= @cliente.nome %>
 </div>
@@ -67,8 +71,8 @@
   <p>
     <%= link_to('Voltar', clientes_path, class: 'btn btn-primary') %>
     <%= link_to('Editar', edit_cliente_path, class: 'btn btn-primary') %>
-    <span class="btn-right">
-      <%= link_to('Excluir', cliente_path, method: 'delete', class: 'btn btn-danger') %>
+    <span align="right">
+      <%= link_to('Excluir', cliente_path, method: 'delete', data: { confirm: 'Deletar registro?' }, class: 'btn btn-danger') %>
     </span>
   </p>
 </div>

@@ -9,9 +9,9 @@ class SessionsController < ApplicationController
 	  if @user && @user.authenticate(session_params[:password_digest])
 	    session[:user_id] = @user.id
 	    session[:user_username] = @user.username
-	    redirect_to clientes_path, notice: "Logged in!"
+	    redirect_to clientes_path
 	  else
-	    flash.now.alert = "Usuário ou senha incorretos"
+	    flash.now[:error] = "Usuário ou senha incorretos"
 	    render "new"
 	  end
 	end
@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 	def destroy
 	  session[:user_id] = nil
 	  session[:user_username] = nil
-	  redirect_to login_path, notice: "Logged out!"
+	  redirect_to login_path
 	end
 
 	private

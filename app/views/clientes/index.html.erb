@@ -23,6 +23,10 @@
 
 <h2>Clientes</h2>
 
+<div class="row">
+    <%= render partial: 'messages' %>
+</div>
+
 <div class="table-responsive">
   <table id="datatable" class="table table-striped table-hover text-center">
     <thead>
@@ -67,7 +71,5 @@
 
 <br>
 
-<%= link_to 'Cadastrar', new_cliente_path, class: 'btn btn-primary' %>
+<%= link_to 'Cadastrar', new_admin_cliente_path, class: 'btn btn-primary' %>
 <%= link_to 'csv', clientes_path(format: :csv), class: 'btn btn-default' %>
-
-

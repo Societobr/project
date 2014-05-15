@@ -1,4 +1,8 @@
-<%= form_for(@cliente) do |f| %>
+<%= form_for(@cliente,  url: locals[:url]) do |f| %>
+
+  <div class="col-md-12" data-appear-animation="bounceInRight">
+    <%= render partial: 'messages' %>
+  </div>
 
   <div class="row">
     <div class="form-group">
@@ -76,6 +80,7 @@
     <div class="form-group">
       <div class="col-md-12">
         <%= f.submit "OK", {class: "btn btn-primary btn-lg"} %>
+        <%= link_to 'Voltar', clientes_path, class: 'btn btn-primary' %>
       </div>
     </div>
   </div>
