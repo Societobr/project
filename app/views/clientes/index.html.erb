@@ -35,12 +35,9 @@
         <th>Sobrenome</th>
         <th>Email</th>
         <th>Cpf</th>
-        <th>Nascimento</th>
         <th>Telefone</th>
-        <th>Cep</th>
         <th>Estado</th>
         <th>Cidade</th>
-        <th>Endereco</th>
         <th></th>
         <th></th>
         <th></th>
@@ -54,12 +51,9 @@
           <td><%= cliente.sobrenome %></td>
           <td><%= cliente.email %></td>
           <td><%= cliente.cpf %></td>
-          <td><%= cliente.nascimento %></td>
           <td><%= cliente.telefone %></td>
-          <td><%= cliente.cep %></td>
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
-          <td><%= cliente.endereco %></td>
           <td><%= link_to icon("search-plus", '', class: "fa-2x", title: "Consultar"), cliente %></td>
           <td><%= link_to icon("pencil-square", '', class: "fa-2x", title: "Editar"), edit_cliente_path(cliente) %></td>
           <td><%= link_to icon("trash-o", '', class: "fa-2x", title: "Excluir"), cliente, method: :delete, data: { confirm: 'Deletar registro?' } %></td>
