@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140510131431) do
+ActiveRecord::Schema.define(version: 20140516133119) do
+
+  create_table "atividades", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "cliente_id"
+    t.decimal  "preco_total",    precision: 10, scale: 0
+    t.decimal  "valor_desconto", precision: 10, scale: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "atividades", ["cliente_id"], name: "index_atividades_on_cliente_id", using: :btree
+  add_index "atividades", ["user_id"], name: "index_atividades_on_user_id", using: :btree
 
   create_table "clientes", force: true do |t|
     t.string   "nome"

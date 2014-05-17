@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  cliente_id: 1
+  preco_total: 9.99
+  valor_desconto: 9.99
+
+two:
+  user_id: 1
+  cliente_id: 1
+  preco_total: 9.99
+  valor_desconto: 9.99

@@ -41,6 +41,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -54,6 +55,40 @@
           <td><%= cliente.telefone %></td>
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
+          <td>
+            <%= link_to icon("eye", '', class: "fa-2x", title: "Atividades"), raw("#myModal#{cliente.id}"), 'data-toggle'=>"modal" %>
+            <div id="myModal<%= cliente.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel<%= cliente.id%>"> Atividades de <%= cliente.nome.upcase! %></h3>
+              </div>
+
+              <div class="modal-body">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Preço Total</th>
+                      <th>Valor do Desconto</th>
+                      <th>Parceiro</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% cliente.atividades.each do |atividade| %>
+                      <tr>
+                        <td><%= atividade.preco_total %></td>
+                        <td><%= atividade.valor_desconto %></td>
+                        <td><%= atividade.user.username %></td>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+            </div>
+            </div>
+
+          </td>
           <td><%= link_to icon("search-plus", '', class: "fa-2x", title: "Consultar"), cliente %></td>
           <td><%= link_to icon("pencil-square", '', class: "fa-2x", title: "Editar"), edit_cliente_path(cliente) %></td>
           <td><%= link_to icon("trash-o", '', class: "fa-2x", title: "Excluir"), cliente, method: :delete, data: { confirm: 'Deletar registro?' } %></td>

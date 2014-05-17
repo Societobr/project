@@ -1,0 +1,2 @@
+class AtividadesController < ApplicationController
+end

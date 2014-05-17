@@ -6,7 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create(username: 'admin', password: '123456')
+User.create([
+	{username: 'admin', password: '123456'},
+	{username: 'parceiro', password: '123456'},
+	{username: 'parceiro1', password: '123456'},
+	])
+Atividade.create([
+	{user_id: 2, cliente_id: 1, preco_total: 200.20, valor_desconto: 20.02},
+	{user_id: 3, cliente_id: 1, preco_total: 300.30, valor_desconto: 30.03},
+	{user_id: 2, cliente_id: 2, preco_total: 500.50, valor_desconto: 50.05},
+	{user_id: 3, cliente_id: 3, preco_total: 600.60, valor_desconto: 60.06},
+	])
 Cliente.create([
 	{nome: 'Nome1',
 		sobrenome: 'Sobrenome1',

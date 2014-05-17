@@ -1,4 +1,7 @@
 class Cliente < ActiveRecord::Base
+	has_many :atividades
+	has_many :users, through: :atividades
+	
 	message = 'deve ser preenchido'
 
 	usar_como_cpf :cpf
