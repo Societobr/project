@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'atividades/index'
+  get 'atividades/new'
+  post 'atividades/new', to: 'atividades#create'
+
   root to: "paginas_estaticas#index"
 
   get 'login', to: 'sessions#new', as: 'login'

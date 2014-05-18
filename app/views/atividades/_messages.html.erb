@@ -1,0 +1,12 @@
+<% @atividade.valid?; get_object_error_into_flash(@atividade) unless flash[:notice] %>
+
+<% if flash %>
+	<% flash.to_hash.each_pair do |key, messages| %>
+		<div class="alert alert-<%= get_message_class(key) %> fade in">
+			<a class="close" data-dismiss="alert" href="#">&times;</a>
+			<ul>
+	      		<%= simple_format(messages) %>
+	      	</ul>
+		</div>
+	<% end unless flash.empty? %>
+<% end %>

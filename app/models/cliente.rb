@@ -1,7 +1,9 @@
 class Cliente < ActiveRecord::Base
 	has_many :atividades
 	has_many :users, through: :atividades
-	
+
+	after_save :set_registro
+
 	message = 'deve ser preenchido'
 
 	usar_como_cpf :cpf
@@ -25,4 +27,10 @@ class Cliente < ActiveRecord::Base
 			end
 		end
 	end
+
+	def set_registro
+		self.registro = '#' + self.created_at.strftime("%d%m%y") + self.id.to_s.rjust(4,"0")
+		self.update_column(:registro, self.registro)
+	end
+
 end

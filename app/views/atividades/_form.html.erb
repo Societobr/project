@@ -1,0 +1,41 @@
+<%= form_tag atividades_new_path do |f| %>
+
+  <div class="row">
+    <div class="col-md-6" data-appear-animation="bounceInRight">
+      <%= render partial: 'messages' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= text_field_tag 'CPF_ou_#Registro', nil, {id: 'cpf_ou_#registro', name: 'atividade[cpf_ou_#registro]', class: "form-control input-lg", placeholder: 'CPF ou #Registro'} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= text_field_tag :total, nil, {id: 'total', name: 'atividade[preco_total]', class: "form-control input-lg", placeholder: 'Total'} %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= text_field_tag :desconto, nil, {id: 'desconto', name: 'atividade[valor_desconto]', class: "form-control input-lg", placeholder: 'Desconto'} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= submit_tag "Registrar", {class: "btn btn-primary btn-lg"} %>
+          <%= link_to 'Cancelar',  atividades_new_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+<% end %>

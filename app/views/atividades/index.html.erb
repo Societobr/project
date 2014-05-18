@@ -1,0 +1,54 @@
+<% content_for :head do %>
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> <%= full_title("Listar Clientes") %></title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <!-- CSS
+      ================================================== -->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <!-- SCRIPTS
+      ================================================== -->
+  </head>
+<% end %>
+
+<h2>Clientes</h2>
+
+<div class="row">
+    <%= render partial: 'messages' %>
+</div>
+
+<div class="table-responsive">
+  <table id="datatable" class="table table-bordered table-striped table-hover table-condensed">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Parceiro</th>
+        <th>Total</th>
+        <th>Desconto</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @atividades.each do |atividade| %>
+        <tr>
+          <td><%= atividade.cliente.nome %></td>
+          <td><%= atividade.user.username %></td>
+          <td><%= atividade.preco_total %></td>
+          <td><%= atividade.valor_desconto %></td>
+          <td><%= atividade.created_at.strftime("%d/%m/%y") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
