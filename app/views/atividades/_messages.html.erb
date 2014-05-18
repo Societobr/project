@@ -1,4 +1,6 @@
-<% @atividade.valid?; get_object_error_into_flash(@atividade) unless flash[:notice] %>
+<% if (@atividade) %>
+	<% @atividade.valid?; get_object_error_into_flash(@atividade) unless flash[:notice] %>
+<% end %>
 
 <% if flash %>
 	<% flash.to_hash.each_pair do |key, messages| %>
