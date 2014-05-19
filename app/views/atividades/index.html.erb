@@ -35,7 +35,7 @@
         <th>Parceiro</th>
         <th>Total</th>
         <th>Desconto</th>
-        <th>Data</th>
+        <th>Data (AA/MM/DD)</th>
       </tr>
     </thead>
 
@@ -46,7 +46,7 @@
           <td><%= atividade.user.username %></td>
           <td><%= atividade.preco_total %></td>
           <td><%= atividade.valor_desconto %></td>
-          <td><%= atividade.created_at.strftime("%d/%m/%y") %></td>
+          <td><%= atividade.created_at.strftime("%y/%m/%d") %></td>
         </tr>
       <% end %>
     </tbody>

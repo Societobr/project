@@ -70,9 +70,10 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>Preço Total</th>
-                      <th>Valor do Desconto</th>
+                      <th>Total</th>
+                      <th>Desconto</th>
                       <th>Parceiro</th>
+                      <th>Data (AA/MM/DD)</th>
                     </tr>
                   </thead>
 
@@ -82,6 +83,7 @@
                         <td><%= atividade.preco_total %></td>
                         <td><%= atividade.valor_desconto %></td>
                         <td><%= atividade.user.username %></td>
+                        <td><%= atividade.created_at.strftime("%y/%m/%d") %></td>
                     <% end %>
                   </tbody>
                 </table>
