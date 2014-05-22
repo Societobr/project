@@ -53,6 +53,8 @@ gem 'font-awesome-sass'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem "pagseguro-oficial", git: "git://github.com/pagseguro/ruby.git"
+
 # Use unicorn as the app server
 # gem 'unicorn'
 

@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/pagseguro/ruby.git
+  revision: 1b353d4c50b9b3afe6ba7cd5f1a4272bc56553a4
+  specs:
+    pagseguro-oficial (2.0.5)
+      aitch (>= 0.2.1)
+      i18n
+      json
+      nokogiri
+
+GIT
   remote: git://github.com/rweng/jquery-datatables-rails.git
   revision: 477e49a649c8d862988298bc96a93e030d023e0e
   specs:
@@ -38,6 +48,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    aitch (0.3.0)
+      activesupport
+      nokogiri (>= 1.6.0)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.7)
     brI18n (3.3.0)
@@ -219,6 +232,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   mysql2 (~> 0.3.15)
+  pagseguro-oficial!
   pg
   rails (= 4.1.0)
   sass-rails (~> 4.0.3)

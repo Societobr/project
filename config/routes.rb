@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'atividades/index'
   get 'atividades/new'
   post 'atividades/new', to: 'atividades#create'
+  get '/confirmacao', to: 'checkout#new'
+  post '/confirmacao', to: 'checkout#confirmacao'
 
   root to: "paginas_estaticas#index"
 
