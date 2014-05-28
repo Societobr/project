@@ -62,6 +62,8 @@ class ClientesController < ApplicationController
         @id_sessao = CheckoutController.get_id_sessao
         render :new
       end
+    else
+      render :new
     end
   end
 

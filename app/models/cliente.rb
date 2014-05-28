@@ -5,6 +5,7 @@ class Cliente < ActiveRecord::Base
 
 	message = 'deve ser preenchido'
 
+	usar_como_cpf :cpf
 	validates_presence_of :nome,
 	:ddd,
 	:telefone,
