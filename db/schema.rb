@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140518174934) do
+ActiveRecord::Schema.define(version: 20140526182138) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20140518174934) do
 
   create_table "clientes", force: true do |t|
     t.string   "nome"
-    t.string   "sobrenome"
     t.string   "email"
     t.string   "cpf"
     t.date     "nascimento"
@@ -35,10 +34,33 @@ ActiveRecord::Schema.define(version: 20140518174934) do
     t.string   "cep"
     t.string   "estado"
     t.string   "cidade"
-    t.string   "endereco"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "registro"
+    t.date     "expira_em"
+    t.string   "ddd"
+    t.string   "bairro"
+    t.string   "complemento"
+    t.string   "numero"
+    t.string   "rua"
+    t.string   "cupom"
+  end
+
+  create_table "historicos", force: true do |t|
+    t.integer  "cliente_id"
+    t.integer  "status_transacao_pag_seguros_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "historicos", ["cliente_id"], name: "index_historicos_on_cliente_id", using: :btree
+  add_index "historicos", ["status_transacao_pag_seguros_id"], name: "index_historicos_on_status_transacao_pag_seguros_id", using: :btree
+
+  create_table "status_transacao_pag_seguros", force: true do |t|
+    t.integer  "code"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

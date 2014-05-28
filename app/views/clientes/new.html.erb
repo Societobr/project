@@ -25,15 +25,20 @@
   <div id="content" class="content page-content full">
     <div class="container">
       <div class="row">
-        <div class="col-md-9">
-          <%= render 'form' %>
+        <div class="parceiro col-md-12">
+          <div class="col-md-8">
+            <h2>Cadastro</h2>
+            <%= render 'form' %>
+          </div>
+          <!-- Start Sidebar -->
+          <div class="col-md-4 sidebar right-sidebar padding-tb75">
+            <h3 class="push-top">Plano <%= session[:plano_nome].humanize %></h3>
+            <ul>
+              <li></i> Preço: R$ <%= session[:plano_preco] %></li>
+              <li></i> Vigência: <%= session[:plano_vigencia] %> dias </li>
+            </ul>
+          </div>
         </div>
-        <!-- Start Sidebar -->
-        <section class="widget sidebar-widget" id="text-widget1">
-          <h4>Sobre o Societo</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in euismod nisi.</p>
-          <p>Cras at ultrices erat, sed vulputate eros. Nunc at augue gravida est fermentum vulputate.</p>
-        </section>
       </div>
     </div>
   </div>

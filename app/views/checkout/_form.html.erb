@@ -3,7 +3,7 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag 'numeroCartao', nil, {id: 'numeroCartao', name: 'checkout[numeroCartao]', class: "form-control input-lg", placeholder: 'Número do cartão', maxlength: '19', onchange: "get_bandeira()"} %>
+        <%= text_field_tag 'numeroCartao', nil, {id: 'numeroCartao', name: 'checkout[numeroCartao]', class: "form-control input-lg", placeholder: 'Número do cartão', maxlength: '19',onfocus: "; get_hash()", onchange: "get_bandeira(); checa_campos_preenchidos()"} %>
       </div>
     </div>
   </div>
@@ -11,8 +11,8 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag 'mesValidadeCartao', nil, {id: 'mesValidadeCartao', name: 'checkout[mesValidadeCartao]', class: "form-control input-lg", placeholder: 'MM', maxlength: '2'} %>
-        <%= text_field_tag 'anoValidadeCartao', nil, {id: 'anoValidadeCartao', name: 'checkout[anoValidadeCartao]', class: "form-control input-lg", placeholder: 'AA', maxlength: '4'} %>
+        <%= text_field_tag 'mesValidadeCartao', nil, {id: 'mesValidadeCartao', name: 'checkout[mesValidadeCartao]', class: "form-control input-lg", placeholder: 'MM', maxlength: '2', onchange: "checa_campos_preenchidos()"} %>
+        <%= text_field_tag 'anoValidadeCartao', nil, {id: 'anoValidadeCartao', name: 'checkout[anoValidadeCartao]', class: "form-control input-lg", placeholder: 'AA', maxlength: '4', onchange: "checa_campos_preenchidos()"} %>
       </div>
     </div>
   </div>
@@ -20,14 +20,14 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag 'cvv', nil, {id: 'cvv', name: 'checkout[cvv]', class: "form-control input-lg", placeholder: 'Código de segurança', maxlength: '3'} %>
+        <%= text_field_tag 'cvv', nil, {id: 'cvv', name: 'checkout[cvv]', class: "form-control input-lg", placeholder: 'Código de segurança', maxlength: '3', onchange: "checa_campos_preenchidos()"} %>
       </div>
     </div>
   </div>
 
   <%= hidden_field_tag 'bandeiraCartao', nil, {id: 'bandeiraCartao', name: 'checkout[bandeiraCartao]'} %>
   <%= hidden_field_tag 'tokenIdentificadorCartao', nil, {id: 'tokenIdentificadorCartao', name: 'checkout[tokenIdentificadorCartao]'} %>
-  <%= hidden_field_tag 'identicadorComprador', nil, {id: 'identicadorComprador', name: 'checkout[identicadorComprador]'} %>
+  <%= hidden_field_tag 'identicadorVendedor', nil, {id: 'identicadorVendedor', name: 'checkout[identicadorVendedor]'} %>
 
   <div class="row">
       <div class="form-group">
@@ -42,7 +42,8 @@
 <script type="text/javascript"
 	src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
 </script> 
-<script type="text/javascript"> 
+<script type="text/javascript">
+  console.log("id da sessão <%= @id_sessao %>");
 	PagSeguroDirectPayment.setSessionId("<%= @id_sessao %>");
 </script>
 
@@ -51,20 +52,19 @@
 $(function() {
   $('#form').submit(function() {
       console.log("Função do form acionada!!!")
-      cartao()
-      $("#identicadorComprador").val(get_hash())
-      return true; // return false to cancel form action
+      $("#identicadorVendedor").val(get_hash())
+      setInterval(function(){return true},3000);
   });
 });
 
 function get_bandeira(){
-  console.log("Função get_bandeira acionada!!!")
   PagSeguroDirectPayment.getBrand({ 
     cardBin: $("#numeroCartao").val(), 
     success: function(response) {
       $("#bandeiraCartao").val(response["brand"]["name"])
     }, 
     error: function(response) { 
+      // Ativar mensagem de erro
     }, 
     complete: function(response) { 
     } 
@@ -72,7 +72,6 @@ function get_bandeira(){
 }
 
 function cartao(){
-  console.log("Função cartao() acionada!!!")
   PagSeguroDirectPayment.createCardToken({ 
    cardNumber: $("#numeroCartao").val(), 
    brand: $("#bandeiraCartao").val(), 
@@ -80,23 +79,31 @@ function cartao(){
    expirationMonth: $("#mesValidadeCartao").val(), 
    expirationYear: $("#anoValidadeCartao").val(), 
    success: function(response) {
-    console.log("sucesso")
-    console.log(response)
       $("#tokenIdentificadorCartao").val(response["card"]["token"])
     }, 
    error: function(response) { 
-    console.log("erro")
-    console.log(response)
     }, 
     complete: function(response) { 
-      console.log("complete")
-      console.log(response)
     } 
   });
 }
 
+function checa_campos_preenchidos(){
+  if($("#numeroCartao").val() != "" &&
+      $("mesValidadeCartao").val() != "" &&
+      $("anoValidadeCartao").val() != "" &&
+      $("cvv").val() != ""){
+    cartao()
+  }
+}
+
 function get_hash(){
-  console.log("Função get_hash() acionada!!!")
-  return PagSeguroDirectPayment.getSenderHash();
+  if($("#identicadorVendedor").val() == ""){
+    console.log("Entrei no IF")
+    return PagSeguroDirectPayment.getSenderHash();
+  } else{
+    console.log("Entrei no ELSE")
+    return $("#identicadorVendedor").val();
+  }
 }
 </script>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente_id: 1
+  status_transacao_pag_seguros_id: 1
+  data: 2014-05-25 13:59:28
+
+two:
+  cliente_id: 1
+  status_transacao_pag_seguros_id: 1
+  data: 2014-05-25 13:59:28
