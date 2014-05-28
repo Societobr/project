@@ -22,27 +22,27 @@ Cliente.create([
 		email: 'a@a.com',
 		cpf: '863.113.453-82',
 		nascimento: '1900/01/01',
-		ddd: '11'
+		ddd: '11',
 		telefone: '1111-1111',
 		cep: '11.111-111',
 		estado: 'AC',
-		rua: 'Rua 1'
-		numero: 'Numero 1'
-		complemento: 'Complemento1'
-		bairro: 'Bairro1'
+		rua: 'Rua 1',
+		numero: 'Numero 1',
+		complemento: 'Complemento1',
+		bairro: 'Bairro1',
 		cidade: 'Cidade1'},
 	{nome: 'Nome2 de Sobrenome2',
 		email: 'b@b.com',
 		cpf: '863.113.453-82',
 		nascimento: '1900/02/02',
-		ddd: '22'
+		ddd: '22',
 		telefone: '2222-2222',
 		cep: '22.222-222',
 		estado: 'AM',
-		rua: 'Rua 2'
-		numero: 'Numero 2'
-		complemento: 'Complemento2'
-		bairro: 'Bairro2'
+		rua: 'Rua 2',
+		numero: 'Numero 2',
+		complemento: 'Complemento2',
+		bairro: 'Bairro2',
 		cidade: 'Cidade2'}
 	])
 StatusTransacaoPagSeguro.create([
