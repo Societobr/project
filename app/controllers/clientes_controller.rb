@@ -88,7 +88,7 @@ class ClientesController < ApplicationController
 
   def cards_brand
     sprocket = Rails.application.assets['cards/'+params[:code].downcase+'.png']
-    img_path = sprocket.digest_path if sprocket
+    img_path = '/assets/' + sprocket.digest_path if sprocket
 
     respond_to do |format|
       format.json {render json: {path: img_path}}
