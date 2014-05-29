@@ -35,6 +35,8 @@ gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-ra
 
 gem "cpf_validator"
 
+gem 'whenever', :require => false
+
 group :test do
   #gem 'shoulda-matchers'
   gem 'cucumber-rails', require: false

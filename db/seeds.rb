@@ -17,9 +17,14 @@ Atividade.create([
 	{user_id: 2, cliente_id: 2, preco_total: 500.50, valor_desconto: 50.05},
 	{user_id: 3, cliente_id: 3, preco_total: 600.60, valor_desconto: 60.06},
 	])
+EmailExpiracaoPlano.create([
+	{assunto: 'Renove seu plano.',
+	antec_envio: 30,
+	body: '<h2>Seu plano expira em alguns dias.<h2> <br /> Faça a renovação e continue a aproveitando as vantagens que só o societo lhe proporciona.'}
+	])
 Cliente.create([
-	{nome: 'Nome1 de Sobrenome1',
-		email: 'a@a.com',
+	{nome: 'Cristiano Alencar de Souza Mendonca',
+		email: 'cristiano.souza.mendonca+primeiro@gmail.com',
 		cpf: '863.113.453-82',
 		nascimento: '1900/01/01',
 		ddd: '11',
@@ -30,10 +35,11 @@ Cliente.create([
 		numero: 'Numero 1',
 		complemento: 'Complemento1',
 		bairro: 'Bairro1',
-		cidade: 'Cidade1'},
+		cidade: 'Cidade1',
+		expira_em: Date.tomorrow},
 	{nome: 'Nome2 de Sobrenome2',
-		email: 'b@b.com',
-		cpf: '863.113.453-82',
+		email: 'cristiano.souza.mendonca+segundo@gmail.com',
+		cpf: '064.427.786-65',
 		nascimento: '1900/02/02',
 		ddd: '22',
 		telefone: '2222-2222',
@@ -43,7 +49,8 @@ Cliente.create([
 		numero: 'Numero 2',
 		complemento: 'Complemento2',
 		bairro: 'Bairro2',
-		cidade: 'Cidade2'}
+		cidade: 'Cidade2',
+		expira_em: Date.tomorrow.next_year}
 	])
 StatusTransacaoPagSeguro.create([
 	{code: 1, description: 'Aguardando pagamento'},

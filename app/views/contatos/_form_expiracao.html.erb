@@ -1,0 +1,41 @@
+<%= form_for @email do |f| %>
+
+  <div class="row">
+    <div class="col-md-6" data-appear-animation="bounceInRight">
+      <%= render partial: 'messages' %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= f.text_field :assunto, {id: 'assunto', class: "form-control input-lg", placeholder: 'Assunto'} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= f.text_field :antec_envio, {id: 'antec_envio', class: "form-control input-lg", placeholder: 'Antecedência de envio (em dias)'} %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <%= f.text_area :body, {id: 'body', class: "form-control input-lg", placeholder: 'Email'} %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="form-group">
+        <div class="col-md-12">
+          <%= submit_tag "OK", {class: "btn btn-primary btn-lg"} %>
+          <%= link_to 'Cancelar',  clientes_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+<% end %>

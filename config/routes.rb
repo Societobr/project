@@ -18,12 +18,16 @@ Rails.application.routes.draw do
   get '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte'
   get '/nossos-planos',  to: 'paginas_estaticas#planos'
   get '/faq', to: 'paginas_estaticas#faq'
+  post '/cupom', to: 'clientes#cupom'
+  post '/cards', to: 'clientes#cards_brand'
 
   scope 'admin' do
     resources :clientes, except: [:create, :new]
     get 'cliente/new', to: 'clientes#new_admin', as: 'new_admin_cliente'
     post 'cliente/new', to: 'clientes#create_admin', as: 'admin_clientes'
     patch 'cliente/:id', to: 'clientes#update', as: 'update_clientes'
+    get 'email-expiracao', to: 'contatos#new_email_expiracao', as: 'email_expiracao_planos'
+    post 'email-expiracao', to: 'contatos#create_email_expiracao'
     resources :users
   end
 

@@ -1,8 +1,13 @@
 class ContactMailer < ActionMailer::Base
-  default :from => 'cristiano.souza.mendonca@gmail.com'
+  default :from => ENV["GMAIL_USERNAME"]
 
   def mensagem_contato(contato)
     @contato = contato
-    mail(:to => 'cristiano.souza.mendonca@gmail.com', :subject => contato.assunto)
+    mail(:to => ENV["GMAIL_USERNAME"], :subject => contato.assunto)
+  end
+
+  def mensagem_expiracao(email, cliente)
+    @email = email
+		mail(to: cliente.email, subject: email.assunto)
   end
 end

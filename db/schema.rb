@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140526182138) do
+ActiveRecord::Schema.define(version: 20140528143559) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20140526182138) do
     t.string   "numero"
     t.string   "rua"
     t.string   "cupom"
+  end
+
+  create_table "email_expiracao_planos", force: true do |t|
+    t.string  "assunto"
+    t.integer "antec_envio"
+    t.text    "body"
   end
 
   create_table "historicos", force: true do |t|

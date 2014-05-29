@@ -77,7 +77,15 @@
 
     <div class="row">
       <div class="col-md-4">
-        <%= f.text_field :cupom, {class: "form-control input-sm", placeholder: "Cupom de Desconto"} %>
+        <%= f.text_field :cupom, {class: "form-control input-sm", placeholder: "Cupom de Desconto", onchange: "validar_cupom()"} %>
+      </div>
+
+      <div class="col-md-8" style='display:none' id='cupom_valido_msg'>
+        Cupom validado com suceso! Você receberá 50% de desconto no ato do pagamento.
+      </div>
+
+      <div class="col-md-8" style='display:none' id='cupom_invalido_msg'>
+        Cupom inválido!
       </div>
     </div>
     
@@ -308,6 +316,24 @@ function copiar(){
 }
 </script>
 
+<script type="text/javascript">
+  $("#cliente_nome").val("João das Colves")
+  $("#cliente_cpf").val("376.630.511-57")
+  $("#cliente_email").val("joao.das.colves@gmail.com")
+  $("#cliente_nascimento").val("25/04/1989")
+  $("#cliente_ddd").val("31")
+  $("#cliente_telefone").val("1111-1111")
+  $("#cliente_bairro").val("Amazonas")
+  $("#cliente_rua").val("Tapajós")
+  $("#cliente_cidade").val("Contagem")
+  $("#cliente_numero").val("353")
+  $("#cliente_complemento").val("Sem Complemento")
+  $("#cliente_cep").val("32.240-060")
+  $("#cliente_estado").val("MG")
+  $("#nome_cartao").val("João Cenoura")
+  $("#aceite").prop('checked', true);
+</script>
+
 <script type="text/javascript"
   src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
 </script> 
@@ -338,8 +364,39 @@ function copiar(){
     });
   }
 
+  function get_brand_image(){
+    $.ajax({
+        url: '/cards',
+        type: "POST",
+        dataType: "json",
+        data: {code: $("#bandeira_cartao").val()},
+        error: function(response){
+            
+        },
+        success: function(response){
+          $('#numero_cartao').css({background: "url("+response['path']+") 0 no-repeat", 'background-position': 'right'})
+        }
+    });   
+  }
+
+  (function () {
+      var oldVal;
+      $('#numero_cartao').on('change keypress paste focus textInput input', function () {
+          var val = this.value;
+          if (val != oldVal) {
+              oldVal = val;
+              if(oldVal.length >= 6){
+                get_bandeira()
+                console.log($("#bandeira_cartao").val())
+                if($("#bandeira_cartao").val().length != 0){
+                  get_brand_image()
+                }
+              }
+          }
+      });
+  }());
+
   function cartao(){
-    console.log("cartao() ativada")
     PagSeguroDirectPayment.createCardToken({ 
      cardNumber: $("#numero_cartao").val(), 
      brand: $("#bandeira_cartao").val(), 
@@ -348,7 +405,7 @@ function copiar(){
      expirationYear: $("#validade_cartao").val().substr(3, 7), 
      success: function(response) {
         $("#tokenCartao").val(response["card"]["token"])
-        console.log("Token cartão: " + response["card"]["token"])
+        get_installments()
       }, 
      error: function(response) { 
       console.log(response)
@@ -356,6 +413,43 @@ function copiar(){
       complete: function(response) { 
       } 
     });
+  }
+
+  function get_installments(){
+    PagSeguroDirectPayment.getInstallments({ 
+      amount: <%= session[:plano_preco] %>, 
+      brand: $("#bandeira_cartao").val(), 
+      success: function(response) { 
+        console.log(response)
+      }, 
+      error: function(response) { 
+        console.log(response)
+      }, 
+      complete: function(response) { 
+      //tratamento comum para todas chamadas 
+      } 
+    }); 
+  }
+
+  function validar_cupom(){   
+    $.ajax({
+        url: '/cupom',
+        type: "POST",
+        dataType: "json",
+        data: {code: $("#cliente_cupom").val()},
+        error: function(e){
+            console.log(e)
+        },
+        success: function(response){
+            if(response['cupom'] == "valido"){
+              $("#cupom_valido_msg").css({ display: "block" })
+              $("#cupom_invalido_msg").css({display: "none"})
+            }else{
+              $("#cupom_valido_msg").css({display: "none"})
+              $("#cupom_invalido_msg").css({ display: "block" })
+            }
+        }
+    });   
   }
 
   function checa_campos_preenchidos(){

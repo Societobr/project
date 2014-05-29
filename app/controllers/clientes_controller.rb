@@ -1,8 +1,13 @@
 class ClientesController < ApplicationController
   layout 'dashboard', except: [:new, :create] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize, except: [:new, :create]
+  before_filter :authorize, except: [:new, :create, :cupom, :cards_brand]
   before_filter :plano_escolhido?, only: [:new]
+
+  CUPOM_CODE = ['societo50']
+  PLANOS_IDS = {'MENSAL' => '001', 'ANUAL' => '002', 'AMIGO' => '003'}
+  PLANOS_PRECOS = {'MENSAL' => 1.01,'ANUAL' => 1.02, 'AMIGO' => 1.03}
+  PLANOS_VIGENCIA = {'MENSAL' => 30,'ANUAL' => 60, 'AMIGO' => 90}
 
   # GET /clientes
   # GET /clientes.json
@@ -67,6 +72,28 @@ class ClientesController < ApplicationController
     end
   end
 
+  def cupom
+    status =
+    if cupom_valido?(params[:code])
+      set_sessions_params(params[:code])
+      'valido'
+    else
+      'invalido'
+    end
+
+    respond_to do |format|
+      format.json {render json: {cupom: status}}
+    end
+  end
+
+  def cards_brand
+    img_path = ActionController::Base.helpers.asset_path('/assets/cards/'+params[:code].downcase+'.png')
+
+    respond_to do |format|
+      format.json {render json: {path: img_path}}
+    end
+  end
+
   # PATCH/PUT /clientes/1
   # PATCH/PUT /clientes/1.json
   def update
@@ -90,8 +117,19 @@ class ClientesController < ApplicationController
       @cliente = Cliente.find(params[:id])
     end
 
+    def set_sessions_params(code)
+      session[:cupom_code] = code
+      session[:cupom_discount] = session[:plano_preco] / 2
+    end
+
+    def cupom_valido?(cupom)
+      print CUPOM_CODE
+      CUPOM_CODE.include?(cupom)
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_params
+      clt_params =
       params.require(:cliente).permit(
         :nome,
         :ddd,
@@ -107,6 +145,8 @@ class ClientesController < ApplicationController
         :numero,
         :complemento,
         :cupom)
+
+      clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
     end
 
     def pagamento_params
@@ -157,16 +197,12 @@ class ClientesController < ApplicationController
       end
     end
 
-    def plano_escolhido?
-      planos_ids = {'MENSAL' => '001', 'ANUAL' => '002', 'AMIGO' => '003'}
-      planos_precos = {'MENSAL' => 1.01,'ANUAL' => 1.02, 'AMIGO' => 1.03}
-      planos_vigencia = {'MENSAL' => 30,'ANUAL' => 60, 'AMIGO' => 90}
-      
-      if planos_precos.keys.include?(params[:plano])
+    def plano_escolhido?      
+      if PLANOS_PRECOS.keys.include?(params[:plano])
         plano = params[:plano]
-        id = planos_ids[plano]
-        preco = planos_precos[plano]
-        vigencia = planos_vigencia[plano]
+        id = PLANOS_IDS[plano]
+        preco = PLANOS_PRECOS[plano]
+        vigencia = PLANOS_VIGENCIA[plano]
         
         session[:plano_id] = id
         session[:plano_nome] = plano

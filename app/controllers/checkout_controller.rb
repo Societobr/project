@@ -42,7 +42,7 @@ class CheckoutController
       "itemDescription1" => params[:plano],
       "itemAmount1" => params[:preco],
       "itemQuantity1" => 1,
-      "reference" => params[:registro],
+      "reference" => params[:reference],
       "senderEmail" => "c50451335031919206442@sandbox.pagseguro.com.br", #colocar email do cliente aqui
       "senderName" => params[:nome],
       "senderCPF" => params[:cpf].gsub(/\.|-/, ''),
