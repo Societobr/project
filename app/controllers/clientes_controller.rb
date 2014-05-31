@@ -61,7 +61,7 @@ class ClientesController < ApplicationController
       resposta = CheckoutController.start(parametrosPagamento)
       
       if sucesso?(resposta)
-        flash[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
       else
         Cliente.delete(@cliente)
         @id_sessao = CheckoutController.get_id_sessao
@@ -144,7 +144,8 @@ class ClientesController < ApplicationController
         :rua,
         :numero,
         :complemento,
-        :cupom)
+        :cupom,
+        :aceite)
 
       clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
     end
@@ -174,7 +175,7 @@ class ClientesController < ApplicationController
     end
 
     def cliente_aceitou_termo?
-      if params[:aceite]
+      if params[:cliente][:aceite]
         true
       else
         @cliente.errors.messages.store :aceite, ['os termos'] 
@@ -197,7 +198,7 @@ class ClientesController < ApplicationController
 
     def sucesso?(resposta)
       if resposta.class == Array    # lista de erros
-        flash[:error] = resposta.join("\n")
+        flash.now[:error] = resposta.join("\n")
         return false
       else resposta.class == String # sucesso
         return true

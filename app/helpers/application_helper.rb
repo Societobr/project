@@ -23,6 +23,12 @@ module ApplicationHelper
 
 	end
 
+	def get_object_error_into_flash_render(object)
+		if(object and !object.errors.messages.empty?)
+			flash.now[:error] = object.errors.full_messages.join('<br />')
+		end
+	end
+
 	def get_message_class(key)
 		FLASH_KEY[key]
 	end

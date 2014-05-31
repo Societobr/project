@@ -188,7 +188,7 @@ class CheckoutController
       when 53039
         "Número de parcelas inválido."
       when 53040
-        "O valor das parcelas deve ser informado. Contate o administrador do sistema."
+        "O valor das parcelas deve ser informado."
       when 53041
         "Valor das parcelas inválido."
       when 53042
