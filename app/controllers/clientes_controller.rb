@@ -175,7 +175,7 @@ class ClientesController < ApplicationController
     end
 
     def cliente_aceitou_termo?
-      if params[:cliente][:aceite]
+      if params[:cliente][:aceite] == "1"
         true
       else
         @cliente.errors.messages.store :aceite, ['os termos'] 
