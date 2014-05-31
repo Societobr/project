@@ -59,7 +59,7 @@
         </div>
         
         <div class="col-md-2">
-          <%= f.text_field :estado, {class: "form-control input-sm", placeholder: "Estado"} %>
+          <%= f.text_field :estado, {class: "form-control input-sm", placeholder: "Estado", maxlength: "2", onchange: "to_upper_case(this)"} %>
         </div>
         
         <div class="col-md-4">
@@ -167,7 +167,7 @@
               </div>
 
               <div class="col-md-2">
-                <%= text_field_tag :estado_cartao, nil, {class: "form-control input-sm", placeholder: "Estado", name: 'pagamento[estado_cartao]'} %>
+                <%= text_field_tag :estado_cartao, nil, {class: "form-control input-sm", placeholder: "Estado", name: 'pagamento[estado_cartao]', onchange: "to_upper_case(this)", maxlength: "2"} %>
               </div>
 
               <div class="col-md-4">
@@ -312,13 +312,11 @@
   $('#cliente_nascimento').mask('99/99/9999');
   $('#cliente_cep').mask('99.999-999');
   $('#cliente_ddd').mask('99');
-  $('#cliente_estado').mask('aa');
   $('#cpf_cartao').mask('999.999.999-99');
   $('#telefone_cartao').mask('9999-9999');
   $('#nascimento_cartao').mask('99/99/9999');
   $('#cep_cartao').mask('99.999-999');
   $('#ddd_cartao').mask('99');
-  $('#estado_cartao').mask('aa');
   $('#validade_cartao').mask('99/9999')
 </script>
 
@@ -355,7 +353,7 @@ function copiar(){
   }
 }
 </script>
-<!--
+
 <script type="text/javascript">
   $("#cliente_nome").val("João das Colves")
   $("#cliente_cpf").val("376.630.511-57")
@@ -373,7 +371,6 @@ function copiar(){
   $("#nome_cartao").val("João Cenoura")
   $("#aceite").prop('checked', true);
 </script>
--->
 
 <!--
 <script type="text/javascript"
@@ -411,6 +408,10 @@ function copiar(){
       complete: function(response) { 
       } 
     });
+  }
+
+  function to_upper_case(obj){
+    obj.value = obj.value.toUpperCase()
   }
 
   function get_brand_image(){
