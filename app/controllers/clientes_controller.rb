@@ -6,7 +6,7 @@ class ClientesController < ApplicationController
 
   CUPOM_CODE = ['societo50']
   PLANOS_IDS = {'MENSAL' => '001', 'ANUAL' => '002', 'AMIGO' => '003'}
-  PLANOS_PRECOS = {'MENSAL' => 1.01,'ANUAL' => 1.02, 'AMIGO' => 1.03}
+  PLANOS_PRECOS = {'MENSAL' => 50.00,'ANUAL' => 100.00, 'AMIGO' => 150.00}
   PLANOS_VIGENCIA = {'MENSAL' => 30,'ANUAL' => 60, 'AMIGO' => 90}
 
   # GET /clientes
@@ -29,6 +29,7 @@ class ClientesController < ApplicationController
   def new
     @cliente = Cliente.new
     @id_sessao = CheckoutController.get_id_sessao
+    session[:cupom_discount] = nil
   end
 
   # Renderiza layout para cadastro de usuário pelo próprio admin
@@ -61,15 +62,13 @@ class ClientesController < ApplicationController
       
       if sucesso?(resposta)
         flash[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-        render :new
       else
         Cliente.delete(@cliente)
         @id_sessao = CheckoutController.get_id_sessao
-        render :new
       end
-    else
-      render :new
     end
+
+    render :new
   end
 
   def cupom
@@ -167,7 +166,10 @@ class ClientesController < ApplicationController
         :parcelas,
         :tokenIdentificadorCartao,
         :identificador_vendedor,
-        :meio_pagamento
+        :meio_pagamento,
+        :preco_total_parcelamento,
+        :valor_parcelas,
+        :num_parcelas
         )
     end
 
@@ -187,6 +189,10 @@ class ClientesController < ApplicationController
       parametros.store(:reference, @cliente.registro)
       parametros.store(:banco, params[:banco])
       return parametros
+    end
+
+    def get_desconto(pagamento)
+      
     end
 
     def sucesso?(resposta)
@@ -216,6 +222,8 @@ class ClientesController < ApplicationController
     end
 
     def plano_params
-      {id_plano: session[:plano_id], plano: session[:plano_nome], preco: session[:plano_preco]}
+      preco = session[:cupom_discount] || session[:plano_preco]
+
+      {id_plano: session[:plano_id], plano: session[:plano_nome], preco: preco}
     end
 end

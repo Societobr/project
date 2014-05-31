@@ -1,3 +1,14 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= image_tag("logo.png", alt: "Societo Clube de Vantagens") %>
+         | Aguarde Enquanto Processamos sua Requisição...
+      </div>
+    </div>
+  </div>
+</div>
+
 <%= form_tag public_cliente_path, id: 'form' do %>
 
   <div class="col-md-12" data-appear-animation="bounceInRight">
@@ -178,7 +189,17 @@
           </div>
 
           <div class="row col-md-12 padding-tb20">
-            <strong>Cartão de crédito</strong>
+            <div>
+              <strong>Cartão de crédito</strong>
+            </div>
+
+            <div id="invalid_card_number" style="display:none" class="red-color-text">
+              Ops! Parece que o número do cartão é inválido. 
+            </div>
+
+            <div id="invalid_card_data" style="display:none" class="red-color-text">
+              Ops! Parece que os dados do cartão não são válidos. Confira se número do cartão, CVV e data de validade foram inseridos corretamente.
+            </div>
           </div>
 
           <div class="row">
@@ -189,7 +210,7 @@
             <div class="col-md-2">
               <%= text_field_tag :cvv_cartao, nil, {id: 'cvv_cartao', class: "form-control input-sm", placeholder: "CVV", onchange: "checa_campos_preenchidos()"} %>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
               <%= text_field_tag :validade_cartao, nil, {id: 'validade_cartao', class: "form-control input-sm", placeholder: "Validade", onfocusout: 'checa_campos_preenchidos()'} %>
             </div>
            </div> 
@@ -197,13 +218,13 @@
 
           <div class="row">
             <div class="col-md-4 text-align-right" >Parcelas (até 4x sem acréscimos)</div>
-            <div class="col-md-2">
-              <%= text_field_tag :parcelas, nil, {class: "form-control input-sm", placeholder: "", name: 'pagamento[parcelas]'} %>
+            <div class="col-md-4">
+              <%= select_tag :parcelas, nil, {class: "form-control input-sm", disabled: true} %>
             </div>
           </div>  
 
           <div class="col-md-12 padding-tb45">
-            <%= link_to 'Finalizar', '#', {class: "btn btn-primary btn-md color-text", onclick: 'submit_form()'} %>
+            <%= link_to 'Finalizar', '#', {id: 'finalizar', class: "btn btn-primary btn-md color-text", onclick: 'submit_form()'} %>
           </div>
           
           <%= image_tag("Logo/logo_pagseguro_180x41.gif", alt: 'Pagseguro') %>
@@ -269,6 +290,12 @@
   <%= hidden_field_tag 'token_cartao', nil, {id: 'tokenCartao', name: 'pagamento[tokenIdentificadorCartao]'} %>
   <%= hidden_field_tag 'identificador_vendedor', nil, {id: 'identificador_vendedor', name: 'pagamento[identificador_vendedor]'} %>
   <%= hidden_field_tag 'meio_pagamento', nil, {id: 'meio_pagamento', name: 'pagamento[meio_pagamento]', value: 'cartao'} %>
+  <%= hidden_field_tag 'preco_plano', nil, {id: 'preco_plano', value: session[:plano_preco]} %>
+  <%= hidden_field_tag 'valor_desconto', nil, {id: 'preco_desconto', value: session[:plano_preco]} %>
+
+  <%= hidden_field_tag 'preco_total_parcelamento', nil, {id: 'preco_total_parcelamento', name: 'pagamento[preco_total_parcelamento]' } %>
+  <%= hidden_field_tag 'valor_parcelas', nil, {id: 'valor_parcelas', name: 'pagamento[valor_parcelas]' } %>
+  <%= hidden_field_tag 'num_parcelas', nil, {id: 'num_parcelas', name: 'pagamento[num_parcelas]' } %>
 
 <% end %>
 
@@ -293,12 +320,11 @@
   $('#ddd_cartao').mask('99');
   $('#estado_cartao').mask('aa');
   $('#validade_cartao').mask('99/9999')
-  $('#parcelas').mask('9')
 </script>
 
 <script type="text/javascript">
 function copiar(){
-  if($("#copiar_dados").val() == "1"){
+  if($("#copiar_dados").prop('checked')){
     $("#cpf_cartao").val($("#cliente_cpf").val())
     $("#email_cartao").val($("#cliente_email").val())
     $("#ddd_cartao").val($("#cliente_ddd").val())
@@ -312,10 +338,25 @@ function copiar(){
     $("#cep_cartao").val($("#cliente_cep").val())
     $("#estado_cartao").val($("#cliente_estado").val())
     $("#nome_cartao").focus()
+  }else{
+    $("#cpf_cartao").val('')
+    $("#email_cartao").val('')
+    $("#ddd_cartao").val('')
+    $("#telefone_cartao").val('')
+    $("#nascimento_cartao").val('')
+    $("#bairro_cartao").val('')
+    $("#rua_cartao").val('')
+    $("#cidade_cartao").val('')
+    $("#numero_endereco_cartao").val('')
+    $("#complemento_cartao").val('')
+    $("#cep_cartao").val('')
+    $("#estado_cartao").val('')
+    $("#nome_cartao").focus()
   }
 }
 </script>
 
+<!--
 <script type="text/javascript">
   $("#cliente_nome").val("João das Colves")
   $("#cliente_cpf").val("376.630.511-57")
@@ -333,10 +374,18 @@ function copiar(){
   $("#nome_cartao").val("João Cenoura")
   $("#aceite").prop('checked', true);
 </script>
+-->
 
+<!--
 <script type="text/javascript"
   src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
-</script> 
+</script>
+-->
+
+<script type="text/javascript"
+  src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
+</script>
+
 <script type="text/javascript">
   console.log("id da sessão <%= @id_sessao %>");
   PagSeguroDirectPayment.setSessionId("<%= @id_sessao %>");
@@ -346,7 +395,7 @@ function copiar(){
   $(function() {
     $('#form').submit(function() {
         get_hash()
-        setInterval(function(){return true},3000);
+        setInterval(function(){return true},10000);
     });
   });
 
@@ -354,10 +403,11 @@ function copiar(){
     PagSeguroDirectPayment.getBrand({ 
       cardBin: $("#numero_cartao").val(), 
       success: function(response) {
-        $("#bandeira_cartao").val(response["brand"]["name"])
+        $("#bandeira_cartao").val(response.brand.name)
+        $("#invalid_card_number").hide()
       }, 
       error: function(response) { 
-        // Ativar mensagem de erro
+        $("#invalid_card_number").show()
       }, 
       complete: function(response) { 
       } 
@@ -373,8 +423,8 @@ function copiar(){
         error: function(response){
             
         },
-        success: function(response){
-          $('#numero_cartao').css({background: "url("+response['path']+") 0 no-repeat", 'background-position': 'right'})
+        success: function(image){
+          $('#numero_cartao').css({background: "url("+image.path+") 0 no-repeat", 'background-position': 'right'})
         }
     });   
   }
@@ -396,6 +446,19 @@ function copiar(){
       });
   }());
 
+  (function () {
+      var oldVal;
+      $('#validade_cartao').on('change keypress paste focus textInput input', function () {
+          var val = this.value;
+          if (val != oldVal) {
+              oldVal = val;
+              if(/(\d{2}\/\d{4})/.test($('#validade_cartao').val())){
+                $("#finalizar").focus()
+              }
+          }
+      });
+  }());
+
   function cartao(){
     PagSeguroDirectPayment.createCardToken({ 
      cardNumber: $("#numero_cartao").val(), 
@@ -404,11 +467,13 @@ function copiar(){
      expirationMonth: $("#validade_cartao").val().substr(0, 2),
      expirationYear: $("#validade_cartao").val().substr(3, 7), 
      success: function(response) {
-        $("#tokenCartao").val(response["card"]["token"])
+        $("#invalid_card_data").hide
+        $("#tokenCartao").val(response.card.token)
         get_installments()
       }, 
      error: function(response) { 
-      console.log(response)
+      console.log("falha cartao()")
+      $("#invalid_card_data").show()
       }, 
       complete: function(response) { 
       } 
@@ -416,11 +481,14 @@ function copiar(){
   }
 
   function get_installments(){
+    var bandeira = $("#bandeira_cartao").val()
+    var preco = $("#preco_desconto").val()
     PagSeguroDirectPayment.getInstallments({ 
-      amount: <%= session[:plano_preco] %>, 
-      brand: $("#bandeira_cartao").val(), 
-      success: function(response) { 
-        console.log(response)
+      amount: preco, 
+      brand: bandeira, 
+      success: function(response) {
+        instmsArray = response.installments[bandeira]
+        add_options_and_enable_select(instmsArray)
       }, 
       error: function(response) { 
         console.log(response)
@@ -429,6 +497,30 @@ function copiar(){
       //tratamento comum para todas chamadas 
       } 
     }); 
+  }
+
+  function preenche_campos_parcelas(){
+    var parcelamento = /(^\d{1,2}) (\d+\.\d{2}) (\d+\.\d{2}$)/.exec($("#parcelas").val())
+    var quantity = parcelamento[1]
+    var installmentAmount = parcelamento[2]
+    var totalAmount = parcelamento[3]
+
+    $('#preco_total_parcelamento').val(totalAmount)
+    $('#valor_parcelas').val(installmentAmount)
+    $('#num_parcelas').val(quantity)
+  }
+
+  function add_options_and_enable_select(installments){
+    var selectField = $("#parcelas")
+    $("#parcelas").find('option').remove() <!--Assegura que não haverá inserção duplicada de options-->
+
+    $.each(installments, function(val, text) {
+      selectField.append(
+        $('<option></option>').val(text.quantity + ' ' + text.installmentAmount.toFixed(2) + ' ' + text.totalAmount.toFixed(2)).html((val+1) + 'x de R$ ' + text.installmentAmount.toFixed(2))
+      );
+    });
+
+    selectField.prop('disabled', false)
   }
 
   function validar_cupom(){   
@@ -441,12 +533,13 @@ function copiar(){
             console.log(e)
         },
         success: function(response){
-            if(response['cupom'] == "valido"){
-              $("#cupom_valido_msg").css({ display: "block" })
-              $("#cupom_invalido_msg").css({display: "none"})
+            if(response.cupom == "valido"){
+              $("#preco_desconto").val($("#preco_plano").val()/2)
+              $("#cupom_valido_msg").show()
+              $("#cupom_invalido_msg").hide()
             }else{
-              $("#cupom_valido_msg").css({display: "none"})
-              $("#cupom_invalido_msg").css({ display: "block" })
+              $("#cupom_valido_msg").hide()
+              $("#cupom_invalido_msg").show()
             }
         }
     });   
@@ -472,6 +565,18 @@ function copiar(){
   }
 
   function submit_form(){
+    if($("#meio_pagamento").val() == "cartao"){
+      limpa_dados_cartao()
+      if(!$("#parcelas").prop('disabled'))
+        preenche_campos_parcelas()
+    }
+    $('#myModal').modal('show')
     $('#form').submit();
+  }
+
+  function limpa_dados_cartao(){
+    $("#numero_cartao").val('')
+    $("#cvv_cartao").val('')
+    $("#validade_cartao").val('')
   }
 </script>

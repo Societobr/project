@@ -32,13 +32,14 @@
     <thead>
       <tr>
         <th>Registro</th>
+        <th>Vigência</th>
         <th>Nome</th>
-        <th>Sobrenome</th>
         <th>Email</th>
         <th>Cpf</th>
         <th>Telefone</th>
         <th>Estado</th>
         <th>Cidade</th>
+        <th>Cupom</th>
         <th></th>
         <th></th>
         <th></th>
@@ -50,13 +51,14 @@
       <% @clientes.each do |cliente| %>
         <tr>
           <td><%= cliente.registro %></td>
+          <td><%= cliente.expira_em %></td>
           <td><%= cliente.nome %></td>
-          <td><%= cliente.sobrenome %></td>
           <td><%= cliente.email %></td>
           <td><%= cliente.cpf %></td>
-          <td><%= cliente.telefone %></td>
+          <td>(<%= cliente.ddd %>) <%= cliente.telefone %></td>
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
+          <td><%= cliente.cupom %></td>
           <td>
             <%= link_to icon("eye", '', class: "fa-2x", title: "Atividades"), raw("#myModal#{cliente.id}"), 'data-toggle'=>"modal" %>
             <div id="myModal<%= cliente.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

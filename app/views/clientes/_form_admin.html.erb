@@ -7,74 +7,65 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-6">
-        <%= f.text_field :nome, {class: "form-control input-lg", placeholder: "Nome"} %>
+        <%= f.text_field :nome, {class: "form-control input-sm", placeholder: "Nome completo"} %>
       </div>
-      <div class="col-md-6">
-        <%= f.text_field :sobrenome, {class: "form-control input-lg", placeholder: "Sobrenome"} %>
+      <div class="col-md-2">
+        <%= f.text_field :ddd, {pattern: '^[0-9]{2}$', class: "form-control input-sm", placeholder: "DDD"} %>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group">
-      <div class="col-md-6">
-        <%= f.email_field :email, {class: "form-control input-lg", placeholder: "Email"} %>
-      </div>
-      <div class="col-md-6">
-        <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-lg", placeholder: "CPF"} %>
+      <div class="col-md-4">
+        <%= f.text_field :telefone, {pattern: '^[0-9]{4}-[0-9]{4}$', class: "form-control input-sm", placeholder: "Telefone"} %>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="form-group">
-      <div class="col-md-12">
-        <%= f.label :data_de_nascimento %><br>
-      </div>
-        <%= f.date_select(:nascimento,
-          {order: [:day, :month, :year],
-            prompt: { day: 'Dia', month: 'Mês', year: 'Ano' },
-            use_month_names: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul',
-              'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            start_year: 1930,
-            end_year: 1996},
-          {class: "form-control input-lg"}) %>
-
       <div class="col-md-6">
-        <%= f.text_field :telefone, {pattern: '^\([0-9]{2}\) [0-9]{4}-[0-9]{4}$', class: "form-control input-lg", placeholder: "Telefone"} %>
+        <%= f.email_field :email, {class: "form-control input-sm", placeholder: "Email"} %>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="form-group">
       <div class="col-md-3">
-        <%= f.text_field :cep, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-lg", placeholder: "CEP"} %>
+        <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-sm", placeholder: "CPF"} %>
+      </div>
+      <div class="col-md-3">
+        <%= f.text_field :nascimento, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento"} %>
+      </div>
+    </div>
+  </div>
+  Endereço:
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-2">
+        <%= f.text_field :cep, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-sm", placeholder: "CEP"} %>
       </div>
 
-      <div class="col-md-3 col-sm-3 col-xs-4">
-        <%= f.select :estado,
-          options_for_select(['Estado', 'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES',
-            'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN',
-            'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO'], 'Estado'), {},
-            {class: "form-control input-lg"}%>
+      <div class="col-md-4">
+        <%= f.text_field :cidade, {class: "form-control input-sm", placeholder: "Cidade"} %>
       </div>
-
-      <div class="col-md-6">
-        <%= f.text_field :cidade, {class: "form-control input-lg", placeholder: "Cidade"} %>
+      
+      <div class="col-md-2">
+        <%= f.text_field :estado, {class: "form-control input-sm", placeholder: "Estado"} %>
       </div>
+      
+      <div class="col-md-4">
+        <%= f.text_field :bairro, {class: "form-control input-sm", placeholder: "Bairro"} %>
+      </div>     
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-12">
-      <%= f.text_field :endereco,
-        {rows: "2", style: "height: 85px;", class: "form-control input-lg", placeholder: "Endereço"} %>
+    <div class="col-md-6">
+      <%= f.text_field :rua, {class: "form-control input-sm", placeholder: "Rua"} %>
+    </div>
+    <div class="col-md-2">
+      <%= f.text_field :numero, {class: "form-control input-sm", placeholder: "Nº"} %>
+    </div>
+    <div class="col-md-4">
+      <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
     </div>
   </div>
 
-  <p> </p>
-  <p> </p>
+  <br />
+  <br />
 
   <div class="row">
     <div class="form-group">
@@ -87,15 +78,19 @@
 
 <% end %>
 
-<!-- Script abaixo toma os elementos dia, mês e ano (gerados por date_select) e os envolve com
-  a classe que os deixam na mesma linha -->
-<script type="text/javascript">
-  $('select[id*="cliente_nascimento"]').wrap('<div class="col-md-2 col-sm-3 col-xs-4">');
-</script> 
-
-<!-- Scripts abaixo criam máscara para formulário -->
 <script type="text/javascript">
   $('#cliente_cpf').mask('999.999.999-99');
-  $('#cliente_telefone').mask('(99) 9999-9999');
+  $('#cliente_telefone').mask('9999-9999');
+  $('#cliente_nascimento').mask('99/99/9999');
   $('#cliente_cep').mask('99.999-999');
+  $('#cliente_ddd').mask('99');
+  $('#cliente_estado').mask('aa');
+  $('#cpf_cartao').mask('999.999.999-99');
+  $('#telefone_cartao').mask('9999-9999');
+  $('#nascimento_cartao').mask('99/99/9999');
+  $('#cep_cartao').mask('99.999-999');
+  $('#ddd_cartao').mask('99');
+  $('#estado_cartao').mask('aa');
+  $('#validade_cartao').mask('99/9999')
+  $('#parcelas').mask('9')
 </script>

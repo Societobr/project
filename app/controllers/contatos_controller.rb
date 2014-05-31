@@ -59,6 +59,6 @@ class ContatosController < ApplicationController
     end
 
     def email_params
-      params.require(:email).permit(:assunto, :body, :antec_envio)
+      params.require(:email).permit(:assunto, :body, :antec_envio, :recorrencia)
     end
 end

@@ -36,10 +36,6 @@
 </div>
 
 <div class="form-group">
-  <strong> Sobrenome: </strong> <%= @cliente.sobrenome %>
-</div>
-
-<div class="form-group">
   <strong> Email: </strong> <%= @cliente.email %>
 </div>
 
@@ -52,23 +48,15 @@
 </div>
 
 <div class="form-group">
-  <strong> Telefone: </strong> <%= @cliente.telefone %>
+  <strong> Telefone: </strong> (<%= @cliente.ddd %>) <%= @cliente.telefone %>
 </div>
 
 <div class="form-group">
-  <strong> CEP: </strong> <%= @cliente.cep %>
+  <strong> Endereço: </strong> <%= "#{@cliente.rua}, nº #{@cliente.numero}, #{@cliente.complemento} - Bairro #{@cliente.bairro}. #{@cliente.cidade}/#{@cliente.estado} - #{@cliente.cep}" %>
 </div>
 
 <div class="form-group">
-  <strong> Estado: </strong> <%= @cliente.estado %>
-</div>
-
-<div class="form-group">
-  <strong> Cidade: </strong> <%= @cliente.cidade %>
-</div>
-
-<div class="form-group">
-  <strong> Endereco: </strong> <%= @cliente.endereco %>
+  <strong> Vigência: </strong> <%= @cliente.expira_em %>
 </div>
 
 <div class="form-group">

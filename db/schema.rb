@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528143559) do
+ActiveRecord::Schema.define(version: 20140530020815) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20140528143559) do
     t.string  "assunto"
     t.integer "antec_envio"
     t.text    "body"
+    t.integer "recorrencia"
   end
 
   create_table "historicos", force: true do |t|

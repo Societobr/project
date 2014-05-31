@@ -40,7 +40,7 @@ class CheckoutController
       "currency" => "BRL",
       "itemId1" => params[:id_plano],
       "itemDescription1" => params[:plano],
-      "itemAmount1" => params[:preco],
+      "itemAmount1" => '%.2f'%params[:preco],
       "itemQuantity1" => 1,
       "reference" => params[:reference],
       "senderEmail" => "c50451335031919206442@sandbox.pagseguro.com.br", #colocar email do cliente aqui
@@ -62,8 +62,8 @@ class CheckoutController
     default.merge({
       "paymentMethod" => "creditCard",
       "creditCardToken" => params[:tokenIdentificadorCartao],
-      "installmentQuantity" => params[:parcelas],
-      "installmentValue" => '%.2f'%(params[:preco] / params[:parcelas].to_i),
+      "installmentQuantity" => params[:num_parcelas],
+      "installmentValue" => params[:valor_parcelas],
       "creditCardHolderName" => params[:nome_cartao],
       "creditCardHolderBirthDate" => params[:nascimento_cartao],
       "creditCardHolderCPF" => params[:cpf_cartao].gsub(/\.|-/, ''),
@@ -190,7 +190,7 @@ class CheckoutController
       when 53040
         "O valor das parcelas deve ser informado. Contate o administrador do sistema."
       when 53041
-        "Insira o número de parcelas."
+        "Valor das parcelas inválido."
       when 53042
         "Informe o nome impresso no cartão."
       when 53043
