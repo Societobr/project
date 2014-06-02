@@ -62,11 +62,13 @@ class NotificationsController < ApplicationController
       valPago = 0
     end
 
-    Historico.create(
-      {cliente_id: cliente.id,
-        status_transacao_pag_seguro_id: status,
-        valor: valPago,
-        plano_id: plano.id})
+    if ['3', '6', '7'].include? status
+      Historico.create(
+        {cliente_id: cliente.id,
+          status_transacao_pag_seguro_id: status,
+          valor: valPago,
+          plano_id: plano.id})
+    end
   end
 
 end
