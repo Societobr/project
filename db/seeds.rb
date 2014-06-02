@@ -46,36 +46,6 @@ Plano.create([
 		codigo: 'A3'
 		},
 	])
-Cliente.create([
-	{nome: 'Cristiano Alencar de Souza Mendonca',
-		email: 'cristiano.souza.mendonca+primeiro@gmail.com',
-		cpf: '863.113.453-82',
-		nascimento: '1900/01/01',
-		ddd: '11',
-		telefone: '1111-1111',
-		cep: '11.111-111',
-		estado: 'AC',
-		rua: 'Rua 1',
-		numero: 'Numero 1',
-		complemento: 'Complemento1',
-		bairro: 'Bairro1',
-		cidade: 'Cidade1',
-		expira_em: Date.tomorrow},
-	{nome: 'Nome2 de Sobrenome2',
-		email: 'cristiano.souza.mendonca+segundo@gmail.com',
-		cpf: '064.427.786-65',
-		nascimento: '1900/02/02',
-		ddd: '22',
-		telefone: '2222-2222',
-		cep: '22.222-222',
-		estado: 'AM',
-		rua: 'Rua 2',
-		numero: 'Numero 2',
-		complemento: 'Complemento2',
-		bairro: 'Bairro2',
-		cidade: 'Cidade2',
-		expira_em: Date.tomorrow.next_year}
-	])
 StatusTransacaoPagSeguro.create([
 	{code: 1, description: 'Aguardando pagamento'},
 	{code: 2, description: 'Em análise'},

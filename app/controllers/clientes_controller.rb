@@ -27,6 +27,7 @@ class ClientesController < ApplicationController
     @cliente = Cliente.new
     @id_sessao = CheckoutController.get_id_sessao
     session[:cupom_discount] = nil
+    session[:cupom_code] = nil
   end
 
   # Renderiza layout para cadastro de usuário pelo próprio admin
@@ -143,8 +144,7 @@ class ClientesController < ApplicationController
     end
 
     def cupom_valido?(cupom)
-      print CUPOM_CODE
-      CUPOM_CODE.include?(cupom)
+      CUPOM_CODE.include?(cupom.downcase)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -168,6 +168,7 @@ class ClientesController < ApplicationController
         :aceite)
 
       clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
+      return clt_params
     end
 
     def pagamento_params
