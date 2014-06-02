@@ -6,8 +6,8 @@ class ContactMailer < ActionMailer::Base
     mail(:to => ENV["GMAIL_USERNAME"], :subject => contato.assunto)
   end
 
-  def mensagem_expiracao(email, cliente)
+  def email(email, cliente)
     @email = email
-		mail(to: cliente.email, subject: email.assunto)
+	mail(to: cliente.email, subject: email.assunto)
   end
 end

@@ -1,7 +1,7 @@
 class ContatosController < ApplicationController
 
   before_filter :authorize, except: [:new, :create]
-  layout 'dashboard', only: :new_email_expiracao
+  layout 'dashboard', except: [:new, :create]
 
   # renderiza página de contato
 	def new
@@ -15,30 +15,57 @@ class ContatosController < ApplicationController
 
     if @contato.valid?
       ContactMailer.mensagem_contato(@contato).deliver
-      flash[:success] = 'Sua mensagem foi recebida com sucesso. Obrigado!'
+      flash.now[:success] = 'Sua mensagem foi recebida com sucesso. Obrigado!'
   	else
-  		flash[:error] = "<strong>Não foi possível enviar sua mensagem.</strong>\n" + @contato.errors.to_a.join("\n")
+  		flash.now[:error] = "<strong>Não foi possível enviar sua mensagem.</strong>\n" + @contato.errors.to_a.join("\n")
     end
     render :action => 'new'
   end
 
   # renderiza página para definição do email
   # de alerta sobre expiração do plano
-  def new_email_expiracao
-    @email = EmailExpiracaoPlano.new
+  def edit_email_expiracao
+    @email = EmailExpiracaoPlano.first
   end
 
   # grava os dados do email a ser enviado
   # quando expiração estiver próxima.
-  def create_email_expiracao
-    @email = EmailExpiracaoPlano.new(email_params)
-    if @email.save?
-      EmailExpiracaoPlano.first.delete # deleta a versão antiga
-      flash[:succes] = "Dados gravados com sucesso."
+  def update_email_expiracao
+    @email = EmailExpiracaoPlano.first
+    if @email.update(email_params)
+      flash.now[:notice] = "Dados gravados com sucesso."
     else
-      flash[:error] = @email.errors.to_a.join("\n")
+      flash.now[:error] = @email.errors.to_a.join("\n")
     end
-    render :new_email_expiracao
+    render :edit_email_expiracao
+  end
+
+  def edit_email_cadastro_efetuado
+    @email = EmailCadastroEfetuado.first
+  end
+
+  def update_email_cadastro_efetuado
+    @email = EmailCadastroEfetuado.first
+    if @email.update(email_cadastro_params)
+      flash.now[:notice] = "Dados gravados com sucesso."
+    else
+      flash.now[:error] = @email.errors.to_a.join("\n")
+    end
+    render :edit_email_cadastro_efetuado
+  end
+
+  def edit_email_pagamento_recebido
+    @email = EmailPagamentoRecebido.first
+  end
+
+  def update_email_pagamento_recebido
+    @email = EmailPagamentoRecebido.first
+    if @email.update(email_pagamento_params)
+      flash.now[:notice] = "Dados gravados com sucesso."
+    else
+      flash.now[:error] = @email.errors.to_a.join("\n")
+    end
+    render :edit_email_pagamento_recebido
   end
 
   # envia email de expiração de plano
@@ -47,7 +74,7 @@ class ContatosController < ApplicationController
     clientes = Cliente.where({ expira_em: Date.today..Date.today+email.antec_envio })
     unless clientes.empty?
       clientes.each do |cliente|
-        ContactMailer.mensagem_expiracao(email, cliente).deliver
+        ContactMailer.email(email, cliente).deliver
       end
     end
   end
@@ -59,6 +86,15 @@ class ContatosController < ApplicationController
     end
 
     def email_params
-      params.require(:email).permit(:assunto, :body, :antec_envio, :recorrencia)
+      params.require(:email_expiracao_plano).permit(:assunto, :body, :antec_envio, :recorrencia)
     end
+
+    def email_cadastro_params
+      params.require(:email_cadastro_efetuado).permit(:assunto, :body)
+    end
+
+    def email_pagamento_params
+      params.require(:email_pagamento_recebido).permit(:assunto, :body)
+    end
+
 end

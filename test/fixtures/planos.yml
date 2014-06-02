@@ -2,8 +2,12 @@
 
 one:
   nome: MyString
+  vigencia: 1
   preco: 9.99
+  codigo: 1
 
 two:
   nome: MyString
+  vigencia: 1
   preco: 9.99
+  codigo: 1

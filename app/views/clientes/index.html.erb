@@ -44,6 +44,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -59,6 +60,43 @@
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
           <td><%= cliente.cupom %></td>
+          <td><%= link_to icon('money', '', class: 'fa-2x', title: "Pagamentos"), raw("#pagModal#{cliente.id}"), 'data-toggle'=>"modal" %>
+
+          <div id="pagModal<%= cliente.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="pagModalLabel<%= cliente.id%>"> Pagamentos de <%= cliente.nome.upcase! %></h3>
+              </div>
+
+              <div class="modal-body">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Operação</th>
+                      <th>Valor</th>
+                      <th>Plano</th>
+                      <th>Vigência</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% cliente.historicos.each do |historico| %>
+                      <tr>
+                        <td><%= historico.created_at.strftime("%y/%m/%d") %></td>
+                        <td><%= historico.status_transacao_pag_seguro.description %></td>
+                        <td><%= '%.2f' % historico.valor %></td>
+                        <td><%= historico.plano.nome %></td>
+                        <td><%= cliente.expira_em %></td>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+            </div>
+            </div>
+          </td>
           <td>
             <%= link_to icon("eye", '', class: "fa-2x", title: "Atividades"), raw("#myModal#{cliente.id}"), 'data-toggle'=>"modal" %>
             <div id="myModal<%= cliente.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

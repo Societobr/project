@@ -26,8 +26,12 @@ Rails.application.routes.draw do
     get 'cliente/new', to: 'clientes#new_admin', as: 'new_admin_cliente'
     post 'cliente/new', to: 'clientes#create_admin', as: 'admin_clientes'
     patch 'cliente/:id', to: 'clientes#update', as: 'update_clientes'
-    get 'email-expiracao', to: 'contatos#new_email_expiracao', as: 'email_expiracao_planos'
-    post 'email-expiracao', to: 'contatos#create_email_expiracao'
+    get 'email-expiracao', to: 'contatos#edit_email_expiracao', as: 'email_expiracao_plano'
+    patch 'email-expiracao', to: 'contatos#update_email_expiracao'
+    get 'email-cadastro', to: 'contatos#edit_email_cadastro_efetuado', as: 'email_cadastro_efetuado'
+    patch 'email-cadastro', to: 'contatos#update_email_cadastro_efetuado'
+    get 'email-pagamento-recebido', to: 'contatos#edit_email_pagamento_recebido', as: 'edit_email_pagamento_recebido'
+    patch 'email-pagamento-recebido', to: 'contatos#update_email_pagamento_recebido'
     resources :users
   end
 

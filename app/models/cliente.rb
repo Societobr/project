@@ -1,6 +1,9 @@
 class Cliente < ActiveRecord::Base
 	has_many :atividades
 	has_many :users, through: :atividades
+	has_many :historicos
+	has_many :status_transacao_pag_seguros, through: :historicos
+	
 	after_save :set_registro
 	scope :expirados, where('expira_em < ?', Date.today)
 

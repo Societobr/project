@@ -5,9 +5,6 @@ class ClientesController < ApplicationController
   before_filter :plano_escolhido?, only: [:new]
 
   CUPOM_CODE = ['societo50']
-  PLANOS_IDS = {'MENSAL' => '001', 'ANUAL' => '002', 'AMIGO' => '003'}
-  PLANOS_PRECOS = {'MENSAL' => 50.00,'ANUAL' => 100.00, 'AMIGO' => 150.00}
-  PLANOS_VIGENCIA = {'MENSAL' => 30,'ANUAL' => 60, 'AMIGO' => 90}
 
   # GET /clientes
   # GET /clientes.json
@@ -63,7 +60,7 @@ class ClientesController < ApplicationController
 
       if sucesso?(resposta)
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-        
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
           redirect_to link_pagamento(resp)
           return
@@ -224,17 +221,14 @@ class ClientesController < ApplicationController
       end
     end
 
-    def plano_escolhido?      
-      if PLANOS_PRECOS.keys.include?(params[:plano])
-        plano = params[:plano]
-        id = PLANOS_IDS[plano]
-        preco = PLANOS_PRECOS[plano]
-        vigencia = PLANOS_VIGENCIA[plano]
-        
-        session[:plano_id] = id
-        session[:plano_nome] = plano
-        session[:plano_preco] = preco
-        session[:plano_vigencia] = vigencia
+    def plano_escolhido?
+      plano = Plano.find_by_nome(params[:plano])
+
+      if plano
+        session[:plano_id] = plano.codigo
+        session[:plano_nome] = plano.nome
+        session[:plano_preco] = plano.preco
+        session[:plano_vigencia] = plano.vigencia
       else
         redirect_to nossos_planos_path
       end

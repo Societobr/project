@@ -17,12 +17,56 @@ class NotificationsController < ApplicationController
 
     uri = URI(url)
     req = Net::HTTP::Get.new(uri)
-    req.add_field('Access-Control-Allow-Origin','https://sandbox.pagseguro.uol.com.br')
+    req['Access-Control-Allow-Origin'] = 'https://sandbox.pagseguro.uol.com.br'
     
     resp = Net::HTTP.start(uri.host, uri.port,:use_ssl => uri.scheme == 'https') do |http|
       http.request(req)
     end
 
+    trata_resposta(resp)
+
     render nothing: true, status: 200
   end
+
+  private
+
+  def trata_resposta(resp)
+    xml = Nokogiri::XML(resp.body)
+    numRegCliente = xml.xpath('//transaction/reference').text
+    cliente = Cliente.find_by_registro(numRegCliente)
+    codPlanClient = xml.xpath('//transaction/items/item/id').text
+    valPago = xml.xpath('//transaction/grossAmount').text
+    statusTransPagSeg = xml.xpath('//transaction/status').text
+    update_status_cliete(statusTransPagSeg, cliente, codPlanClient, valPago)
+  end
+
+  def update_status_cliete(status, cliente, codPlan, valPago)
+    plano = Plano.find_by_codigo(codPlan)
+    case status
+      # Para os casos abaixo, nada será feito (referência:
+      # http://bit.ly/T41dHl em 'Status da Transação')
+      # '1 - Aguardando pagamento'
+      # '2 - Em análise'
+      # '4 - Disponível'
+      # '5 - Em disputa'
+    when '1', '2', '4', '5' 
+      # não faz nada
+    when '3' # 'Paga'
+      cliente.update(expira_em: Date.today + plano.vigencia.days) # habilita plano
+      ContactMailer.email(EmailPagamentoRecebido.first, cliente).deliver
+    when '6' # 'Devolvida'
+      cliente.update(expira_em: Date.today - 1.day) # desabilita plano
+      valPago = -valPago.to_f
+    when '7' # 'Cancelada'
+      cliente.update(expira_em: Date.today - 1.day) # desabilita plano
+      valPago = 0
+    end
+
+    Historico.create(
+      {cliente_id: cliente.id,
+        status_transacao_pag_seguro_id: status,
+        valor: valPago,
+        plano_id: plano.id})
+  end
+
 end

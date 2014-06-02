@@ -21,6 +21,31 @@ EmailExpiracaoPlano.create([
 	antec_envio: 30,
 	body: '<h2>Seu plano expira em alguns dias.<h2> <br /> Faça a renovação e continue a aproveitando as vantagens que só o societo lhe proporciona.'}
 	])
+EmailPagamentoRecebido.create([
+	{assunto: 'Se pagamento foi identificado',
+	body: '<h2>Recebemos seu pagamento e ativos sua conta.<h2> <br /> A partir de agora você já conta com todas as vantagens que só o societo lhe proporciona.'}
+	])
+EmailCadastroEfetuado.create([
+	{assunto: 'Bem vindo ao Societo!',
+	body: '<h2>Seu cadastro foi efetuado com sucesso!<h2> <br /> Assim que seu pagamento for identificado, ativaremos sua conta!!!'}
+	])
+Plano.create([
+	{nome: 'MENSAL',
+		vigencia: 30,
+		preco: 50.00,
+		codigo: 'M1'
+		},
+	{nome: 'ANUAL',
+		vigencia: 60,
+		preco: 100.00,
+		codigo: 'A2'
+		},
+	{nome: 'AMIGO',
+		vigencia: 90,
+		preco: 150.00,
+		codigo: 'A3'
+		},
+	])
 Cliente.create([
 	{nome: 'Cristiano Alencar de Souza Mendonca',
 		email: 'cristiano.souza.mendonca+primeiro@gmail.com',

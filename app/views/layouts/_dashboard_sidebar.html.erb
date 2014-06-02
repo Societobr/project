@@ -1,7 +1,15 @@
-<ul class="nav nav-list">
+<ul class="sf-menu">
   <li class="nav-header"> Menu </li>
-  <li class="active"> <%= link_to 'Clientes', clientes_path %> </li>
-  <li class="active"> <%= link_to 'Parceiros', users_path %> </li>
-  <li class="active"> <%= link_to 'Atividades', atividades_index_path %> </li>
-  <li class="active"> <%= link_to 'Email Alerta Renovação', email_expiracao_planos_path %> </li>
+  <li> <%= link_to 'Clientes', clientes_path %> </li>
+  <li> <%= link_to 'Parceiros', users_path %> </li>
+  <li> <%= link_to 'Atividades', atividades_index_path %> </li>
+  <ul class="dropdown">
+    <li> <%= link_to '#' do %> Emails <%= icon('angle-down') %> <% end %>
+        <ul class="dropdown">
+            <li> <%= link_to 'Plano Expirando', email_expiracao_plano_path %> </li>
+            <li> <%= link_to 'Cadastro Realizado', email_cadastro_efetuado_path %> </li>
+            <li> <%= link_to 'Pagamento Recebido', email_pagamento_recebido_path %> </li>
+        </ul>
+    </li>
+  </ul>  
 </ul>
