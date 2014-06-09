@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 	layout 'dashboard'
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
-	before_filter :authorize
+	before_filter :authorize_admin
 
 	def new
 	  @user = User.new
@@ -44,6 +44,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password_digest)
+      params.require(:user).permit(:username, :password, :role_id)
     end
 end

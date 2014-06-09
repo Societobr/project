@@ -10,4 +10,10 @@ class ContactMailer < ActionMailer::Base
     @email = email
 	mail(to: cliente.email, subject: email.assunto)
   end
+
+  def email_expiracao_plano(email, cliente, hash)
+  	@hash = hash
+  	@email = email
+	mail(to: cliente.email, subject: email.assunto)
+  end
 end

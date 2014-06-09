@@ -9,7 +9,28 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag 'CPF_ou_#Registro', nil, {id: 'cpf_ou_#registro', name: 'atividade[cpf_ou_#registro]', class: "form-control input-lg", placeholder: 'CPF ou #Registro'} %>
+        <%= radio_button_tag :idCliente, 'cpf', true, 'data-toggle' => "tooltip", 'data-original-title' => 'CPF', onchange: 'change_mask(this)' %> CPF
+        <%= radio_button_tag :idCliente, 'reg', false, 'data-toggle' => "tooltip", 'data-original-title' => 'Registro', onchange: 'change_mask(this)' %> #Registro
+      </div>
+    </div>
+  </div>
+
+  <div class="row" id="errors" style="display:none">
+    <div class="form-group">
+      <div class="col-md-4 col-sm-4">
+        <div class="red-color-text">
+          <p>Cliente inexistente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <div class="col-md-8 col-sm-8">
+        <div id="dadosCliente" style="display:none">
+          
+        </div>
       </div>
     </div>
   </div>
@@ -17,25 +38,135 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag :total, nil, {id: 'total', name: 'atividade[preco_total]', class: "form-control input-lg", placeholder: 'Total'} %>
-      </div>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="form-group">
-      <div class="col-md-4 col-sm-4">
-        <%= text_field_tag :desconto, nil, {id: 'desconto', name: 'atividade[valor_desconto]', class: "form-control input-lg", placeholder: 'Desconto'} %>
+        <%= text_field_tag 'id', nil, {id: 'id', name: 'atividade[id]', class: "form-control input-lg", placeholder: 'CPF ou #Registro'} %>
       </div>
     </div>
   </div>
 
-  <div class="row">
+  <div id='divValores' style='display:none'>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-4 col-sm-4">
+          <%= number_field_tag :total, nil, {id: 'total', name: 'atividade[preco_total]', class: "form-control input-lg", placeholder: 'Total', onchange: 'calcula_valor_a_pagar()', step: '0.01', min: 0} %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-4 col-sm-4">
+          <%= number_field_tag :desconto, nil, {id: 'desconto', name: 'atividade[valor_desconto]', class: "form-control input-lg", placeholder: 'Desconto', onchange: 'calcula_valor_a_pagar()', step: '0.01', min: 0} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+    <div class="form-group">
+      <div class="col-md-8 col-sm-8">
+        <div id="valorAPagar" style="display:none">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="row">
       <div class="form-group">
         <div class="col-md-12">
-          <%= submit_tag "Registrar", {class: "btn btn-primary btn-lg"} %>
+          <%= submit_tag "Registrar", {id:"submit", class: "btn btn-primary btn-lg", disabled: true} %>
           <%= link_to 'Cancelar',  atividades_new_path, class: 'btn btn-primary' %>
         </div>
       </div>
     </div>
+  </div>
 <% end %>
+
+<script type="text/javascript">
+
+  $('#id').mask('999.999.999-99', {'completed':function(){find_client();}});
+
+  function change_mask(element){
+    $("#divValores").hide();
+    $('#id').unmask();
+    $('#id').val("");
+    $("#nome_cliente").remove()
+    $("#status_cliente").remove()
+    $("#errors").hide()
+    
+    if(element.value == "cpf"){
+      $('#id').mask('999.999.999-99', {'completed':function(){find_client();}});
+    }else{
+      $('#id').mask('#9999999999', {'completed':function(){find_client();}});
+    }
+  }
+
+  function calcula_valor_a_pagar(){
+    if($("#total").val() != "" && $("#desconto").val() != ""){
+      $("#valorAPagar").show();
+      $("#valor_a_pagar").remove()
+      $("#valorAPagar").append("<h2 id=valor_a_pagar> Valor a Pagar: R$" + ($("#total").val() - $("#desconto").val()).toFixed(2) + "</h2>")
+    }else{
+      $("#valorAPagar").hide();
+      $("#valor_a_pagar").remove()
+    }
+  }
+
+  // Catch all events related to changes
+$('#textbox').on('change keyup', function() {
+  // Remove invalid characters
+  var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+  // Remove the first point if there is more than one
+  sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+  // Update value
+  $(this).val(sanitized);
+});
+
+  (function () {
+    $('#total').on('change keypress paste focus textInput input', function () {
+      var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+      sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+      $(this).val(sanitized);
+    });
+  }());
+
+  function find_client(){
+    $.ajax({
+        url: '/client',
+        type: "POST",
+        dataType: "json",
+        data: {id: $("#id").val()},
+        error: function(response){
+        },
+        success: function(response){
+          if(response.client == null){
+            $("#errors").show()
+            $("#dadosCliente").hide()
+            $("#divValores").hide();
+            $("#submit").prop("disabled", true);
+            $("#nome_cliente").remove()
+            $("#status_cliente").remove()
+          }
+          else{
+            $("#errors").hide()
+            $("#dadosCliente").append("<h3 id=nome_cliente> Cliente: " + response.client.nome + "</h3>")
+            $("#dadosCliente").show()
+            if (response.client.expira_em == null){
+              $("#dadosCliente").append("<h3 id=status_cliente> Status: Aguardando Pagamento </h3>")
+              $("#divValores").hide();
+              $("#submit").prop("disabled", true);
+            }
+            else if (new Date() < new Date(response.client.expira_em + "(BRT)")){
+              $("#dadosCliente").append("<h3 id=status_cliente> Status: Ativo </h3>")
+              $("#divValores").show();
+              $("#submit").removeAttr("disabled");
+            } else{
+              $("#dadosCliente").append("<h3 id=status_cliente> Status: Inativo </h3>")
+              $("#divValores").hide();
+              $("#submit").prop("disabled", true);
+            }
+          }
+        }
+    });   
+  }
+
+</script>

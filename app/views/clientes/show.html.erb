@@ -44,7 +44,7 @@
 </div>
 
 <div class="form-group">
-  <strong> Nascimento: </strong> <%= @cliente.nascimento %>
+  <strong> Nascimento: </strong> <%= @cliente.nascimento.strftime("%Y/%m/%d") %>
 </div>
 
 <div class="form-group">
@@ -56,7 +56,7 @@
 </div>
 
 <div class="form-group">
-  <strong> Vigência: </strong> <%= @cliente.expira_em %>
+  <strong> Vigência: </strong> <%= @cliente.expira_em.strftime("%Y/%m/%d") if @cliente.expira_em %>
 </div>
 
 <div class="form-group">

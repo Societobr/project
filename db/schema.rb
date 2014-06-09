@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140602173502) do
+ActiveRecord::Schema.define(version: 20140608220549) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
     t.integer  "cliente_id"
-    t.decimal  "preco_total",    precision: 10, scale: 0
-    t.decimal  "valor_desconto", precision: 10, scale: 0
+    t.decimal  "preco_total",    precision: 8, scale: 2
+    t.decimal  "valor_desconto", precision: 8, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20140602173502) do
     t.integer  "status_transacao_pag_seguro_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "valor",                          precision: 10, scale: 0
+    t.decimal  "valor",                          precision: 8, scale: 2
     t.integer  "plano_id"
     t.date     "vigencia"
   end
@@ -89,11 +89,34 @@ ActiveRecord::Schema.define(version: 20140602173502) do
   add_index "historicos", ["plano_id"], name: "index_historicos_on_plano_id", using: :btree
   add_index "historicos", ["status_transacao_pag_seguro_id"], name: "index_historicos_on_status_transacao_pag_seguro_id", using: :btree
 
+  create_table "log_email_expiracaos", force: true do |t|
+    t.integer  "cliente_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_email_expiracaos", ["cliente_id"], name: "index_log_email_expiracaos_on_cliente_id", using: :btree
+
+  create_table "log_hash_email_expiracaos", force: true do |t|
+    t.integer  "cliente_id"
+    t.string   "rand_hash"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_hash_email_expiracaos", ["cliente_id"], name: "index_log_hash_email_expiracaos_on_cliente_id", using: :btree
+
   create_table "planos", force: true do |t|
     t.string   "nome"
     t.integer  "vigencia"
-    t.decimal  "preco",      precision: 10, scale: 0
+    t.decimal  "preco",      precision: 8, scale: 2
     t.string   "codigo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", force: true do |t|
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -107,9 +130,12 @@ ActiveRecord::Schema.define(version: 20140602173502) do
 
   create_table "users", force: true do |t|
     t.string   "username"
-    t.string   "password_digest"
+    t.text     "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "role_id"
   end
+
+  add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
 
 end

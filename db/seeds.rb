@@ -7,19 +7,41 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.create([
-	{username: 'admin', password: '123456'},
-	{username: 'parceiro', password: '123456'},
-	{username: 'parceiro1', password: '123456'},
+	{username: 'admin', password: '123456', role_id: 1},
+	{username: 'parceiro', password: '123456', role_id: 2},
 	])
 Atividade.create([
 	{user_id: 2, cliente_id: 1, preco_total: 200.20, valor_desconto: 20.02},
-	{user_id: 3, cliente_id: 1, preco_total: 300.30, valor_desconto: 30.03},
 	{user_id: 2, cliente_id: 2, preco_total: 500.50, valor_desconto: 50.05},
+	])
+LogEmailExpiracao.create([
+	{cliente_id: 1},
+	{cliente_id: 2}
+	])
+Cliente.create([
+	{nome: 'Cristiano Alencar',
+		email: 'cristiano.souza.mendonca+1@gmail.com',
+		cpf: '064.427.786-65',
+		nascimento: Date.new(1989, 04, 25),
+		telefone: '8782-7703',
+		cep: '32.240-060',
+		estado: 'MG',
+		cidade: 'Contagem',
+		ddd: '31',
+		bairro: 'Amazonas',
+		numero: '353',
+		rua: 'Tapajós',
+		aceite: true}
+	])
+Role.create([
+	{description: 'ADMIN'},
+	{description: 'PARCEIRO'},
 	])
 EmailExpiracaoPlano.create([
 	{assunto: 'Renove seu plano.',
+	body: '<h2>Seu plano expira em alguns dias.<h2> <br /> Faça a renovação e continue a aproveitando as vantagens que só o societo lhe proporciona.',
 	antec_envio: 30,
-	body: '<h2>Seu plano expira em alguns dias.<h2> <br /> Faça a renovação e continue a aproveitando as vantagens que só o societo lhe proporciona.'}
+	recorrencia: 1}
 	])
 EmailPagamentoRecebido.create([
 	{assunto: 'Se pagamento foi identificado',

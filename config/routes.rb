@@ -1,14 +1,7 @@
 Rails.application.routes.draw do
 
-  get 'atividades/index'
-  get 'atividades/new'
-  post 'atividades/new', to: 'atividades#create'
-  get '/checkout', to: 'checkout#new', as: 'checkout'
-  post '/checkout', to: 'checkout#create'
-  post '/notificacoes', to: 'notifications#create'
-
   root to: "paginas_estaticas#index"
-
+  post '/notificacoes', to: 'notifications#create'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
   get '/contato', to: 'contatos#new', as: 'contatos'
@@ -20,9 +13,11 @@ Rails.application.routes.draw do
   get '/faq', to: 'paginas_estaticas#faq'
   post '/cupom', to: 'clientes#cupom'
   post '/cards', to: 'clientes#cards_brand'
+  post '/client', to: 'atividades#find_client'
 
   scope 'admin' do
     resources :clientes, except: [:create, :new]
+    get 'atividades', to: 'atividades#index', as: 'atividades_index'
     get 'cliente/new', to: 'clientes#new_admin', as: 'new_admin_cliente'
     post 'cliente/new', to: 'clientes#create_admin', as: 'admin_clientes'
     patch 'cliente/:id', to: 'clientes#update', as: 'update_clientes'
@@ -33,6 +28,11 @@ Rails.application.routes.draw do
     get 'email-pagamento-recebido', to: 'contatos#edit_email_pagamento_recebido', as: 'edit_email_pagamento_recebido'
     patch 'email-pagamento-recebido', to: 'contatos#update_email_pagamento_recebido'
     resources :users
+  end
+
+  scope 'parceiro' do
+    get 'atividades/new', to: 'atividades#new', as: 'new_atividade'
+    post 'atividades/new', to: 'atividades#create'
   end
 
   resources :sessions, except: [:new, :destroy]

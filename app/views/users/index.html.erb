@@ -28,12 +28,12 @@
 </div>
 
 <div class="table-responsive">
-  <table id="datatable" class="table table-striped table-hover text-center">
+  <table id="datatable" class="table table-striped table-hover">
     <thead>
       <tr>
         <th>Usuário</th>
         <th>Senha</th>
-        <th></th>
+        <th>Papel</th>
         <th></th>
         <th></th>
       </tr>
@@ -44,9 +44,47 @@
         <tr>
           <td><%= usuario.username %></td>
           <td><%= usuario.password_digest %></td>
+          <td><%= usuario.role.description %></td>
+
+          <td>
+            <%= link_to_if usuario.role.description != "ADMIN", icon("eye", '', class: "fa-2x", title: "Atividades"), raw("#myModal#{usuario.id}"), 'data-toggle'=>"modal" %>
+            <div id="myModal<%= usuario.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+              <div class="modal-header">
+                <h3 id="myModalLabel<%= usuario.id%>"> Atividades de <%= usuario.username.upcase! %></h3>
+              </div>
+
+              <div class="modal-body">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Total</th>
+                      <th>Desconto</th>
+                      <th>Pago</th>
+                      <th>Parceiro</th>
+                      <th>Data (AA/MM/DD)</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <% usuario.atividades.each do |atividade| %>
+                      <tr>
+                        <td><%= number_to_currency(atividade.preco_total, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td><%= number_to_currency(atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td><%= number_to_currency(atividade.preco_total - atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td><%= atividade.user.username if atividade.user %></td>
+                        <td><%= atividade.created_at.strftime("%Y/%m/%d") %></td>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+            </div>
+            </div>
+          </td>
+
           <td><%= link_to icon("search-plus", '', class: "fa-2x", title: "Consultar"), usuario %></td>
-          <td><%= link_to icon("pencil-square", '', class: "fa-2x", title: "Editar"), edit_user_path(usuario) %></td>
-          <td><%= link_to icon("trash-o", '', class: "fa-2x", title: "Excluir"), usuario, method: :delete, data: { confirm: 'Deletar registro?' } %></td>
         </tr>
       <% end %>
     </tbody>

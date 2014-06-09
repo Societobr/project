@@ -1,6 +1,6 @@
 class ContatosController < ApplicationController
 
-  before_filter :authorize, except: [:new, :create]
+  before_filter :authorize_admin, except: [:new, :create]
   layout 'dashboard', except: [:new, :create]
 
   # renderiza página de contato
@@ -19,6 +19,7 @@ class ContatosController < ApplicationController
   	else
   		flash.now[:error] = "<strong>Não foi possível enviar sua mensagem.</strong>\n" + @contato.errors.to_a.join("\n")
     end
+
     render :action => 'new'
   end
 
@@ -71,10 +72,15 @@ class ContatosController < ApplicationController
   # envia email de expiração de plano
   def self.send_email_expiracao
     email = EmailExpiracaoPlano.first
-    clientes = Cliente.where({ expira_em: Date.today..Date.today+email.antec_envio })
-    unless clientes.empty?
-      clientes.each do |cliente|
-        ContactMailer.email(email, cliente).deliver
+    diaExpiracao = email.antec_envio.days.from_now.to_date
+    clientes = clientes_expirando(diaExpiracao, email.recorrencia)
+    
+    unless clientes.empty?      
+      clientes.to_hash.each do |clt|
+        cliente = Cliente.new(clt)
+        hash = SecureRandom.urlsafe_base64 32
+        log_email_expiracao(cliente, hash)
+        ContactMailer.email_expiracao_plano(email, cliente, hash).deliver
       end
     end
   end
@@ -83,6 +89,20 @@ class ContatosController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def contato_params
       params.require(:contato).permit(:nome, :email, :assunto, :mensagem)
+    end
+
+    def self.log_email_expiracao(cliente, hash)
+      lee = LogEmailExpiracao.find_or_initialize_by(cliente_id: cliente.id)
+      lee.id? ? lee.touch : lee.save
+      LogHashEmailExpiracao.create({cliente_id: cliente.id, rand_hash: hash})
+    end
+
+    def self.clientes_expirando(dataLimite, recorrencia)
+      query = "SELECT * FROM clientes WHERE (clientes.expira_em BETWEEN '#{Date.current}' AND '#{dataLimite}') AND clientes.id NOT IN \
+      (SELECT clientes.id FROM clientes LEFT JOIN log_email_expiracaos ON log_email_expiracaos.cliente_id = clientes.id \
+      WHERE log_email_expiracaos.updated_at > '#{recorrencia.days.ago.to_date}')"
+      
+      return ActiveRecord::Base.connection.exec_query(query)
     end
 
     def email_params

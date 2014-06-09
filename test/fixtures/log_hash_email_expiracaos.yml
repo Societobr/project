@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cliente_id: 1
+  rand_hash: MyString
+
+two:
+  cliente_id: 1
+  rand_hash: MyString

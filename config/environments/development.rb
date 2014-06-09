@@ -16,6 +16,8 @@ Rails.application.configure do
   # Care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
 
+  config.action_mailer.default_url_options = { :host => 'localhost:3000', :port => 3000 }
+
   # Set up the development mailer
   #config.action_mailer.smtp_settings = {
   #  address: "smtp.gmail.com",

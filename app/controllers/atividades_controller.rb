@@ -1,6 +1,7 @@
 class AtividadesController < ApplicationController
   layout 'dashboard'
-  before_filter :authorize
+  before_filter :authorize_admin, only: [:index]
+  before_filter :authorize_parceiro, except: [:index]
 
   def index
   	@atividades = Atividade.all
@@ -11,32 +12,46 @@ class AtividadesController < ApplicationController
   end
 
   def create
-    @atividade = Atividade.new(get_valid_args)
+    @atividade = Atividade.new(get_atividade_params)
     
     if @atividade.save
-      flash[:notice] = 'Registro gravado'
+      flash.now[:notice] = 'Registro gravado'
+    else
+      flash.now[:error] = @atividade.errors.to_a.join("\n")
     end
 
-    redirect_to :atividades_new
+    render :new
+  end
+
+  # Method called via AJAX to check whether the
+  # client exists or not.
+  def find_client
+    cliente = get_cliente(params[:id])
+
+    respond_to do |format|
+      format.json {render json: {client: cliente}}
+    end
   end
 
   private
+
+  def get_atividade_params
+    parametros = atividade_params
+    cliente = get_cliente(parametros['id'])
+    parceiro = current_user
+
+    ativ = {user_id: current_user.id,
+            cliente_id: cliente.id,
+            preco_total: parametros[:preco_total].gsub(',', '.').to_f,
+            valor_desconto: parametros[:valor_desconto].gsub(',', '.').to_f,
+            }
+  end
   
   def atividade_params
-    params.require(:atividade).permit('cpf_ou_#registro', :preco_total, :valor_desconto)
+    params.require(:atividade).permit('id', :preco_total, :valor_desconto)
   end
 
-  def get_cliente
-    id = atividade_params['cpf_ou_#registro']
+  def get_cliente(id)
     Cliente.where("cpf = ? OR registro = ?", id, id).first
-  end
-
-  def get_valid_args
-    cliente = get_cliente
-    parceiro = current_user # definido em application_controller
-    validArgs = atividade_params.except('cpf_ou_#registro')
-    validArgs.store(:cliente_id, cliente.id) if cliente
-    validArgs.store(:user_id, parceiro.id)
-    return validArgs
   end
 end

@@ -10,7 +10,15 @@ class ApplicationController < ActionController::Base
 	end
 	helper_method :current_user
 
-	def authorize
+	def authorize_parceiro
 	  redirect_to login_url, alert: "Para acessar esta página é necessário autenticar-se." if current_user.nil?
+	end
+
+	def authorize_admin
+	  if current_user.nil?
+	  	redirect_to login_url, alert: "Para acessar esta página é necessário autenticar-se."
+	  elsif @current_user.role.description == "PARCEIRO"
+	  	redirect_to new_atividade_path, alert: "Você não tem permissão para acessar este recurso."
+	  end
 	end
 end

@@ -27,7 +27,7 @@
         <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-sm", placeholder: "CPF"} %>
       </div>
       <div class="col-md-3">
-        <%= f.text_field :nascimento, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento"} %>
+        <%= f.text_field :nascimento, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento", value:@cliente.nascimento.strftime("%d/%m/%Y")} %>
       </div>
     </div>
   </div>

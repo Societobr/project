@@ -1,7 +1,7 @@
 class ClientesController < ApplicationController
   layout 'dashboard', except: [:new, :create] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize, except: [:new, :create, :cupom, :cards_brand]
+  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand]
   before_filter :plano_escolhido?, only: [:new]
 
   CUPOM_CODE = ['societo50']
@@ -9,12 +9,16 @@ class ClientesController < ApplicationController
   # GET /clientes
   # GET /clientes.json
   def index
-    @clientes = Cliente.all
+    @clientes = filter(params[:filter]) || Cliente.all
 
     respond_to do |format|
       format.html # show index.html.erb
       format.csv { send_data @clientes.to_csv }
     end
+  end
+
+  def filter(filtro)
+    Cliente.send filtro if filtro
   end
 
   # GET /clientes/1
@@ -24,7 +28,7 @@ class ClientesController < ApplicationController
 
   # GET /clientes/new
   def new
-    @cliente = Cliente.new
+    @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new)
     @id_sessao = CheckoutController.get_id_sessao
     session[:cupom_discount] = nil
     session[:cupom_code] = nil
@@ -50,29 +54,53 @@ class ClientesController < ApplicationController
     end
   end
 
-  # POST /clientes
-  def create
+  # POST /clientes 
+  # def create # Criar clientes com pagamento
+  #   @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new(cliente_params))
+  #   if session[:cliente_id]
+  #     if @cliente.update(cliente_params) && cliente_aceitou_termo?
+  #       parametrosPagamento = get_parametros_validos()
+  #       resp = CheckoutController.start(parametrosPagamento)
+  #       resposta = check_response_code(resp)    
+
+  #       if sucesso?(resposta)
+  #         flash.now[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado.'
+          
+  #         if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
+  #           redirect_to link_pagamento(resp)
+  #           return
+  #         end
+  #       end
+  #     end
+  #   elsif @cliente.valid? && cliente_aceitou_termo? && @cliente.save
+  #     parametrosPagamento = get_parametros_validos()
+  #     resp = CheckoutController.start(parametrosPagamento)
+  #     resposta = check_response_code(resp)    
+
+  #     if sucesso?(resposta)
+  #       flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+  #       ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+  #       if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
+  #         redirect_to link_pagamento(resp)
+  #         return
+  #       end
+
+  #     else
+  #       Cliente.delete(@cliente)
+  #     end
+  #   end
+
+  #   @id_sessao = CheckoutController.get_id_sessao
+  #   render :new
+  # end
+
+  def create # Criar sem pagamento
     @cliente = Cliente.new(cliente_params)
-
-    if @cliente.valid? && cliente_aceitou_termo? && @cliente.save
-      parametrosPagamento = get_parametros_validos()
-      resp = CheckoutController.start(parametrosPagamento)
-      resposta = check_response_code(resp)    
-
-      if sucesso?(resposta)
-        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
-        if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
-          redirect_to link_pagamento(resp)
-          return
-        end
-
-      else
-        Cliente.delete(@cliente)
-      end
+    if @cliente.save
+      flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
     end
 
-    @id_sessao = CheckoutController.get_id_sessao
     render :new
   end
 
@@ -140,7 +168,7 @@ class ClientesController < ApplicationController
 
     def set_sessions_params(code)
       session[:cupom_code] = code
-      session[:cupom_discount] = session[:plano_preco] / 2
+      session[:cupom_discount] = session[:plano_preco].to_f / 2
     end
 
     def cupom_valido?(cupom)

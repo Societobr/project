@@ -6,10 +6,11 @@ class SessionsController < ApplicationController
 
 	def create
 	  @user = set_user
+
 	  if @user && @user.authenticate(session_params[:password_digest])
 	    session[:user_id] = @user.id
 	    session[:user_username] = @user.username
-	    redirect_to clientes_path
+	    redirect_to dashboard_home()
 	  else
 	    flash.now[:error] = "Usuário ou senha incorretos"
 	    render "new"
@@ -31,5 +32,9 @@ class SessionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def session_params
       params.require(:session).permit(:username, :password_digest)
+    end
+
+    def dashboard_home
+    	@user.role.description == "ADMIN" ? clientes_path : new_atividade_path
     end
 end

@@ -1,0 +1,583 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= image_tag("logo.png", alt: "Societo Clube de Vantagens") %>
+         | Aguarde Enquanto Processamos sua Requisição...
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= form_tag public_cliente_path, id: 'form' do %>
+
+  <div class="col-md-12" data-appear-animation="bounceInRight">
+    <div class="alert alert-warning fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a> <strong>Todos os campos</strong> são obrigatórios para se filiar
+    </div>
+    
+    <%= render partial: 'messages' %>
+  </div>
+
+  <%= fields_for @cliente do |f| %>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.text_field :nome, {class: "form-control input-sm", placeholder: "Nome completo"} %>
+        </div>
+        <div class="col-md-2">
+          <%= f.text_field :ddd, {pattern: '^[0-9]{2}$', class: "form-control input-sm", placeholder: "DDD"} %>
+        </div>
+        <div class="col-md-4">
+          <%= f.text_field :telefone, {pattern: '^[0-9]{4}-[0-9]{4}$', class: "form-control input-sm", placeholder: "Telefone"} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.email_field :email, {class: "form-control input-sm", placeholder: "Email"} %>
+        </div>
+        <div class="col-md-3">
+          <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-sm", placeholder: "CPF"} %>
+        </div>
+        <div class="col-md-3">
+          <%= f.text_field :nascimento, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento", value: (@cliente.nascimento.strftime("%d/%m/%Y") if session[:cliente_id])} %>
+        </div>
+      </div>
+    </div>
+    Endereço:
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-2">
+          <%= f.text_field :cep, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-sm", placeholder: "CEP"} %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.text_field :cidade, {class: "form-control input-sm", placeholder: "Cidade"} %>
+        </div>
+        
+        <div class="col-md-2">
+          <%= f.text_field :estado, {class: "form-control input-sm", placeholder: "Estado", maxlength: "2", onchange: "to_upper_case(this)"} %>
+        </div>
+        
+        <div class="col-md-4">
+          <%= f.text_field :bairro, {class: "form-control input-sm", placeholder: "Bairro"} %>
+        </div>     
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.text_field :rua, {class: "form-control input-sm", placeholder: "Rua"} %>
+      </div>
+      <div class="col-md-2">
+        <%= f.text_field :numero, {class: "form-control input-sm", placeholder: "Nº"} %>
+      </div>
+      <div class="col-md-4">
+        <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
+      </div>
+    </div>
+
+    <br />
+
+    <div>
+      Cupom de desconto (opcional):
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <%= f.text_field :cupom, {class: "form-control input-sm", placeholder: "Cupom de Desconto", onchange: "validar_cupom()"} %>
+      </div>
+
+      <div class="col-md-8" style='display:none' id='cupom_valido_msg'>
+        Cupom validado com suceso! Você receberá 50% de desconto no ato do pagamento.
+      </div>
+
+      <div class="col-md-8" style='display:none' id='cupom_invalido_msg'>
+        Cupom inválido!
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12 padding-t45">
+        <%= f.check_box :aceite %> <span> Li e concordo com os Termos</span>
+      </div>
+    </div>
+
+    <br />
+    <br />
+    
+  <% end %>
+
+  <div class="col-md-12 parceiro lgray-color padding-b45 padding-lr45" id="project-additional-info">
+    <h3 class="push-top">Escolha uma forma de pagamento</h3>
+    <div class="tabs">
+
+      <ul class="nav nav-tabs">
+        <li class="active"> <%= link_to "Cartão de Crédito", "#credito", {'data-toggle' => 'tab', onclick: 'forma_pagamento("cartao")'} %> </li>
+        <li> <%= link_to "Boleto Bancário", "#boleto", {'data-toggle' => 'tab', onclick: 'forma_pagamento("boleto")'} %> </li>
+        <li> <%= link_to "Débito OnLine", "#debito", {'data-toggle' => 'tab', onclick: 'forma_pagamento("debito")'} %> </li>
+      </ul>
+      
+      <div class="tab-content">
+        <div id="credito" class="tab-pane active">
+          <div class="row col-md-12">
+            <span>Favor inserir os dados do titular do cartão</span>
+          </div>
+      
+          <div class="row col-md-12 padding-tb20">
+            <%= check_box_tag :copiar_dados, "1", false, onchange: 'copiar()' %> <span>Utilizar os mesmos dados fornecido no cadastro</span>
+          </div>
+      
+          <div class="row">
+            <div class="form-group">
+              <div class="col-md-6">
+                <%= text_field_tag :nome_cartao, nil, {class: "form-control input-sm", placeholder: "Nome impresso no cartão", name: 'pagamento[nome_cartao]'} %>
+              </div>
+              <div class="col-md-2">
+                <%= text_field_tag :ddd_cartao, nil, {pattern: '^[0-9]{2}$', class: "form-control input-sm", placeholder: "DDD", name: 'pagamento[ddd_cartao]'} %>
+              </div>
+              <div class="col-md-4">
+                <%= text_field_tag :telefone_cartao, nil, {pattern: '^[0-9]{4}-[0-9]{4}$', class: "form-control input-sm", placeholder: "Telefone", name: 'pagamento[telefone_cartao]'} %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-md-3">
+                <%= text_field_tag :cpf_cartao, nil, {class: "form-control input-sm", placeholder: "CPF", name: 'pagamento[cpf_cartao]'} %>
+              </div>
+              <div class="col-md-3">
+                <%= text_field_tag :nascimento_cartao, nil, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento", name: 'pagamento[nascimento_cartao]'} %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group">
+              <div class="col-md-2">
+                <%= text_field_tag :cep_cartao, nil, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-sm", placeholder: "CEP", name: 'pagamento[cep_cartao]'} %>
+              </div>
+
+              <div class="col-md-4">
+                <%= text_field_tag :cidade_cartao, nil, {class: "form-control input-sm", placeholder: "Cidade", name: 'pagamento[cidade_cartao]'} %>
+              </div>
+
+              <div class="col-md-2">
+                <%= text_field_tag :estado_cartao, nil, {class: "form-control input-sm", placeholder: "Estado", name: 'pagamento[estado_cartao]', onchange: "to_upper_case(this)", maxlength: "2"} %>
+              </div>
+
+              <div class="col-md-4">
+                <%= text_field_tag :bairro_cartao, nil, {class: "form-control input-sm", placeholder: "Bairro", name: 'pagamento[bairro_cartao]'} %>
+              </div>     
+            </div>
+          </div>                   
+
+          <div class="row">
+            <div class="col-md-6">
+              <%= text_field_tag :rua_cartao, nil, {class: "form-control input-sm", placeholder: "Rua", name: 'pagamento[rua_cartao]'} %>
+            </div>
+            <div class="col-md-2">
+              <%= text_field_tag :numero_endereco_cartao, nil, {class: "form-control input-sm", placeholder: "Nº", name: 'pagamento[numero_endereco_cartao]'} %>
+            </div>
+            <div class="col-md-4">
+              <%= text_field_tag :complemento_cartao, nil, {class: "form-control input-sm", placeholder: "Complemento", name: 'pagamento[complemento_cartao]'} %>
+            </div>
+          </div>
+
+          <div class="row col-md-12 padding-tb20">
+            <div>
+              <strong>Cartão de crédito</strong>
+            </div>
+
+            <div id="invalid_card_number" style="display:none" class="red-color-text">
+              Ops! Parece que o número do cartão é inválido. 
+            </div>
+
+            <div id="invalid_card_data" style="display:none" class="red-color-text">
+              Ops! Parece que os dados do cartão não são válidos. Confira se número do cartão, CVV e data de validade foram inseridos corretamente.
+            </div>
+          </div>
+
+          <div class="row">
+           <div class="form-group">
+            <div class="col-md-4">
+              <%= text_field_tag :numero_cartao, nil, {id: 'numero_cartao', class: "form-control input-sm", placeholder:"Nº Cartão", onchange: "get_bandeira(); checa_campos_preenchidos()"} %>
+            </div>
+            <div class="col-md-2">
+              <%= text_field_tag :cvv_cartao, nil, {id: 'cvv_cartao', class: "form-control input-sm", placeholder: "CVV", onchange: "checa_campos_preenchidos()"} %>
+            </div>
+            <div class="col-md-2">
+              <%= text_field_tag :validade_cartao, nil, {id: 'validade_cartao', class: "form-control input-sm", placeholder: "Validade", onfocusout: 'checa_campos_preenchidos()'} %>
+            </div>
+           </div> 
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 text-align-right" >Parcelas (até 4x sem acréscimos)</div>
+            <div class="col-md-4">
+              <%= select_tag :parcelas, nil, {class: "form-control input-sm", disabled: true} %>
+            </div>
+          </div>  
+
+          <div class="col-md-12 padding-tb45">
+            <%= link_to 'Finalizar', '#', {id: 'finalizar', class: "btn btn-primary btn-md color-text", onclick: 'submit_form()'} %>
+          </div>
+          
+          <%= image_tag("Logo/logo_pagseguro_180x41.gif", alt: 'Pagseguro') %>
+        </div>
+
+        <div id="boleto" class="tab-pane">
+          <div class="padding-tb45">
+            <%= link_to 'Finalizar', '#', {class: "btn btn-primary btn-md color-text", onclick: 'submit_form()'} %>
+          </div>
+          <%= image_tag("Logo/logo_pagseguro_180x41.gif", alt: 'Pagseguro') %>
+        </div>
+
+        <div id="debito" class="tab-pane">
+          <span>Escolha o banco</span>
+          <ul class="social-icons-list">
+            <li>
+              <%= radio_button_tag :banco, 'bradesco', false, {'data-toggle' => "tooltip", 'data-original-title' => "Bradesco"} %>
+              <%= label_tag :banco_bradesco do %>
+                <%= image_tag("banks/bradesco.png", alt: "Bradesco") %>
+              <% end %>
+            </li>
+            
+            <li>
+              <%= radio_button_tag :banco, 'itau', false, 'data-toggle' => "tooltip", 'data-original-title' => 'Itaú' %>
+              <%= label_tag :banco_itau do %>
+                <%= image_tag("banks/itau.png", alt: "Itaú") %>
+              <% end %>
+            </li>
+            
+            <li>
+              <%= radio_button_tag :banco, 'bancodobrasil', false, 'data-toggle' => "tooltip", 'data-original-title' => 'Banco do Brasil' %>
+              <%= label_tag :banco_bancodobrasil do %>
+                <%= image_tag("banks/bb.png", alt: "Banco do Brasil") %>
+              <% end %>
+            </li>
+            
+            <li>
+              <%= radio_button_tag :banco, 'hsbc', false, 'data-toggle' => "tooltip", 'data-original-title' => 'HSBC' %>
+              <%= label_tag :banco_hsbc do %>
+                <%= image_tag("banks/hsbc.png", alt: "HSBC") %>
+              <% end %>
+            </li>
+            
+            <li>
+              <%= radio_button_tag :banco, 'banrisul', false, 'data-toggle' => "tooltip", 'data-original-title' => 'Banrisul' %>
+              <%= label_tag :banco_banrisul do %>
+                <%= image_tag("banks/banrisul.png", alt: "Banrisul") %>
+              <% end %>
+            </li>
+          </ul>
+
+          <div class="padding-tb45">
+            <%= link_to 'Finalizar', '#', {class: "btn btn-primary btn-md color-text", onclick: 'submit_form()'} %>
+          </div>
+          <%= image_tag("Logo/logo_pagseguro_180x41.gif", alt: 'Pagseguro') %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <%= hidden_field_tag 'bandeira_cartao', nil, {id: 'bandeira_cartao', name: 'pagamento[bandeiraCartao]'} %>
+  <%= hidden_field_tag 'token_cartao', nil, {id: 'tokenCartao', name: 'pagamento[tokenIdentificadorCartao]'} %>
+  <%= hidden_field_tag 'identificador_vendedor', nil, {id: 'identificador_vendedor', name: 'pagamento[identificador_vendedor]'} %>
+  <%= hidden_field_tag 'meio_pagamento', nil, {id: 'meio_pagamento', name: 'pagamento[meio_pagamento]', value: 'cartao'} %>
+  <%= hidden_field_tag 'preco_plano', nil, {id: 'preco_plano', value: session[:plano_preco]} %>
+  <%= hidden_field_tag 'valor_desconto', nil, {id: 'preco_desconto', value: session[:plano_preco]} %>
+
+  <%= hidden_field_tag 'preco_total_parcelamento', nil, {id: 'preco_total_parcelamento', name: 'pagamento[preco_total_parcelamento]' } %>
+  <%= hidden_field_tag 'valor_parcelas', nil, {id: 'valor_parcelas', name: 'pagamento[valor_parcelas]' } %>
+  <%= hidden_field_tag 'num_parcelas', nil, {id: 'num_parcelas', name: 'pagamento[num_parcelas]' } %>
+
+<% end %>
+
+<!-- Script abaixo toma os elementos dia, mês e ano (gerados por date_select) e os envolve com
+  a classe que os deixam na mesma linha
+<script type="text/javascript">
+  $('select[id*="nascimento_"]').wrap('<div class="col-md-2 col-sm-3 col-xs-4">');
+</script> --> 
+
+<!-- Scripts abaixo criam máscara para formulário -->
+<script type="text/javascript">
+  $('#cliente_cpf').mask('999.999.999-99');
+  $('#cliente_telefone').mask('9999-9999');
+  $('#cliente_nascimento').mask('99/99/9999');
+  $('#cliente_cep').mask('99.999-999');
+  $('#cliente_ddd').mask('99');
+  $('#cpf_cartao').mask('999.999.999-99');
+  $('#telefone_cartao').mask('9999-9999');
+  $('#nascimento_cartao').mask('99/99/9999');
+  $('#cep_cartao').mask('99.999-999');
+  $('#ddd_cartao').mask('99');
+  $('#validade_cartao').mask('99/9999')
+</script>
+
+<script type="text/javascript">
+function copiar(){
+  if($("#copiar_dados").prop('checked')){
+    $("#cpf_cartao").val($("#cliente_cpf").val())
+    $("#email_cartao").val($("#cliente_email").val())
+    $("#ddd_cartao").val($("#cliente_ddd").val())
+    $("#telefone_cartao").val($("#cliente_telefone").val())
+    $("#nascimento_cartao").val($("#cliente_nascimento").val())
+    $("#bairro_cartao").val($("#cliente_bairro").val())
+    $("#rua_cartao").val($("#cliente_rua").val())
+    $("#cidade_cartao").val($("#cliente_cidade").val())
+    $("#numero_endereco_cartao").val($("#cliente_numero").val())
+    $("#complemento_cartao").val($("#cliente_complemento").val())
+    $("#cep_cartao").val($("#cliente_cep").val())
+    $("#estado_cartao").val($("#cliente_estado").val())
+    $("#nome_cartao").focus()
+  }else{
+    $("#cpf_cartao").val('')
+    $("#email_cartao").val('')
+    $("#ddd_cartao").val('')
+    $("#telefone_cartao").val('')
+    $("#nascimento_cartao").val('')
+    $("#bairro_cartao").val('')
+    $("#rua_cartao").val('')
+    $("#cidade_cartao").val('')
+    $("#numero_endereco_cartao").val('')
+    $("#complemento_cartao").val('')
+    $("#cep_cartao").val('')
+    $("#estado_cartao").val('')
+    $("#nome_cartao").focus()
+  }
+}
+</script>
+
+<!--
+<script type="text/javascript">
+  $("#cliente_nome").val("João das Colves")
+  $("#cliente_cpf").val("376.630.511-57")
+  $("#cliente_email").val("joao.das.colves@gmail.com")
+  $("#cliente_nascimento").val("25/04/1989")
+  $("#cliente_ddd").val("31")
+  $("#cliente_telefone").val("1111-1111")
+  $("#cliente_bairro").val("Amazonas")
+  $("#cliente_rua").val("Tapajós")
+  $("#cliente_cidade").val("Contagem")
+  $("#cliente_numero").val("353")
+  $("#cliente_complemento").val("Sem Complemento")
+  $("#cliente_cep").val("32.240-060")
+  $("#cliente_estado").val("MG")
+  $("#nome_cartao").val("João Cenoura")
+  $("#aceite").prop('checked', true);
+</script>
+
+
+<script type="text/javascript"
+  src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
+</script>
+-->
+
+<script type="text/javascript"
+  src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
+</script>
+
+<script type="text/javascript">
+  console.log("id da sessão <%= @id_sessao %>");
+  PagSeguroDirectPayment.setSessionId("<%= @id_sessao %>");
+</script>
+
+<script type="text/javascript">
+  $(function() {
+    $('#form').submit(function() {
+        get_hash()
+        setInterval(function(){return true},10000);
+    });
+  });
+
+  function get_bandeira(){
+    PagSeguroDirectPayment.getBrand({ 
+      cardBin: $("#numero_cartao").val(), 
+      success: function(response) {
+        $("#bandeira_cartao").val(response.brand.name)
+        $("#invalid_card_number").hide()
+      }, 
+      error: function(response) { 
+        $("#invalid_card_number").show()
+      }, 
+      complete: function(response) { 
+      } 
+    });
+  }
+
+  function to_upper_case(obj){
+    obj.value = obj.value.toUpperCase()
+  }
+
+  function get_brand_image(){
+    $.ajax({
+        url: '/cards',
+        type: "POST",
+        dataType: "json",
+        data: {code: $("#bandeira_cartao").val()},
+        error: function(response){
+            
+        },
+        success: function(image){
+          $('#numero_cartao').css({background: "url("+image.path+") 0 no-repeat", 'background-position': 'right'})
+        }
+    });   
+  }
+
+  (function () {
+      var oldVal;
+      $('#numero_cartao').on('change keypress paste focus textInput input', function () {
+          var val = this.value;
+          if (val != oldVal) {
+              oldVal = val;
+              if(oldVal.length >= 6){
+                get_bandeira()
+                console.log($("#bandeira_cartao").val())
+                if($("#bandeira_cartao").val().length != 0){
+                  get_brand_image()
+                }
+              }
+          }
+      });
+  }());
+
+  (function () {
+      var oldVal;
+      $('#validade_cartao').on('change keypress paste focus textInput input', function () {
+          var val = this.value;
+          if (val != oldVal) {
+              oldVal = val;
+              if(/(\d{2}\/\d{4})/.test($('#validade_cartao').val())){
+                $("#finalizar").focus()
+              }
+          }
+      });
+  }());
+
+  function cartao(){
+    PagSeguroDirectPayment.createCardToken({ 
+     cardNumber: $("#numero_cartao").val(), 
+     brand: $("#bandeira_cartao").val(), 
+     cvv: $("#cvv_cartao").val(), 
+     expirationMonth: $("#validade_cartao").val().substr(0, 2),
+     expirationYear: $("#validade_cartao").val().substr(3, 7), 
+     success: function(response) {
+        $("#invalid_card_data").hide
+        $("#tokenCartao").val(response.card.token)
+        get_installments()
+      }, 
+     error: function(response) { 
+      console.log("falha cartao()")
+      $("#invalid_card_data").show()
+      }, 
+      complete: function(response) { 
+      } 
+    });
+  }
+
+  function get_installments(){
+    var bandeira = $("#bandeira_cartao").val()
+    var preco = $("#preco_desconto").val()
+    PagSeguroDirectPayment.getInstallments({ 
+      amount: preco, 
+      brand: bandeira, 
+      success: function(response) {
+        instmsArray = response.installments[bandeira]
+        add_options_and_enable_select(instmsArray)
+      }, 
+      error: function(response) { 
+        console.log(response)
+      }, 
+      complete: function(response) { 
+      //tratamento comum para todas chamadas 
+      } 
+    }); 
+  }
+
+  function preenche_campos_parcelas(){
+    var parcelamento = /(^\d{1,2}) (\d+\.\d{2}) (\d+\.\d{2}$)/.exec($("#parcelas").val())
+    var quantity = parcelamento[1]
+    var installmentAmount = parcelamento[2]
+    var totalAmount = parcelamento[3]
+
+    $('#preco_total_parcelamento').val(totalAmount)
+    $('#valor_parcelas').val(installmentAmount)
+    $('#num_parcelas').val(quantity)
+  }
+
+  function add_options_and_enable_select(installments){
+    var selectField = $("#parcelas")
+    $("#parcelas").find('option').remove() <!--Assegura que não haverá inserção duplicada de options-->
+
+    $.each(installments, function(val, text) {
+      selectField.append(
+        $('<option></option>').val(text.quantity + ' ' + text.installmentAmount.toFixed(2) + ' ' + text.totalAmount.toFixed(2)).html((val+1) + 'x de R$ ' + text.installmentAmount.toFixed(2))
+      );
+    });
+
+    selectField.prop('disabled', false)
+  }
+
+  function validar_cupom(){   
+    $.ajax({
+        url: '/cupom',
+        type: "POST",
+        dataType: "json",
+        data: {code: $("#cliente_cupom").val()},
+        error: function(e){
+            console.log(e)
+        },
+        success: function(response){
+            if(response.cupom == "valido"){
+              $("#preco_desconto").val($("#preco_plano").val()/2)
+              $("#cupom_valido_msg").show()
+              $("#cupom_invalido_msg").hide()
+            }else{
+              $("#cupom_valido_msg").hide()
+              $("#cupom_invalido_msg").show()
+            }
+        }
+    });   
+  }
+
+  function checa_campos_preenchidos(){
+    if($("#numero_cartao").val() != "" &&
+        $("#validade_cartao").val() != "" &&
+        $("#cvv_cartao").val() != ""){
+      cartao()
+    }
+  }
+
+  function get_hash(){
+    if($("#identificador_vendedor").val() == ""){
+      var a = PagSeguroDirectPayment.getSenderHash();
+      $("#identificador_vendedor").val(a)
+    }
+  }
+
+  function forma_pagamento(forma_pagamento){
+    $("#meio_pagamento").val(forma_pagamento)
+  }
+
+  function submit_form(){
+    if($("#meio_pagamento").val() == "cartao"){
+      limpa_dados_cartao()
+      if(!$("#parcelas").prop('disabled'))
+        preenche_campos_parcelas()
+    }
+    $('#myModal').modal('show')
+    $('#form').submit();
+  }
+
+  function limpa_dados_cartao(){
+    $("#numero_cartao").val('')
+    $("#cvv_cartao").val('')
+    $("#validade_cartao").val('')
+  }
+</script>
