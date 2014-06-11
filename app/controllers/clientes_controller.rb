@@ -1,7 +1,7 @@
 class ClientesController < ApplicationController
   layout 'dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand]
+  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento]
   before_filter :plano_escolhido?, only: [:new, :new_sem_pagamento]
 
   CUPOM_CODE = ['societo50']
