@@ -116,6 +116,7 @@
                     <tr>
                       <th>Total</th>
                       <th>Desconto</th>
+                      <th>Pago</th>
                       <th>Parceiro</th>
                       <th>Data (AA/MM/DD)</th>
                     </tr>
@@ -126,6 +127,7 @@
                       <tr>
                         <td><%= number_to_currency(atividade.preco_total, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
                         <td><%= number_to_currency(atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td><%= number_to_currency(atividade.preco_total - atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
                         <td><%= atividade.user.username if atividade.user %></td>
                         <td><%= atividade.created_at.strftime("%Y/%m/%d") %></td>
                     <% end %>

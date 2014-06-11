@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140608220549) do
+ActiveRecord::Schema.define(version: 20140611134436) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -48,6 +48,13 @@ ActiveRecord::Schema.define(version: 20140608220549) do
   end
 
   create_table "email_cadastro_efetuados", force: true do |t|
+    t.string   "assunto"
+    t.string   "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "email_cpf_ja_cadastrados", force: true do |t|
     t.string   "assunto"
     t.string   "body"
     t.datetime "created_at"

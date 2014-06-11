@@ -44,8 +44,12 @@ EmailExpiracaoPlano.create([
 	recorrencia: 1}
 	])
 EmailPagamentoRecebido.create([
-	{assunto: 'Se pagamento foi identificado',
+	{assunto: 'Seu pagamento foi identificado',
 	body: '<h2>Recebemos seu pagamento e ativos sua conta.<h2> <br /> A partir de agora você já conta com todas as vantagens que só o societo lhe proporciona.'}
+	])
+EmailCpfJaCadastrado.create([
+	{assunto: 'Reative sua conta',
+	body: 'Para dar prosseguimento ao cadastro, <ol> <li> clique no link abaixo </li> <li> Escolha um novo plano </li> <li> Atualize seus dados </li> <li> Efetue o pagamento </li> </ol>'}
 	])
 EmailCadastroEfetuado.create([
 	{assunto: 'Bem vindo ao Societo!',

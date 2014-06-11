@@ -1,8 +1,8 @@
 class ClientesController < ApplicationController
-  layout 'dashboard', except: [:new, :create] # new ~> layouts/application
+  layout 'dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
   before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand]
-  before_filter :plano_escolhido?, only: [:new]
+  before_filter :plano_escolhido?, only: [:new, :new_sem_pagamento]
 
   CUPOM_CODE = ['societo50']
 
@@ -45,7 +45,7 @@ class ClientesController < ApplicationController
 
   # Valida informações inseridas pelo admin no cadastro de usuário
   def create_admin
-    @cliente = Cliente.new(cliente_params)
+    @cliente = Cliente.new(cliente_params_admin)
 
     if @cliente.save
       redirect_to @cliente, notice: 'Cliente criado com sucesso.'
@@ -55,53 +55,89 @@ class ClientesController < ApplicationController
   end
 
   # POST /clientes 
-  # def create # Criar clientes com pagamento
-  #   @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new(cliente_params))
-  #   if session[:cliente_id]
-  #     if @cliente.update(cliente_params) && cliente_aceitou_termo?
-  #       parametrosPagamento = get_parametros_validos()
-  #       resp = CheckoutController.start(parametrosPagamento)
-  #       resposta = check_response_code(resp)    
+  def create
+    @cliente = (renovacao? ? Cliente.find(session[:cliente_id]) : Cliente.new(cliente_params))
 
-  #       if sucesso?(resposta)
-  #         flash.now[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado.'
+    if renovacao?
+
+      if @cliente.update(cliente_params) && cliente_aceitou_termo?
+        resp, resposta = realiza_pagamento()
+
+        if sucesso?(resposta)
+          flash.now[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado.'
           
-  #         if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
-  #           redirect_to link_pagamento(resp)
-  #           return
-  #         end
-  #       end
-  #     end
-  #   elsif @cliente.valid? && cliente_aceitou_termo? && @cliente.save
-  #     parametrosPagamento = get_parametros_validos()
-  #     resp = CheckoutController.start(parametrosPagamento)
-  #     resposta = check_response_code(resp)    
+          if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
+            redirect_to link_pagamento(resp)
+            return
+          end
+        end
+      else
+        flash.now[:error] = @cliente.errors.to_a.join("\n")
+      end
 
-  #     if sucesso?(resposta)
-  #       flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-  #       ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
-  #       if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
-  #         redirect_to link_pagamento(resp)
-  #         return
-  #       end
+    elsif @cliente.valid? && cliente_aceitou_termo? && @cliente.save
+      resp, resposta = realiza_pagamento()
 
-  #     else
-  #       Cliente.delete(@cliente)
-  #     end
-  #   end
+      if sucesso?(resposta)
+        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+        if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
+          redirect_to link_pagamento(resp)
+          return
+        end
 
-  #   @id_sessao = CheckoutController.get_id_sessao
-  #   render :new
-  # end
+      else
+        Cliente.delete(@cliente)
+      end
 
-  def create # Criar sem pagamento
-    @cliente = Cliente.new(cliente_params)
-    if @cliente.save
-      flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+    elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
+      cliente = Cliente.find_by_cpf @cliente.cpf
+      notifica_cliente_por_email(cliente)
+      flash.now[:error] = "Este CPF já está em uso. Para prosseguir com o cadastramento, acesse seu email (#{cliente.email}) e siga as intruções."
+    else
+      flash.now[:error] = @cliente.errors.to_a.join("\n")
     end
 
+    @id_sessao = CheckoutController.get_id_sessao
     render :new
+  end
+
+  def create_sem_pagamento # Criar sem pagamento
+    @cliente = (renovacao? ? Cliente.find(session[:cliente_id]) : Cliente.new(cliente_params))
+    @cliente.expira_em = Plano.find_by_codigo(session[:plano_id]).vigencia.days.from_now
+
+    if renovacao? # verifica se session[:cliente_id] está setado
+
+      if @cliente.valid? && cliente_aceitou_termo? && @cliente.update(cliente_params)
+        flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+      else
+        flash.now[:error] = @cliente.errors.to_a.join("\n")
+      end
+    
+    else
+
+      if @cliente.valid? && cliente_aceitou_termo? && @cliente.save
+        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+      elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
+        cliente = Cliente.find_by_cpf @cliente.cpf
+        notifica_cliente_por_email(cliente)
+        flash.now[:error] = "Este CPF já está em uso. Para prosseguir com o cadastramento, acesse seu email (#{cliente.email}) e siga as intruções."
+      else
+        flash.now[:error] = @cliente.errors.to_a.join("\n")
+      end
+
+    end
+
+    render :new_sem_pagamento
+  end
+
+  def new_sem_pagamento
+    @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new)
+    @id_sessao = CheckoutController.get_id_sessao
+    session[:cupom_discount] = nil
+    session[:cupom_code] = nil
   end
 
   def cupom
@@ -130,7 +166,7 @@ class ClientesController < ApplicationController
   # PATCH/PUT /clientes/1
   # PATCH/PUT /clientes/1.json
   def update
-    if @cliente.update(cliente_params)
+    if @cliente.update(cliente_params_admin)
       redirect_to @cliente, notice: 'Cliente atualizado.'
     else
       render :edit
@@ -148,6 +184,23 @@ class ClientesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_cliente
       @cliente = Cliente.find(params[:id])
+    end
+
+    def renovacao?
+      true if session[:cliente_id]
+    end
+
+    def realiza_pagamento
+      parametrosPagamento = get_parametros_validos()
+      retornoPagSeguro = CheckoutController.start(parametrosPagamento)
+      resposta = check_response_code(retornoPagSeguro)
+      return retornoPagSeguro, resposta
+    end
+
+    def notifica_cliente_por_email(cliente)
+      hash = SecureRandom.urlsafe_base64 32
+      ContactMailer.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash).deliver
+      LogHashEmailExpiracao.create({cliente_id: cliente.id, rand_hash: hash})
     end
 
     def link_pagamento(resp)
@@ -197,6 +250,26 @@ class ClientesController < ApplicationController
 
       clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
       return clt_params
+    end
+
+    def cliente_params_admin
+      params.require(:cliente).permit(
+        :nome,
+        :ddd,
+        :email,
+        :cpf,
+        :nascimento,
+        :telefone,
+        :cep,
+        :estado,
+        :cidade,
+        :bairro,
+        :rua,
+        :numero,
+        :complemento,
+        :cupom,
+        :aceite,
+        :expira_em)
     end
 
     def pagamento_params

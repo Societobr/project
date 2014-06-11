@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   post '/contato', to: 'contatos#create'
   get '/cadastre-se', to: 'clientes#new', as: 'cadastre-se'
   post '/cadastre-se', to: 'clientes#create', as: 'public_cliente'
+
+  get '/cadastro', to:'clientes#new_sem_pagamento', as: 'cadastro'
+  post '/cadastro', to: 'clientes#create_sem_pagamento'
+  
   get '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte'
   get '/nossos-planos',  to: 'paginas_estaticas#planos'
   get '/faq', to: 'paginas_estaticas#faq'

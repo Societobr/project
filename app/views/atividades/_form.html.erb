@@ -148,6 +148,8 @@ $('#textbox').on('change keyup', function() {
           }
           else{
             $("#errors").hide()
+            $("#nome_cliente").remove()
+            $("#status_cliente").remove()
             $("#dadosCliente").append("<h3 id=nome_cliente> Cliente: " + response.client.nome + "</h3>")
             $("#dadosCliente").show()
             if (response.client.expira_em == null){

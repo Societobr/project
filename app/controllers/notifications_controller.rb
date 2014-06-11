@@ -42,7 +42,6 @@ class NotificationsController < ApplicationController
 
   def update_status_cliete(status, cliente, codPlan, valPago)
     plano = Plano.find_by_codigo(codPlan)
-    byebug
     case status
       # Para os casos abaixo, nada será feito (referência:
       # http://bit.ly/T41dHl em 'Status da Transação')

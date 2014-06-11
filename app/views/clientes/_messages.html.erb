@@ -1,5 +1,3 @@
-<% get_object_error_into_flash_render(@cliente) %>
-
 <% if flash %>
 	<% flash.to_hash.each_pair do |key, messages| %>
 		<div class="alert alert-<%= get_message_class(key) %> fade in">

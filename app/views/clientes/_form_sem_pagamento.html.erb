@@ -1,0 +1,124 @@
+<%= form_tag cadastro_path, id: 'form' do %>
+
+  <div class="col-md-12" data-appear-animation="bounceInRight">
+    <div class="alert alert-warning fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a> <strong>Todos os campos</strong> são obrigatórios para se filiar
+    </div>
+    
+    <%= render partial: 'messages' %>
+  </div>
+
+  <%= fields_for @cliente do |f| %>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.text_field :nome, {class: "form-control input-sm", placeholder: "Nome completo"} %>
+        </div>
+        <div class="col-md-2">
+          <%= f.text_field :ddd, {pattern: '^[0-9]{2}$', class: "form-control input-sm", placeholder: "DDD"} %>
+        </div>
+        <div class="col-md-4">
+          <%= f.text_field :telefone, {pattern: '^[0-9]{4}-[0-9]{4}$', class: "form-control input-sm", placeholder: "Telefone"} %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.email_field :email, {class: "form-control input-sm", placeholder: "Email"} %>
+        </div>
+        <div class="col-md-3">
+          <%= f.text_field :cpf, {pattern: '^([0-9]{3}.){2}[0-9]{3}-[0-9]{2}$', class: "form-control input-sm", placeholder: "CPF"} %>
+        </div>
+        <div class="col-md-3">
+          <%= f.text_field :nascimento, {pattern: '^[0-9]{2}/[0-9]{2}/[0-9]{4}$', class: "form-control input-sm", placeholder: "Nascimento", value: (@cliente.nascimento.strftime("%d/%m/%Y") if @cliente.nascimento)} %>
+        </div>
+      </div>
+    </div>
+    Endereço:
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-2">
+          <%= f.text_field :cep, {pattern: "^[0-9]{2}.[0-9]{3}-[0-9]{3}$", class: "form-control input-sm", placeholder: "CEP"} %>
+        </div>
+
+        <div class="col-md-4">
+          <%= f.text_field :cidade, {class: "form-control input-sm", placeholder: "Cidade"} %>
+        </div>
+        
+        <div class="col-md-2">
+          <%= f.text_field :estado, {class: "form-control input-sm", placeholder: "Estado", maxlength: "2", onchange: "to_upper_case(this)"} %>
+        </div>
+        
+        <div class="col-md-4">
+          <%= f.text_field :bairro, {class: "form-control input-sm", placeholder: "Bairro"} %>
+        </div>     
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.text_field :rua, {class: "form-control input-sm", placeholder: "Rua"} %>
+      </div>
+      <div class="col-md-2">
+        <%= f.text_field :numero, {class: "form-control input-sm", placeholder: "Nº"} %>
+      </div>
+      <div class="col-md-4">
+        <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12 padding-t45">
+        <%= f.check_box :aceite %> <span> Li e concordo com os Termos</span>
+      </div>
+    </div>
+
+    <br />
+    
+  <% end %>
+
+  <%= submit_tag "Cadastrar", {class: "btn btn-primary btn-lg"} %>
+
+<% end %>
+
+<!-- Scripts abaixo criam máscara para formulário -->
+<script type="text/javascript">
+  $('#cliente_cpf').mask('999.999.999-99');
+  $('#cliente_telefone').mask('9999-9999');
+  $('#cliente_nascimento').mask('99/99/9999');
+  $('#cliente_cep').mask('99.999-999');
+  $('#cliente_ddd').mask('99');
+  $('#cpf_cartao').mask('999.999.999-99');
+  $('#telefone_cartao').mask('9999-9999');
+  $('#nascimento_cartao').mask('99/99/9999');
+  $('#cep_cartao').mask('99.999-999');
+  $('#ddd_cartao').mask('99');
+  $('#validade_cartao').mask('99/9999')
+
+  function to_upper_case(obj){
+    obj.value = obj.value.toUpperCase()
+  }
+</script>
+
+<!--
+<script type="text/javascript">
+  $("#cliente_nome").val("João das Colves")
+  $("#cliente_cpf").val("376.630.511-57")
+  $("#cliente_email").val("joao.das.colves@gmail.com")
+  $("#cliente_nascimento").val("25/04/1989")
+  $("#cliente_ddd").val("31")
+  $("#cliente_telefone").val("1111-1111")
+  $("#cliente_bairro").val("Amazonas")
+  $("#cliente_rua").val("Tapajós")
+  $("#cliente_cidade").val("Contagem")
+  $("#cliente_numero").val("353")
+  $("#cliente_complemento").val("Sem Complemento")
+  $("#cliente_cep").val("32.240-060")
+  $("#cliente_estado").val("MG")
+  $("#nome_cartao").val("João Cenoura")
+  $("#aceite").prop('checked', true);
+</script>
+
+-->
