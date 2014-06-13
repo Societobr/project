@@ -48,17 +48,20 @@
 
           <td>
             <%= link_to_if usuario.role.description != "ADMIN", icon("eye", '', class: "fa-2x", title: "Atividades"), raw("#myModal#{usuario.id}"), 'data-toggle'=>"modal" %>
-            <div id="myModal<%= usuario.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-sm">
+
+            <div id="myModal<%= usuario.id %>" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" style="width:1000px">
                 <div class="modal-content">
-              <div class="modal-header">
-                <h3 id="myModalLabel<%= usuario.id%>"> Atividades de <%= usuario.username.upcase! %></h3>
-              </div>
+                <div class="modal-header">
+                  <h3 id="myModalLabel<%= usuario.id%>"> Atividades de <%= usuario.username.upcase! %></h3>
+                </div>
 
               <div class="modal-body">
                 <table>
                   <thead>
                     <tr>
+                      <th>CPF</th>
+                      <th>Cliente</th>
                       <th>Total</th>
                       <th>Desconto</th>
                       <th>Pago</th>
@@ -70,11 +73,13 @@
                   <tbody>
                     <% usuario.atividades.each do |atividade| %>
                       <tr>
-                        <td><%= number_to_currency(atividade.preco_total, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
-                        <td><%= number_to_currency(atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
-                        <td><%= number_to_currency(atividade.preco_total - atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
-                        <td><%= atividade.user.username if atividade.user %></td>
-                        <td><%= atividade.created_at.strftime("%Y/%m/%d") %></td>
+                        <td> <%= atividade.cliente.cpf if atividade.cliente %> </td>
+                        <td> <%= atividade.cliente.nome if atividade.cliente %> </td>
+                        <td> <%= number_to_currency(atividade.preco_total, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td> <%= number_to_currency(atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td> <%= number_to_currency(atividade.preco_total - atividade.valor_desconto, :unit => "R$ ", :separator => ",", :delimiter => ".") %></td>
+                        <td> <%= atividade.user.username if atividade.user %></td>
+                        <td> <%= atividade.created_at.strftime("%Y/%m/%d") %></td>
                     <% end %>
                   </tbody>
                 </table>
@@ -94,3 +99,4 @@
 <br>
 
 <%= link_to 'Cadastrar', new_user_path, class: 'btn btn-primary' %>
+

@@ -12,6 +12,7 @@ class Cliente < ActiveRecord::Base
 
   usar_como_cpf :cpf
   validate :cpf_unico
+  validates_uniqueness_of :email, message: "já cadastrado em nossa base de dados."
   validates_presence_of :nome,
     :ddd,
 	:telefone,

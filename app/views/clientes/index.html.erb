@@ -38,6 +38,7 @@
     <thead>
       <tr>
         <th>Registro</th>
+        <th>Plano</th>
         <th>Vigência</th>
         <th>Nome</th>
         <th>Email</th>
@@ -56,11 +57,12 @@
       <% @clientes.each do |cliente| %>
         <tr>
           <td><%= cliente.registro %></td>
+          <td></td>
           <td><%= cliente.expira_em %></td>
           <td><%= cliente.nome %></td>
           <td><%= cliente.email %></td>
           <td><%= cliente.cpf %></td>
-          <td>(<%= cliente.ddd %>) <%= cliente.telefone %></td>
+          <td><%= "(#{cliente.ddd}) #{cliente.telefone}" %></td>
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
           <td><%= cliente.cupom %></td>
