@@ -21,7 +21,8 @@ Rails.application.routes.draw do
 
   scope 'admin' do
     resources :clientes, except: [:create, :new]
-    get 'atividades', to: 'atividades#index', as: 'atividades_index'
+    get 'atividades', to: 'atividades#index', as: 'atividades'
+    post 'atividades', to: 'atividades#filter'
     get 'cliente/new', to: 'clientes#new_admin', as: 'new_admin_cliente'
     post 'cliente/new', to: 'clientes#create_admin', as: 'admin_clientes'
     patch 'cliente/:id', to: 'clientes#update', as: 'update_clientes'

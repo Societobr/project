@@ -5,6 +5,20 @@ class AtividadesController < ApplicationController
 
   def index
   	@atividades = Atividade.all
+    @de = Date.new(2000, 01, 01)
+    @ate = Date.current.at_end_of_day
+  end
+
+  def filter
+    @de = (params[:de] == "" ? Date.new(2000, 01, 01) : params[:de].to_date.at_beginning_of_day)
+    @ate = (params[:ate] == "" ? Date.current.at_end_of_day : params[:ate].to_date.at_end_of_day)
+    @parc_nome = params[:parceiro]
+    @atividades = Atividade.
+                    where(created_at: @de..@ate).
+                    joins(:user).
+                    merge( User.where("username LIKE '#{@parc_nome}%'") )
+    
+    render :index
   end
 
   def new

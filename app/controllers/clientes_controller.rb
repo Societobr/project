@@ -60,7 +60,7 @@ class ClientesController < ApplicationController
 
     if renovacao?
 
-      if @cliente.update(cliente_params) && cliente_aceitou_termo?
+      if termo_aceito_e_email_confirmado? && @cliente.update(cliente_params)
         resp, resposta = realiza_pagamento()
 
         if sucesso?(resposta)
@@ -75,7 +75,7 @@ class ClientesController < ApplicationController
         flash.now[:error] = @cliente.errors.to_a.join("\n")
       end
 
-    elsif @cliente.valid? && cliente_aceitou_termo? && @cliente.save
+    elsif @cliente.valid? && termo_aceito_e_email_confirmado? && @cliente.save
       resp, resposta = realiza_pagamento()
 
       if sucesso?(resposta)
@@ -108,7 +108,7 @@ class ClientesController < ApplicationController
 
     if renovacao? # verifica se session[:cliente_id] está setado
 
-      if @cliente.valid? && cliente_aceitou_termo? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
+      if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
         flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       else
@@ -117,7 +117,7 @@ class ClientesController < ApplicationController
     
     else
 
-      if @cliente.valid? && cliente_aceitou_termo? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
+      if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
@@ -297,12 +297,15 @@ class ClientesController < ApplicationController
         )
     end
 
-    def cliente_aceitou_termo?
-      if params[:cliente][:aceite] == "1"
-        true
+    def termo_aceito_e_email_confirmado?
+      if params[:cliente][:aceite] == "1" && params[:email_confirm] == params[:cliente][:email]
+        return true
       else
-        @cliente.errors.messages.store :aceite, ['os termos'] 
-        false
+        @cliente.errors.messages.store :aceite, ['os termos.'] unless 
+                params[:cliente][:aceite] == "1"
+        @cliente.errors.messages.store :email, ['de confirmação deve ser igual ao email fornecido.'] unless
+                params[:email_confirm] == params[:cliente][:email]
+        return false
       end
     end
 
