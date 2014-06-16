@@ -68,12 +68,20 @@
         <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-md-12 padding-t45">
         <%= f.check_box :aceite %> <span> Li e concordo com os Termos</span>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12 padding-t45">
+        <%= recaptcha_tags display: {:theme => 'white'} %>
+      </div>
+    </div>
+
+    <%= f.hidden_field 'plano_id', {id: 'plano_id', value: (session[:plano_id] if session[:plano_id])} %>
 
     <br />
     

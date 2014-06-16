@@ -30,6 +30,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 # Inclui validações de padrões brasileiros como CPF, CNPJ e etc
 gem 'brazilian-rails', '~> 3.3.0'
+# Inclui recaptcha ao site
+gem "recaptcha", :require => "recaptcha/rails"
 
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 

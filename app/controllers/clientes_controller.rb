@@ -104,11 +104,11 @@ class ClientesController < ApplicationController
 
   def create_sem_pagamento # Criar sem pagamento
     @cliente = (renovacao? ? Cliente.find(session[:cliente_id]) : Cliente.new(cliente_params))
-    @cliente.expira_em = Plano.find_by_codigo(session[:plano_id]).vigencia.days.from_now
+    @cliente.expira_em = Plano.find_by_codigo(session[:plano_codigo]).vigencia.days.from_now
 
     if renovacao? # verifica se session[:cliente_id] está setado
 
-      if @cliente.valid? && cliente_aceitou_termo? && @cliente.update(cliente_params)
+      if @cliente.valid? && cliente_aceitou_termo? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
         flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       else
@@ -117,7 +117,7 @@ class ClientesController < ApplicationController
     
     else
 
-      if @cliente.valid? && cliente_aceitou_termo? && @cliente.save
+      if @cliente.valid? && cliente_aceitou_termo? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
@@ -246,7 +246,8 @@ class ClientesController < ApplicationController
         :numero,
         :complemento,
         :cupom,
-        :aceite)
+        :aceite,
+        :plano_id)
 
       clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
       return clt_params
@@ -327,19 +328,24 @@ class ClientesController < ApplicationController
       plano = Plano.find_by_nome(params[:plano])
 
       if plano
-        session[:plano_id] = plano.codigo
-        session[:plano_nome] = plano.nome
-        session[:plano_preco] = plano.preco
-        session[:plano_vigencia] = plano.vigencia
+        set_plano_session(plano)
       else
         redirect_to nossos_planos_path
       end
 
     end
 
+    def set_plano_session(plano)
+      session[:plano_id] = plano.id
+      session[:plano_codigo] = plano.codigo
+      session[:plano_nome] = plano.nome
+      session[:plano_preco] = plano.preco
+      session[:plano_vigencia] = plano.vigencia
+    end
+
     def plano_params
       preco = session[:cupom_discount] || session[:plano_preco]
-      return {id_plano: session[:plano_id], plano: session[:plano_nome], preco: preco}
+      return {id_plano: session[:plano_codigo], plano: session[:plano_nome], preco: preco}
     end
 
     def erros(resposta)

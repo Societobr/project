@@ -6,6 +6,8 @@ class Cliente < ActiveRecord::Base
   has_many :log_email_expiracaos
   after_save :set_registro
 
+  belongs_to :plano
+
   scope :expirados, -> { where('expira_em <= ?', Date.current) }
   scope :ativos, -> { where('expira_em > ?', Date.current) }
   scope :aguard_pag, -> { where('expira_em is NULL', Date.current) }

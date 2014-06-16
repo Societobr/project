@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140611134436) do
+ActiveRecord::Schema.define(version: 20140613130803) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -45,7 +45,10 @@ ActiveRecord::Schema.define(version: 20140611134436) do
     t.string   "rua"
     t.string   "cupom"
     t.boolean  "aceite"
+    t.integer  "plano_id"
   end
+
+  add_index "clientes", ["plano_id"], name: "index_clientes_on_plano_id", using: :btree
 
   create_table "email_cadastro_efetuados", force: true do |t|
     t.string   "assunto"

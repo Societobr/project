@@ -57,7 +57,7 @@
       <% @clientes.each do |cliente| %>
         <tr>
           <td><%= cliente.registro %></td>
-          <td></td>
+          <td><%= cliente.plano.nome if cliente.plano %></td>
           <td><%= cliente.expira_em %></td>
           <td><%= cliente.nome %></td>
           <td><%= cliente.email %></td>

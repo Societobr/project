@@ -99,6 +99,8 @@
         Cupom inválido!
       </div>
     </div>
+
+    <%= f.hidden_field 'plano_id', {id: 'plano_id', value: (session[:plano_id] if session[:plano_id])} %>
     
     <div class="row">
       <div class="col-md-12 padding-t45">
