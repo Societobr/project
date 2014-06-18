@@ -4,21 +4,9 @@ class AtividadesController < ApplicationController
   before_filter :authorize_parceiro, except: [:index]
 
   def index
-  	@atividades = Atividade.all
-    @de = Date.new(2000, 01, 01)
-    @ate = Date.current.at_end_of_day
-  end
-
-  def filter
-    @de = (params[:de] == "" ? Date.new(2000, 01, 01) : params[:de].to_date.at_beginning_of_day)
-    @ate = (params[:ate] == "" ? Date.current.at_end_of_day : params[:ate].to_date.at_end_of_day)
-    @parc_nome = params[:parceiro]
-    @atividades = Atividade.
-                    where(created_at: @de..@ate).
-                    joins(:user).
-                    merge( User.where("username LIKE '#{@parc_nome}%'") )
-    
-    render :index
+  	@atividades = filter(params[:filtro]) || Atividade.all
+    get_zip_reports if params[:commit] == "Relatório"
+    @atividades = @atividades.paginate(:page => params[:page], :per_page => 3)
   end
 
   def new
@@ -54,11 +42,46 @@ class AtividadesController < ApplicationController
     cliente = get_cliente(parametros['id'])
     parceiro = current_user
 
-    ativ = {user_id: current_user.id,
-            cliente_id: cliente.id,
-            preco_total: parametros[:preco_total].gsub(',', '.').to_f,
-            valor_desconto: parametros[:valor_desconto].gsub(',', '.').to_f,
-            }
+    {
+      user_id: current_user.id,
+      cliente_id: cliente.id,
+      preco_total: parametros[:preco_total].gsub(',', '.').to_f,
+      valor_desconto: parametros[:valor_desconto].gsub(',', '.').to_f
+    }
+  end
+
+  def filter(filtro)
+    set_default_filter_values
+
+    unless filtro.nil?
+      @de = (filtro[:de] == "" ? Date.new(2000, 01, 01) : filtro[:de].to_date.at_beginning_of_day)
+      @ate = (filtro[:ate] == "" ? Date.current.at_end_of_day : filtro[:ate].to_date.at_end_of_day)
+      @parc_nome = filtro[:parceiro]
+      Atividade.where(created_at: @de..@ate).
+                joins(:user).
+                merge( User.where("username LIKE '#{@parc_nome}%'") )
+    end
+  end
+
+  def set_default_filter_values
+    @de = Date.new(2000, 01, 01)
+    @ate = Date.current.at_end_of_day
+  end
+
+  def get_zip_reports
+    file = Zip::ZipOutputStream.write_buffer do |zos|
+      zos.put_next_entry 'societo.csv'
+      zos.write Atividade.relat_do_admin(@atividades)
+      
+      @atividades.group_by(&:user_id).each_value do |array_atividade|
+        zos.put_next_entry(array_atividade[0].user.username + '.csv')
+        zos.write Atividade.relat_do_parc(array_atividade)
+      end
+    end
+
+    file.rewind
+    binary_data = file.sysread
+    send_data binary_data, filename: "Atividades DE #{@de.to_s_br.gsub('/','-')} ATÉ #{@ate.to_s_br.gsub('/','-')}.zip"
   end
   
   def atividade_params

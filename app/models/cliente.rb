@@ -35,17 +35,17 @@ class Cliente < ActiveRecord::Base
   end
 
   def self.to_csv
-	CSV.generate do |csv|
-      csv << column_names
-	    all.each do |cliente|
-		  csv << cliente.attributes.values_at(*column_names)
-		end
-	end
+  	CSV.generate do |csv|
+        csv << column_names
+  	    all.each do |cliente|
+  		  csv << cliente.attributes.values_at(*column_names)
+  		end
+  	end
   end
 
   def set_registro
-	self.registro = '#' + self.created_at.strftime("%d%m%y") + self.id.to_s.rjust(4,"0")
-	self.update_column(:registro, self.registro)
+  	self.registro = '#' + self.created_at.strftime("%d%m%y") + self.id.to_s.rjust(4,"0")
+  	self.update_column(:registro, self.registro)
   end
 
 end

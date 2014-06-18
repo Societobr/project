@@ -33,11 +33,17 @@ gem 'brazilian-rails', '~> 3.3.0'
 # Inclui recaptcha ao site
 gem "recaptcha", :require => "recaptcha/rails"
 
+# Inclui os módulos necessário para trabalhar com geração de arquivos zip
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.
+
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
-
+# Validador de CPF
 gem "cpf_validator"
-
+# Cron jobs
 gem 'whenever', :require => false
+# Paginação
+gem 'will_paginate-bootstrap'
 
 group :test do
   #gem 'shoulda-matchers'
