@@ -18,6 +18,13 @@
     <%= csrf_meta_tags %>
     <!-- SCRIPTS
       ================================================== -->
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#example').dataTable( {
+            "scrollX": true
+        } );
+      } );
+    </script>
   </head>
 <% end %>
 
@@ -34,7 +41,7 @@
     <%= link_to 'INATIVOS', clientes_path(filter: :expirados), class: 'btn btn-primary' %>
     <%= link_to 'AGUARDANDO PAGAMENTO', clientes_path(filter: :aguard_pag), class: 'btn btn-primary' %>
   </p>
-  <table id="datatable" class="table table-striped table-hover text-center">
+  <table id="example" cellspacing="0" class="display table table-striped table-hover text-center" width="100%">
     <thead>
       <tr>
         <th>Registro</th>

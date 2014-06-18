@@ -20,4 +20,7 @@
  *= require owl.carousel
  *= require dataTables/jquery.dataTables
  *= require dataTables/jquery.dataTables.bootstrap3
+ *= require_self
  */
+
+ th, td { white-space: nowrap; }
