@@ -12,7 +12,7 @@ User.create([
 	])
 Atividade.create([
 	{user_id: 2, cliente_id: 1, preco_total: 200.20, valor_desconto: 20.02},
-	{user_id: 2, cliente_id: 2, preco_total: 500.50, valor_desconto: 50.05},
+	{user_id: 2, cliente_id: 1, preco_total: 500.50, valor_desconto: 50.05},
 	])
 LogEmailExpiracao.create([
 	{cliente_id: 1},
@@ -23,6 +23,8 @@ Cliente.create([
 		email: 'cristiano.souza.mendonca+1@gmail.com',
 		cpf: '064.427.786-65',
 		nascimento: Date.new(1989, 04, 25),
+		expira_em: Date.new(2014, 07, 01),
+		plano_id: 1,
 		telefone: '8782-7703',
 		cep: '32.240-060',
 		estado: 'MG',
