@@ -79,19 +79,19 @@ EmailCadastroEfetuado.create([
 Plano.create([
 	{nome: 'MENSAL',
 		vigencia: 30,
-		preco: 50.00,
+		preco: 1.00,
 		codigo: 'M1',
 		duplo: false
 		},
 	{nome: 'ANUAL',
 		vigencia: 60,
-		preco: 100.00,
+		preco: 1.01,
 		codigo: 'A2',
 		duplo: false
 		},
 	{nome: 'AMIGO',
 		vigencia: 90,
-		preco: 150.00,
+		preco: 1.02,
 		codigo: 'A3',
 		duplo: true
 		},

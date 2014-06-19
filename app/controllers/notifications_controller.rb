@@ -12,12 +12,13 @@ class NotificationsController < ApplicationController
 
     # render nothing: true, status: 200
 
-    url = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions/notifications/#{params[:notificationCode]}?email=EMAIL&token=TOKEN"
+    # url = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions/notifications/#{params[:notificationCode]}?email=EMAIL&token=TOKEN"
+    url = "https://ws.pagseguro.uol.com.br/v2/transactions/notifications/#{params[:notificationCode]}?email=EMAIL&token=TOKEN"
     url.gsub!(/EMAIL/, ENV["EMAIL_PAGSEGURO"]).gsub!(/TOKEN/, ENV["TOKEN_PAGSEGURO"])
 
     uri = URI(url)
     req = Net::HTTP::Get.new(uri)
-    req['Access-Control-Allow-Origin'] = 'https://sandbox.pagseguro.uol.com.br'
+    # req['Access-Control-Allow-Origin'] = 'https://sandbox.pagseguro.uol.com.br'
     
     resp = Net::HTTP.start(uri.host, uri.port,:use_ssl => uri.scheme == 'https') do |http|
       http.request(req)

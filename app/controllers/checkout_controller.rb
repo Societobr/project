@@ -2,12 +2,14 @@ class CheckoutController
   protected
 
   def self.start(params)
-    url = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions"
+    # url = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions"
+    url = "https://ws.pagseguro.uol.com.br/v2/transactions"
     postParams = post_params(params)
     uri = URI(url)
     req = Net::HTTP::Post.new(uri)
     req.set_form_data(postParams)
     
+    byebug
     resp = Net::HTTP.start(uri.host, uri.port,:use_ssl => uri.scheme == 'https') do |http|
       http.request(req)
     end
@@ -35,7 +37,7 @@ class CheckoutController
       "itemAmount1" => '%.2f'%params[:preco],
       "itemQuantity1" => 1,
       "reference" => params[:reference],
-      "senderEmail" => "c50451335031919206442@sandbox.pagseguro.com.br", #colocar email do cliente aqui
+      "senderEmail" => params[:email], #colocar email do cliente aqui
       "senderName" => params[:nome],
       "senderCPF" => params[:cpf].gsub(/\.|-/, ''),
       "senderAreaCode" => params[:ddd],
@@ -85,8 +87,9 @@ class CheckoutController
   end
 
   def self.get_id_sessao
-    urlAutenticacao =
-      "https://ws.sandbox.pagseguro.uol.com.br/v2/sessions?email=EMAIL&token=TOKEN"
+    byebug
+    # urlAutenticacao = "https://ws.sandbox.pagseguro.uol.com.br/v2/sessions?email=EMAIL&token=TOKEN"
+    urlAutenticacao = "https://ws.pagseguro.uol.com.br/v2/sessions?email=EMAIL&token=TOKEN"
     urlAutenticacao.gsub!(
       /EMAIL|TOKEN/,
       {"EMAIL" => ENV["EMAIL_PAGSEGURO"], "TOKEN" => ENV["TOKEN_PAGSEGURO"]})

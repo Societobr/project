@@ -169,7 +169,6 @@ class ClientesController < ApplicationController
 
   def new_sem_pagamento
     @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new)
-    @id_sessao = CheckoutController.get_id_sessao
     session[:cupom_discount] = nil
     session[:cupom_code] = nil
   end
