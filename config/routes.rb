@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   post '/cupom', to: 'clientes#cupom'
   post '/cards', to: 'clientes#cards_brand'
   post '/client', to: 'atividades#find_client'
+  get '/cadastro-amigo', to: 'clientes#new_amigo'
+  post '/cadastro-amigo', to: 'clientes#create_amigo'
 
   scope 'admin' do
     resources :clientes, except: [:create, :new]

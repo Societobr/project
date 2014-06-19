@@ -42,6 +42,7 @@ class NotificationsController < ApplicationController
 
   def update_status_cliete(status, cliente, codPlan, valPago)
     plano = Plano.find_by_codigo(codPlan)
+
     case status
       # Para os casos abaixo, nada será feito (referência:
       # http://bit.ly/T41dHl em 'Status da Transação')
@@ -52,14 +53,13 @@ class NotificationsController < ApplicationController
     when '1', '2', '4', '5' 
       # não faz nada
     when '3' # 'Paga'
-      expira_em = data_expiracao(cliente, plano)
-      cliente.update(expira_em: expira_em) # habilita plano
+      update_status(cliente, plano) { get_data_expiracao(cliente, plano) }
       ContactMailer.email(EmailPagamentoRecebido.first, cliente).deliver
     when '6' # 'Devolvida'
-      cliente.update(expira_em: 1.day.ago) # desabilita plano
+      update(cliente, plano) { 1.day.ago }
       valPago = -valPago.to_f
     when '7' # 'Cancelada'
-      cliente.update(expira_em: 1.day.ago) # desabilita plano
+      update(expira_em, cliente, plano) { 1.day.ago }
       valPago = 0
     end
 
@@ -72,15 +72,19 @@ class NotificationsController < ApplicationController
     end
   end
 
-  def data_expiracao(cliente, plano)
-    if cliente.expira_em                        # Já foi cliente alguma vez
-    
-      if cliente.expira_em >= Date.current      # Renovando antes do vencimento
+  def update_status(cliente, plano)
+    dataExpiracao = yield
+    cliente.update(expira_em: dataExpiracao)
+    cliente.amigo.update(expira_em: dataExpiracao) if cliente.amigo && plano.duplo
+  end
+
+  def get_data_expiracao(cliente, plano)
+    if cliente.expira_em                        # É/foi cliente
+      if cliente.expira_em >= Date.current      # É cliente - Renovando antes do vencimento
         cliente.expira_em + plano.vigencia.days
-      else                                      # Renovando após vencimento
+      else                                      # Foi cliente - Renovando após vencimento
         plano.vigencia.days.from_now
       end
-    
     else                                        # Nunca foi cliente
       plano.vigencia.days.from_now
     end

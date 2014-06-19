@@ -4,9 +4,12 @@ class Cliente < ActiveRecord::Base
   has_many :historicos
   has_many :status_transacao_pag_seguros, through: :historicos
   has_many :log_email_expiracaos
-  after_save :set_registro
-
+  has_many :log_hash_email_amigos
+  
   belongs_to :plano
+  belongs_to :amigo, class_name: "Cliente", foreign_key: "cliente_id"
+  
+  after_save :set_registro
 
   scope :expirados, -> { where('expira_em <= ?', Date.current) }
   scope :ativos, -> { where('expira_em > ?', Date.current) }
@@ -46,6 +49,10 @@ class Cliente < ActiveRecord::Base
   def set_registro
   	self.registro = '#' + self.created_at.strftime("%d%m%y") + self.id.to_s.rjust(4,"0")
   	self.update_column(:registro, self.registro)
+  end
+
+  def expirado?
+    true if self.expira_em && self.expira_em < Date.current
   end
 
 end

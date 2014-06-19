@@ -20,7 +20,7 @@ LogEmailExpiracao.create([
 	])
 Cliente.create([
 	{nome: 'Cristiano Alencar',
-		email: 'cristiano.souza.mendonca+1@gmail.com',
+		email: 'cristiano.souza.mendonca@gmail.com',
 		cpf: '064.427.786-65',
 		nascimento: Date.new(1989, 04, 25),
 		expira_em: Date.new(2014, 07, 01),
@@ -33,6 +33,21 @@ Cliente.create([
 		bairro: 'Amazonas',
 		numero: '353',
 		rua: 'Tapajós',
+		aceite: true},
+	{nome: 'Souza Mendonça',
+		email: 'cristiano.souza.mendonca+1@gmail.com',
+		cpf: '665.655.148-36',
+		nascimento: Date.new(1989, 04, 01),
+		expira_em: Date.new(2014, 06, 01),
+		plano_id: 3,
+		telefone: '1111-1111',
+		cep: '11.111-111',
+		estado: 'AM',
+		cidade: 'Arial',
+		ddd: '11',
+		bairro: 'Arara',
+		numero: '111',
+		rua: 'Aruanã',
 		aceite: true}
 	])
 Role.create([
@@ -45,6 +60,10 @@ EmailExpiracaoPlano.create([
 	antec_envio: 30,
 	recorrencia: 1}
 	])
+EmailAvisoAmigo.create({
+	assunto: 'Resgate seu presente!',
+	body: '<h2>Seu email foi cadastrado no plano Amigo do Societo.<h2> <br /> Acesse o link abaixo e efetue seu cadastro.'
+	})
 EmailPagamentoRecebido.create([
 	{assunto: 'Seu pagamento foi identificado',
 	body: '<h2>Recebemos seu pagamento e ativos sua conta.<h2> <br /> A partir de agora você já conta com todas as vantagens que só o societo lhe proporciona.'}
@@ -61,17 +80,20 @@ Plano.create([
 	{nome: 'MENSAL',
 		vigencia: 30,
 		preco: 50.00,
-		codigo: 'M1'
+		codigo: 'M1',
+		duplo: false
 		},
 	{nome: 'ANUAL',
 		vigencia: 60,
 		preco: 100.00,
-		codigo: 'A2'
+		codigo: 'A2',
+		duplo: false
 		},
 	{nome: 'AMIGO',
 		vigencia: 90,
 		preco: 150.00,
-		codigo: 'A3'
+		codigo: 'A3',
+		duplo: true
 		},
 	])
 StatusTransacaoPagSeguro.create([

@@ -8,12 +8,18 @@ class ContactMailer < ActionMailer::Base
 
   def email(email, cliente)
     @email = email
-	mail(to: cliente.email, subject: email.assunto)
+	  mail(to: cliente.email, subject: email.assunto)
   end
 
   def email_expiracao_plano(email, cliente, hash)
   	@hash = hash
   	@email = email
-	mail(to: cliente.email, subject: email.assunto)
+	  mail(to: cliente.email, subject: email.assunto)
+  end
+
+  def email_plano_amigo(email, email_cliente, hash)
+    @hash = hash
+    @email = email
+    mail(to: email_cliente, subject: email.assunto)
   end
 end

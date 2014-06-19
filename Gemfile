@@ -54,6 +54,7 @@ end
 
 group :development, :test do
 	gem 'byebug', '~> 3.1.2'
+	gem 'rack-mini-profiler'
 end
 # Permite a criação de recursos sem persistência de objetos como se eles existissem
 gem 'active_attr'

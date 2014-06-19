@@ -77,19 +77,31 @@
       </div>
     </div>
 
+    
     <div class="row">
-      <div class="col-md-6">
-        <%= f.text_field :rua, {class: "form-control input-sm", placeholder: "Rua"} %>
-      </div>
-      <div class="col-md-2">
-        <%= f.text_field :numero, {class: "form-control input-sm", placeholder: "Nº"} %>
-      </div>
-      <div class="col-md-4">
-        <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
+      <div class="form-group">
+        <div class="col-md-6">
+          <%= f.text_field :rua, {class: "form-control input-sm", placeholder: "Rua"} %>
+        </div>
+        <div class="col-md-2">
+          <%= f.text_field :numero, {class: "form-control input-sm", placeholder: "Nº"} %>
+        </div>
+        <div class="col-md-4">
+          <%= f.text_field :complemento, {class: "form-control input-sm", placeholder: "Complemento"} %>
+        </div>
       </div>
     </div>
-
-    <br />
+    
+    <% if session[:plano_duplo] %>
+      Email do amigo:
+      <div class="row">
+        <div class="form-group">
+          <div class="col-md-6">
+            <%= email_field_tag 'cliente[email_amigo]', nil, {class: "form-control input-sm", placeholder: "Email"} %>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
     <div>
       Cupom de desconto (opcional):
@@ -368,11 +380,8 @@ function copiar(){
 }
 </script>
 
-<!--
 <script type="text/javascript">
   $("#cliente_nome").val("João das Colves")
-  $("#cliente_cpf").val("376.630.511-57")
-  $("#cliente_email").val("joao.das.colves@gmail.com")
   $("#cliente_nascimento").val("25/04/1989")
   $("#cliente_ddd").val("31")
   $("#cliente_telefone").val("1111-1111")
@@ -387,7 +396,7 @@ function copiar(){
   $("#aceite").prop('checked', true);
 </script>
 
-
+<!--
 <script type="text/javascript"
   src="https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js">
 </script>

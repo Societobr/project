@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613130803) do
+ActiveRecord::Schema.define(version: 20140618201517) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -46,9 +46,18 @@ ActiveRecord::Schema.define(version: 20140613130803) do
     t.string   "cupom"
     t.boolean  "aceite"
     t.integer  "plano_id"
+    t.integer  "cliente_id"
   end
 
+  add_index "clientes", ["cliente_id"], name: "index_clientes_on_cliente_id", using: :btree
   add_index "clientes", ["plano_id"], name: "index_clientes_on_plano_id", using: :btree
+
+  create_table "email_aviso_amigos", force: true do |t|
+    t.string   "assunto"
+    t.string   "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "email_cadastro_efetuados", force: true do |t|
     t.string   "assunto"
@@ -107,6 +116,15 @@ ActiveRecord::Schema.define(version: 20140613130803) do
 
   add_index "log_email_expiracaos", ["cliente_id"], name: "index_log_email_expiracaos_on_cliente_id", using: :btree
 
+  create_table "log_hash_email_amigos", force: true do |t|
+    t.integer  "cliente_id"
+    t.string   "rand_hash"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "log_hash_email_amigos", ["cliente_id"], name: "index_log_hash_email_amigos_on_cliente_id", using: :btree
+
   create_table "log_hash_email_expiracaos", force: true do |t|
     t.integer  "cliente_id"
     t.string   "rand_hash"
@@ -123,6 +141,7 @@ ActiveRecord::Schema.define(version: 20140613130803) do
     t.string   "codigo"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "duplo"
   end
 
   create_table "roles", force: true do |t|

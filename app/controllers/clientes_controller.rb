@@ -1,15 +1,16 @@
 class ClientesController < ApplicationController
-  layout 'dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento] # new ~> layouts/application
+  layout 'dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento]
+  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo]
   before_filter :plano_escolhido?, only: [:new, :new_sem_pagamento]
+  before_filter :hash_amigo_valido?, only: [:new_amigo]
 
   CUPOM_CODE = ['societo50']
 
   # GET /clientes
   # GET /clientes.json
   def index
-    @clientes = filter(params[:filter]) || Cliente.all
+    @clientes = filter(params[:filter]) || Cliente.includes(:plano, :atividades, historicos: [:status_transacao_pag_seguro]).all # Cliente.all
     
     respond_to do |format|
       format.html # show index.html.erb
@@ -18,7 +19,7 @@ class ClientesController < ApplicationController
   end
 
   def filter(filtro)
-    Cliente.send filtro if filtro
+    Cliente.includes(:plano, :atividades, historicos: [:status_transacao_pag_seguro]).send filtro if filtro
   end
 
   # GET /clientes/1
@@ -60,10 +61,11 @@ class ClientesController < ApplicationController
 
     if renovacao?
 
-      if termo_aceito_e_email_confirmado? && @cliente.update(cliente_params)
+      if termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.update(cliente_params)
         resp, resposta = realiza_pagamento()
 
         if sucesso?(resposta)
+          envia_email_amigo if session[:plano_duplo]
           flash.now[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado.'
           
           if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
@@ -75,10 +77,11 @@ class ClientesController < ApplicationController
         flash.now[:error] = @cliente.errors.to_a.join("\n")
       end
 
-    elsif @cliente.valid? && termo_aceito_e_email_confirmado? && @cliente.save
+    elsif @cliente.valid? && termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.save
       resp, resposta = realiza_pagamento()
 
       if sucesso?(resposta)
+        envia_email_amigo if session[:plano_duplo]
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
@@ -100,6 +103,37 @@ class ClientesController < ApplicationController
 
     @id_sessao = CheckoutController.get_id_sessao
     render :new
+  end
+
+  def new_amigo
+    session[:hash] = LogHashEmailAmigo.find_by_rand_hash(params[:hash]).rand_hash
+    @cliente = Cliente.new
+    render :new_amigo
+  end
+
+  def create_amigo
+    contratante = LogHashEmailAmigo.find_by_rand_hash(session[:hash]).cliente
+    @cliente = Cliente.new(cliente_params)
+    
+    if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!")
+      @cliente.expira_em = contratante.expira_em
+      @cliente.amigo = contratante
+
+      @cliente.save
+      contratante.update({cliente_id: @cliente.id})
+
+      flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+    elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
+      @cliente.update({expira_em: contratante.expira_em, cliente_id: contratante.id})
+      contratante.update({cliente_id: @cliente.id})
+      flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
+      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+    else
+      flash.now[:error] = @cliente.errors.to_a.join("\n")
+    end
+
+    render :new_amigo
   end
 
   def create_sem_pagamento # Criar sem pagamento
@@ -309,6 +343,22 @@ class ClientesController < ApplicationController
       end
     end
 
+    def envia_email_amigo
+      hash = SecureRandom.urlsafe_base64 32
+      LogHashEmailAmigo.create({cliente_id: @cliente.id, rand_hash: hash})
+      ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
+    end
+
+    def cadastro_amigo?
+      if session[:plano_duplo]
+        if params[:cliente][:email_amigo] == "" || (params[:cliente][:email_amigo] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i).nil?
+          @cliente.errors.messages.store :email, ['do amigo não informado ou inválido']
+          return false
+        end
+      end
+      return true
+    end
+
     def get_parametros_validos
       parametros = cliente_params
       parametros.merge!(pagamento_params)
@@ -338,12 +388,17 @@ class ClientesController < ApplicationController
 
     end
 
+    def hash_amigo_valido?
+      redirect_to nossos_planos_path unless LogHashEmailAmigo.find_by_rand_hash(params[:hash])
+    end
+
     def set_plano_session(plano)
       session[:plano_id] = plano.id
       session[:plano_codigo] = plano.codigo
       session[:plano_nome] = plano.nome
       session[:plano_preco] = plano.preco
       session[:plano_vigencia] = plano.vigencia
+      session[:plano_duplo] = plano.duplo
     end
 
     def plano_params
