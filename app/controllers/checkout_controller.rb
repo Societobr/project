@@ -9,7 +9,6 @@ class CheckoutController
     req = Net::HTTP::Post.new(uri)
     req.set_form_data(postParams)
     
-    byebug
     resp = Net::HTTP.start(uri.host, uri.port,:use_ssl => uri.scheme == 'https') do |http|
       http.request(req)
     end
@@ -87,7 +86,6 @@ class CheckoutController
   end
 
   def self.get_id_sessao
-    byebug
     # urlAutenticacao = "https://ws.sandbox.pagseguro.uol.com.br/v2/sessions?email=EMAIL&token=TOKEN"
     urlAutenticacao = "https://ws.pagseguro.uol.com.br/v2/sessions?email=EMAIL&token=TOKEN"
     urlAutenticacao.gsub!(
