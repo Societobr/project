@@ -6,11 +6,16 @@
     </div>
   </div>
 
-  <div class="row">
+  <div id="div_butt_mask" class="row">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= radio_button_tag :idCliente, 'cpf', true, 'data-toggle' => "tooltip", 'data-original-title' => 'CPF', onchange: 'change_mask(this)' %> CPF
-        <%= radio_button_tag :idCliente, 'reg', false, 'data-toggle' => "tooltip", 'data-original-title' => 'Registro', onchange: 'change_mask(this)' %> #Registro
+        <%= button_tag(type: 'button', onclick: 'change_mask(this)', id: 'cpf', class: "btn btn-primary btn-lg") do %>
+          <%= content_tag(:strong, 'CPF') %>
+        <% end %>
+
+        <%= button_tag(type: 'button', onclick: 'change_mask(this)', id: 'reg', class: "btn btn-primary btn-lg") do %>
+          <%= content_tag(:strong, '#Registro') %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -35,10 +40,10 @@
     </div>
   </div>
 
-  <div class="row">
+  <div id="div_id" class="row" style="display:none">
     <div class="form-group">
       <div class="col-md-4 col-sm-4">
-        <%= text_field_tag 'id', nil, {id: 'id', name: 'atividade[id]', class: "form-control input-lg", placeholder: 'CPF ou #Registro'} %>
+        <%= text_field_tag 'id', nil, {id: 'id', name: 'atividade[id]', class: "form-control input-lg" } %>
       </div>
     </div>
   </div>
@@ -74,7 +79,7 @@
       <div class="form-group">
         <div class="col-md-12">
           <%= submit_tag "Registrar", {id:"submit", class: "btn btn-primary btn-lg", disabled: true} %>
-          <%= link_to 'Cancelar',  atividades_new_path, class: 'btn btn-primary' %>
+          <%= link_to 'Cancelar',  atividades_new_path, class: 'btn btn-danger btn-lg' %>
         </div>
       </div>
     </div>
@@ -86,6 +91,7 @@
   $('#id').mask('999.999.999-99', {'completed':function(){find_client();}});
 
   function change_mask(element){
+    $("#div_id").show()
     $("#divValores").hide();
     $('#id').unmask();
     $('#id').val("");
@@ -93,41 +99,38 @@
     $("#status_cliente").remove()
     $("#errors").hide()
     
-    if(element.value == "cpf"){
+    if(element.id == "cpf"){
+      $("#id").attr("placeholder", "CPF");
       $('#id').mask('999.999.999-99', {'completed':function(){find_client();}});
     }else{
+      $("#id").attr("placeholder", "#Registro");
       $('#id').mask('#9999999999', {'completed':function(){find_client();}});
     }
   }
 
   function calcula_valor_a_pagar(){
-    if($("#total").val() != "" && $("#desconto").val() != ""){
-      $("#valorAPagar").show();
-      $("#valor_a_pagar").remove()
-      $("#valorAPagar").append("<h2 id=valor_a_pagar> Valor a Pagar: R$" + ($("#total").val() - $("#desconto").val()).toFixed(2) + "</h2>")
-    }else{
-      $("#valorAPagar").hide();
-      $("#valor_a_pagar").remove()
-    }
+    $("#valor_a_pagar").remove()
+    $("#valorAPagar").append("<h2 id=valor_a_pagar> Valor a Pagar: R$" + ($("#total").val() - $("#desconto").val()).toFixed(2) + "</h2>")
   }
-
-  // Catch all events related to changes
-$('#textbox').on('change keyup', function() {
-  // Remove invalid characters
-  var sanitized = $(this).val().replace(/[^0-9.]/g, '');
-  // Remove the first point if there is more than one
-  sanitized = sanitized.replace(/\.(?=.*\.)/, '');
-  // Update value
-  $(this).val(sanitized);
-});
 
   (function () {
     $('#total').on('change keypress paste focus textInput input', function () {
       var sanitized = $(this).val().replace(/[^0-9.]/g, '');
       sanitized = sanitized.replace(/\.(?=.*\.)/, '');
       $(this).val(sanitized);
+      calcula_valor_a_pagar()
     });
   }());
+
+  (function () {
+    $('#desconto').on('change keypress paste focus textInput input', function () {
+      var sanitized = $(this).val().replace(/[^0-9.]/g, '');
+      sanitized = sanitized.replace(/\.(?=.*\.)/, '');
+      $(this).val(sanitized);
+      calcula_valor_a_pagar()
+    });
+  }());
+
 
   function find_client(){
     $.ajax({
@@ -147,6 +150,7 @@ $('#textbox').on('change keyup', function() {
             $("#status_cliente").remove()
           }
           else{
+            $("#div_butt_mask").hide()
             $("#errors").hide()
             $("#nome_cliente").remove()
             $("#status_cliente").remove()
@@ -158,6 +162,8 @@ $('#textbox').on('change keyup', function() {
               $("#submit").prop("disabled", true);
             }
             else if (new Date() < new Date(response.client.expira_em + "(BRT)")){
+              calcula_valor_a_pagar()
+              $("#valorAPagar").show();
               $("#dadosCliente").append("<h3 id=status_cliente> Status: Ativo </h3>")
               $("#divValores").show();
               $("#submit").removeAttr("disabled");

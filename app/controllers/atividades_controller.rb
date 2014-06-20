@@ -6,7 +6,7 @@ class AtividadesController < ApplicationController
   def index
   	@atividades = filter(params[:filtro]) || Atividade.all
     get_zip_reports if params[:commit] == "Relatório"
-    @atividades = @atividades.paginate(:page => params[:page], :per_page => 3)
+    @atividades = @atividades.paginate(:page => params[:page], :per_page => 10)
   end
 
   def new

@@ -20,7 +20,7 @@ LogEmailExpiracao.create([
 	])
 Cliente.create([
 	{nome: 'Cristiano Alencar',
-		email: 'cristiano.souza.mendonca@gmail.com',
+		email: 'cristiano.souza.mendonca+1@gmail.com',
 		cpf: '064.427.786-65',
 		nascimento: Date.new(1989, 04, 25),
 		expira_em: Date.new(2014, 07, 01),
@@ -35,7 +35,7 @@ Cliente.create([
 		rua: 'Tapajós',
 		aceite: true},
 	{nome: 'Souza Mendonça',
-		email: 'cristiano.souza.mendonca+1@gmail.com',
+		email: 'cristiano.souza.mendonca+2@gmail.com',
 		cpf: '665.655.148-36',
 		nascimento: Date.new(1989, 04, 01),
 		expira_em: Date.new(2014, 06, 01),
