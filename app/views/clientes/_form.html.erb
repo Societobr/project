@@ -93,11 +93,14 @@
     </div>
     
     <% if session[:plano_duplo] %>
-      Email do amigo:
+      Informações do Amigo:
       <div class="row">
         <div class="form-group">
           <div class="col-md-6">
-            <%= email_field_tag 'cliente[email_amigo]', nil, {class: "form-control input-sm", placeholder: "Email"} %>
+            <%= email_field_tag 'cliente[email_amigo]', nil, {class: "form-control input-sm", placeholder: "Email do Amigo"} %>
+          </div>
+          <div class="col-md-3">
+            <%= text_field_tag 'cliente[cpf_amigo]', nil, {class: "form-control input-sm", placeholder: "CPF do Amigo"} %>
           </div>
         </div>
       </div>
@@ -331,6 +334,7 @@
 <!-- Scripts abaixo criam máscara para formulário -->
 <script type="text/javascript">
   $('#cliente_cpf').mask('999.999.999-99');
+  $("#cliente_cpf_amigo").mask('999.999.999-99');
   $('#cliente_telefone').mask('9999-9999');
   $('#cliente_nascimento').mask('99/99/9999');
   $('#cliente_cep').mask('99.999-999');

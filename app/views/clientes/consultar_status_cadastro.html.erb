@@ -3,7 +3,7 @@
   <!-- Basic Page Needs
     ================================================== -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> <%= full_title("Nova Atividade") %></title>
+    <title> <%= full_title("Consultar Status Plano") %> </title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
@@ -21,5 +21,14 @@
   </head>
 <% end %>
 
-<h2>Registrar Atividade</h2>
-<%= render 'form' %>
+<div class="main" role="main">
+  <div id="content" class="content page-content full">
+    <div class="container">
+      <div class="parceiro col-md-12">
+        <h2>Consultar CPF</h2>
+        <h3>Digite seu CPF para saber o status do seu plano</h3>
+        <%= render 'form_consulta_status_cadastro' %>
+      </div>
+    </div>
+  </div>
+</div>

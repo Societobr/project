@@ -5,10 +5,10 @@
 		<div class="main" role="main">
 		  <div id="content" class="content page-content full">
 		    <div class="container">
-		      <%= render 'layouts/dashboard_header' %>
+		      <%= render 'layouts/dashboard/header' %>
 		      <div class="row">
 		        <div class="col-md-2  sidebar left-sidebar">
-		        	<%= render 'layouts/dashboard_sidebar' unless (request.path.eql? new_atividade_path) %>
+		        	<%= render 'layouts/dashboard/sidebar' %>
 		          <div class="clearfix"></div>
 		          <div id="message"></div>
 		        </div>

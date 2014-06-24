@@ -1,5 +1,5 @@
 class AtividadesController < ApplicationController
-  layout 'dashboard'
+  layout 'parceiro/dashboard'
   before_filter :authorize_admin, only: [:index]
   before_filter :authorize_parceiro, except: [:index]
 
@@ -89,6 +89,6 @@ class AtividadesController < ApplicationController
   end
 
   def get_cliente(id)
-    Cliente.where("cpf = ? OR registro = ?", id, id).first
+    Cliente.where("cpf = ? OR registro = ? OR num_cartao = ?", id, id, id).first
   end
 end

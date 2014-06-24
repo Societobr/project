@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   get '/cadastro', to:'clientes#new_sem_pagamento', as: 'cadastro'
   post '/cadastro', to: 'clientes#create_sem_pagamento'
+
+  get '/6softwares' => redirect('http://www.6softwares.com.br'), as: 'six_softwares'
   
   get '/cidades/belo-horizonte', to: 'paginas_estaticas#belo_horizonte'
   get '/nossos-planos',  to: 'paginas_estaticas#planos'
@@ -20,6 +22,8 @@ Rails.application.routes.draw do
   post '/client', to: 'atividades#find_client'
   get '/cadastro-amigo', to: 'clientes#new_amigo'
   post '/cadastro-amigo', to: 'clientes#create_amigo'
+  get '/consultar-status-cadastro', to: 'clientes#consultar_status_cadastro'
+  post '/consultar-status-cadastro', to: 'clientes#status_cadastro'
 
   scope 'admin' do
     resources :clientes, except: [:create, :new]

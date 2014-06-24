@@ -1,4 +1,4 @@
-<footer class="site-footer-bottom">
+<footer <%= 'id=footer-parceiro' if request.path == '/login' %> class="site-footer-bottom">
   <div class="container">
     <div class="row">
       <div class="col-md-2"> <%= image_tag "logo.png", alt: "Tentered",  class: "site-logo"%> </div>
@@ -16,3 +16,4 @@
     </div>
   </div>
 </footer>
+<%= link_to icon('angle-double-up', '', id: 'back-to-top') %>

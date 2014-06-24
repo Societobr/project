@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html class="en">
+  <%= yield :head %>
+  <body style="overflow-x: scroll;">
+  	<div id="wrap" class="container">
+	    <div id="main" class="container clear-top">
+		  <div id="content" class="content page-content full">
+			<div class="container">
+			  <%= render 'layouts/parceiro/header' %>
+			  <div class="row">
+			    <div class="col-md-2  sidebar left-sidebar">
+			      <div class="clearfix"></div>
+			      <div id="message"></div>
+		        </div>
+			    <div class="col-md-10">
+	              <%= yield %>
+	            </div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<%= render 'layouts/parceiro/footer' %>
+  </body>
+</html>

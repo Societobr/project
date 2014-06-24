@@ -1,0 +1,14 @@
+<%= render partial: 'messages' %>
+
+<%= form_tag consultar_status_cadastro_path, id: 'form' do %>
+  <div class="col-md-3">
+    <%= text_field_tag 'cliente[cpf]', nil, {class: "form-control input-sm", placeholder: "CPF"} %>
+  </div>
+  <div class="col-md-1">
+    <%= submit_tag "Consultar", {class: "btn btn-primary btn-sm"} %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $("#cliente_cpf").mask('999.999.999-99');
+</script>

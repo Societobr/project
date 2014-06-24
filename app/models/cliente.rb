@@ -9,7 +9,7 @@ class Cliente < ActiveRecord::Base
   belongs_to :plano
   belongs_to :amigo, class_name: "Cliente", foreign_key: "cliente_id"
   
-  after_save :set_registro
+  before_save :set_registro
 
   scope :expirados, -> { where('expira_em <= ?', Date.current) }
   scope :ativos, -> { where('expira_em > ?', Date.current) }
@@ -46,9 +46,27 @@ class Cliente < ActiveRecord::Base
   	end
   end
 
+  def ativo?
+    true if self.expira_em > Date.current
+  end
+
+  def aguard_pag?
+    true if self.expira_em.nil?
+  end
+
+  def expirado?
+    true if self.expira_em <= Date.current
+  end
+
+  def status_plano
+    return 'ativo' if self.expira_em > Date.current
+    return 'aguardando pagamento' if self.expira_em.nil?
+    return 'expirado' if self.expira_em <= Date.current
+  end
+
   def set_registro
-  	self.registro = '#' + self.created_at.strftime("%d%m%y") + self.id.to_s.rjust(4,"0")
-  	self.update_column(:registro, self.registro)
+    last_id = Cliente.last.id || 0
+  	self.registro = '#' + Date.current.strftime("%y%m%d") + last_id.next.to_s.rjust(4,"0")
   end
 
   def expirado?

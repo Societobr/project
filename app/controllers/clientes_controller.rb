@@ -1,5 +1,5 @@
 class ClientesController < ApplicationController
-  layout 'dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo] # new ~> layouts/application
+  layout 'dashboard/dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo, :consultar_status_cadastro, :status_cadastro] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
   before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo]
   before_filter :plano_escolhido?, only: [:new, :new_sem_pagamento]
@@ -25,6 +25,19 @@ class ClientesController < ApplicationController
   # GET /clientes/1
   # GET /clientes/1.json
   def show
+  end
+
+  def consultar_status_cadastro
+  end
+
+  def status_cadastro
+    cliente = Cliente.find_by_cpf(params[:cliente][:cpf])
+    if cliente
+      flash.now[:notice] = "Status: #{cliente.status_plano}"
+    else
+      flash.now[:error] = "CPF não cadastrado em nossa base de dados."
+    end
+    render :consultar_status_cadastro
   end
 
   # GET /clientes/new
@@ -61,7 +74,8 @@ class ClientesController < ApplicationController
 
     if renovacao?
 
-      if termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.update(cliente_params)
+      # if termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.update(cliente_params)
+      if validate_entries { cadastro_amigo? } && @cliente.update(cliente_params)
         resp, resposta = realiza_pagamento()
 
         if sucesso?(resposta)
@@ -77,7 +91,8 @@ class ClientesController < ApplicationController
         flash.now[:error] = @cliente.errors.to_a.join("\n")
       end
 
-    elsif @cliente.valid? && termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.save
+    # elsif @cliente.valid? && termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.save
+    elsif validate_entries { cadastro_amigo? } && @cliente.save
       resp, resposta = realiza_pagamento()
 
       if sucesso?(resposta)
@@ -115,7 +130,8 @@ class ClientesController < ApplicationController
     contratante = LogHashEmailAmigo.find_by_rand_hash(session[:hash]).cliente
     @cliente = Cliente.new(cliente_params)
     
-    if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!")
+    # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!")
+    if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") }
       @cliente.expira_em = contratante.expira_em
       @cliente.amigo = contratante
 
@@ -142,7 +158,8 @@ class ClientesController < ApplicationController
 
     if renovacao? # verifica se session[:cliente_id] está setado
 
-      if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
+      # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
+      if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.update(cliente_params)
         flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       else
@@ -151,7 +168,8 @@ class ClientesController < ApplicationController
     
     else
 
-      if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
+      # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
+      if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.save
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
@@ -221,6 +239,14 @@ class ClientesController < ApplicationController
 
     def renovacao?
       true if session[:cliente_id]
+    end
+
+    def validate_entries
+      valid = @cliente.valid?
+      taec = termo_aceito_e_email_confirmado?
+      y = yield
+
+      return valid && taec && y
     end
 
     def realiza_pagamento
@@ -303,7 +329,8 @@ class ClientesController < ApplicationController
         :complemento,
         :cupom,
         :aceite,
-        :expira_em)
+        :expira_em,
+        :num_cartao)
     end
 
     def pagamento_params
@@ -334,9 +361,9 @@ class ClientesController < ApplicationController
       if params[:cliente][:aceite] == "1" && params[:email_confirm] == params[:cliente][:email]
         return true
       else
-        @cliente.errors.messages.store :aceite, ['os termos.'] unless 
+        @cliente.errors.messages.store :aceite, ['os termos'] unless 
                 params[:cliente][:aceite] == "1"
-        @cliente.errors.messages.store :email, ['de confirmação deve ser igual ao email fornecido.'] unless
+        @cliente.errors.messages.store :email, ['de confirmação deve ser igual ao email fornecido'] unless
                 params[:email_confirm] == params[:cliente][:email]
         return false
       end
@@ -350,8 +377,8 @@ class ClientesController < ApplicationController
 
     def cadastro_amigo?
       if session[:plano_duplo]
-        if params[:cliente][:email_amigo] == "" || (params[:cliente][:email_amigo] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i).nil?
-          @cliente.errors.messages.store :email, ['do amigo não informado ou inválido']
+        if params[:cliente][:email_amigo].empty? || (params[:cliente][:email_amigo] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i).nil?
+          @cliente.errors.messages.store :email_do_amigo, ['não informado ou inválido']
           return false
         end
       end

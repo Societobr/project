@@ -1,7 +1,7 @@
 class ContatosController < ApplicationController
 
   before_filter :authorize_admin, except: [:new, :create]
-  layout 'dashboard', except: [:new, :create]
+  layout 'dashboard/dashboard', except: [:new, :create]
 
   # renderiza página de contato
 	def new

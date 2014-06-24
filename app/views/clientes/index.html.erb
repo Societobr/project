@@ -38,6 +38,7 @@
     <thead>
       <tr>
         <th>Registro</th>
+        <th>Cartão</th>
         <th>Plano</th>
         <th>Vigência</th>
         <th>Nome</th>
@@ -57,6 +58,7 @@
       <% @clientes.each do |cliente| %>
         <tr>
           <td><%= cliente.registro %></td>
+          <td><%= cliente.num_cartao %></td>
           <td><%= cliente.plano.nome if cliente.plano %></td>
           <td><%= cliente.expira_em %></td>
           <td><%= cliente.nome %></td>

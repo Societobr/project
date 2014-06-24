@@ -71,6 +71,9 @@
     <div class="col-md-2">
       <%= f.text_field :expira_em, {class: "form-control input-sm", placeholder: "Vigência", value:(@cliente.expira_em.strftime("%d/%m/%Y") if @cliente.expira_em)} %>
     </div>
+    <div class="col-md-2">
+      <%= f.text_field :num_cartao, {class: "form-control input-sm", placeholder: "Cartão"} %>
+    </div>
   </div>
 
   <br />
@@ -89,6 +92,7 @@
 
 <script type="text/javascript">
   $('#cliente_cpf').mask('999.999.999-99');
+  $('#cliente_num_cartao').mask('99.999.999')
   $('#cliente_telefone').mask('9999-9999');
   $('#cliente_nascimento').mask('99/99/9999');
   $('#cliente_expira_em').mask('99/99/9999');

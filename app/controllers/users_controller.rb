@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	layout 'dashboard'
+	layout 'dashboard/dashboard'
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
 	before_filter :authorize_admin
 

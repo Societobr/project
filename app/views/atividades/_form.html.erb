@@ -8,13 +8,17 @@
 
   <div id="div_butt_mask" class="row">
     <div class="form-group">
-      <div class="col-md-4 col-sm-4">
+      <div class="col-md-6 col-sm-6">
         <%= button_tag(type: 'button', onclick: 'change_mask(this)', id: 'cpf', class: "btn btn-primary btn-lg") do %>
           <%= content_tag(:strong, 'CPF') %>
         <% end %>
 
         <%= button_tag(type: 'button', onclick: 'change_mask(this)', id: 'reg', class: "btn btn-primary btn-lg") do %>
           <%= content_tag(:strong, '#Registro') %>
+        <% end %>
+
+        <%= button_tag(type: 'button', onclick: 'change_mask(this)', id: 'card', class: "btn btn-primary btn-lg") do %>
+          <%= content_tag(:strong, 'Cartão') %>
         <% end %>
       </div>
     </div>
@@ -98,13 +102,17 @@
     $("#nome_cliente").remove()
     $("#status_cliente").remove()
     $("#errors").hide()
-    
+    $('#id').focus();
+
     if(element.id == "cpf"){
       $("#id").attr("placeholder", "CPF");
       $('#id').mask('999.999.999-99', {'completed':function(){find_client();}});
-    }else{
+    }else if(element.id == "reg"){
       $("#id").attr("placeholder", "#Registro");
       $('#id').mask('#9999999999', {'completed':function(){find_client();}});
+    }else{
+      $("#id").attr("placeholder", "Cartão");
+      $('#id').mask('99.999.999', {'completed':function(){find_client();}});
     }
   }
 
@@ -167,6 +175,7 @@
               $("#dadosCliente").append("<h3 id=status_cliente> Status: Ativo </h3>")
               $("#divValores").show();
               $("#submit").removeAttr("disabled");
+              $('#total').focus();
             } else{
               $("#dadosCliente").append("<h3 id=status_cliente> Status: Inativo </h3>")
               $("#divValores").hide();
