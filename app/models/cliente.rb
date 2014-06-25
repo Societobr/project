@@ -47,7 +47,7 @@ class Cliente < ActiveRecord::Base
   end
 
   def ativo?
-    true if self.expira_em > Date.current
+    true if self.expira_em >= Date.current
   end
 
   def aguard_pag?
@@ -55,7 +55,7 @@ class Cliente < ActiveRecord::Base
   end
 
   def expirado?
-    true if self.expira_em <= Date.current
+    true if self.expira_em && self.expira_em < Date.current
   end
 
   def status_plano
@@ -67,10 +67,6 @@ class Cliente < ActiveRecord::Base
   def set_registro
     last_id = Cliente.last.id || 0
   	self.registro = '#' + Date.current.strftime("%y%m%d") + last_id.next.to_s.rjust(4,"0")
-  end
-
-  def expirado?
-    true if self.expira_em && self.expira_em < Date.current
   end
 
 end

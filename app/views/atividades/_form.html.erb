@@ -169,7 +169,7 @@
               $("#divValores").hide();
               $("#submit").prop("disabled", true);
             }
-            else if (new Date() < new Date(response.client.expira_em + "(BRT)")){
+            else if (new Date() <= new Date(response.client.expira_em + "(BRT)")){
               calcula_valor_a_pagar()
               $("#valorAPagar").show();
               $("#dadosCliente").append("<h3 id=status_cliente> Status: Ativo </h3>")

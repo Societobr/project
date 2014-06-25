@@ -1,7 +1,7 @@
 class ClientesController < ApplicationController
   layout 'dashboard/dashboard', except: [:new, :create, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo, :consultar_status_cadastro, :status_cadastro] # new ~> layouts/application
   before_action :set_cliente, only: [:show, :edit, :update, :destroy]
-  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo]
+  before_filter :authorize_admin, except: [:new, :create, :cupom, :cards_brand, :new_sem_pagamento, :create_sem_pagamento, :new_amigo, :create_amigo, :consultar_status_cadastro, :status_cadastro]
   before_filter :plano_escolhido?, only: [:new, :new_sem_pagamento]
   before_filter :hash_amigo_valido?, only: [:new_amigo]
 
@@ -33,7 +33,7 @@ class ClientesController < ApplicationController
   def status_cadastro
     cliente = Cliente.find_by_cpf(params[:cliente][:cpf])
     if cliente
-      flash.now[:notice] = "Status: #{cliente.status_plano}"
+      flash.now[:notice] = "Status: #{cliente.status_plano}\nVálido até: #{cliente.expira_em.strftime('%d/%m/%Y')}"
     else
       flash.now[:error] = "CPF não cadastrado em nossa base de dados."
     end
@@ -74,8 +74,7 @@ class ClientesController < ApplicationController
 
     if renovacao?
 
-      # if termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.update(cliente_params)
-      if validate_entries { cadastro_amigo? } && @cliente.update(cliente_params)
+      if validate_entries { trata_se_cadastro_amigo_valido? } && @cliente.update(cliente_params)
         resp, resposta = realiza_pagamento()
 
         if sucesso?(resposta)
@@ -91,8 +90,7 @@ class ClientesController < ApplicationController
         flash.now[:error] = @cliente.errors.to_a.join("\n")
       end
 
-    # elsif @cliente.valid? && termo_aceito_e_email_confirmado? && cadastro_amigo? && @cliente.save
-    elsif validate_entries { cadastro_amigo? } && @cliente.save
+    elsif validate_entries { trata_se_cadastro_amigo_valido? } && @cliente.save
       resp, resposta = realiza_pagamento()
 
       if sucesso?(resposta)
@@ -121,16 +119,17 @@ class ClientesController < ApplicationController
   end
 
   def new_amigo
-    session[:hash] = LogHashEmailAmigo.find_by_rand_hash(params[:hash]).rand_hash
-    @cliente = Cliente.new
-    render :new_amigo
+    log = LogHashEmailAmigo.find_by_rand_hash(params[:hash])
+    session[:hash] = log.rand_hash
+    cpf = log.cpf
+    email = log.email
+    @cliente = Cliente.new(cpf: cpf, email: email)
   end
 
   def create_amigo
     contratante = LogHashEmailAmigo.find_by_rand_hash(session[:hash]).cliente
     @cliente = Cliente.new(cliente_params)
     
-    # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!")
     if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") }
       @cliente.expira_em = contratante.expira_em
       @cliente.amigo = contratante
@@ -139,11 +138,6 @@ class ClientesController < ApplicationController
       contratante.update({cliente_id: @cliente.id})
 
       flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
-      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
-    elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
-      @cliente.update({expira_em: contratante.expira_em, cliente_id: contratante.id})
-      contratante.update({cliente_id: @cliente.id})
-      flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
       ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
     else
       flash.now[:error] = @cliente.errors.to_a.join("\n")
@@ -158,7 +152,6 @@ class ClientesController < ApplicationController
 
     if renovacao? # verifica se session[:cliente_id] está setado
 
-      # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.update(cliente_params)
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.update(cliente_params)
         flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
@@ -168,7 +161,6 @@ class ClientesController < ApplicationController
     
     else
 
-      # if @cliente.valid? && termo_aceito_e_email_confirmado? && verify_recaptcha(:model => @cliente, :message => "Captcha incorreto!") && @cliente.save
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.save
         flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
@@ -358,7 +350,8 @@ class ClientesController < ApplicationController
     end
 
     def termo_aceito_e_email_confirmado?
-      if params[:cliente][:aceite] == "1" && params[:email_confirm] == params[:cliente][:email]
+      byebug
+      if params[:cliente][:aceite] == "1" && (params[:email_confirm].nil? || params[:email_confirm] == params[:cliente][:email])
         return true
       else
         @cliente.errors.messages.store :aceite, ['os termos'] unless 
@@ -371,17 +364,39 @@ class ClientesController < ApplicationController
 
     def envia_email_amigo
       hash = SecureRandom.urlsafe_base64 32
-      LogHashEmailAmigo.create({cliente_id: @cliente.id, rand_hash: hash})
+      LogHashEmailAmigo.create({cliente_id: @cliente.id, rand_hash: hash, cpf: params[:cliente][:cpf_amigo], email: params[:cliente][:email_amigo]})
       ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
     end
 
-    def cadastro_amigo?
+    def trata_se_cadastro_amigo_valido?
       if session[:plano_duplo]
-        if params[:cliente][:email_amigo].empty? || (params[:cliente][:email_amigo] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i).nil?
-          @cliente.errors.messages.store :email_do_amigo, ['não informado ou inválido']
-          return false
+        if params[:cliente][:cpf_amigo] == params[:cliente][:cpf]
+          @cliente.errors.messages.store :cpf_do_amigo, ['deve ser diferente do seu CPF']
         end
+
+        if params[:cliente][:email_amigo] == params[:cliente][:email]
+          @cliente.errors.messages.store :email_do_amigo, ['deve ser diferente do seu email']
+        end
+
+        if params[:cliente][:email_amigo].empty?
+          @cliente.errors.messages.store :email_do_amigo, ['deve ser preenchido']
+        elsif (params[:cliente][:email_amigo] =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i).nil?
+          @cliente.errors.messages.store :email_do_amigo, ['inválido']
+        elsif (cliente = Cliente.find_by_email(params[:cliente][:email_amigo])) && !cliente.expirado?
+            @cliente.errors.messages.store :email_do_amigo, ['já cadastrado em nossa base de dados']
+        end
+
+        if params[:cliente][:cpf_amigo].empty?
+          @cliente.errors.messages.store :cpf_do_amigo, ['deve ser preenchido']
+        elsif !Cpf.new(params[:cliente][:cpf_amigo]).valido?
+          @cliente.errors.messages.store :cpf_do_amigo, ['inválido']
+        elsif (cliente = Cliente.find_by_cpf(params[:cliente][:cpf_amigo])) && !cliente.expirado?
+          @cliente.errors.messages.store :cpf_do_amigo, ['já cadastrado em nossa base de dados']
+        end
+
+        return false if @cliente.errors.has_key?(:email_do_amigo) || @cliente.errors.has_key?(:cpf_do_amigo)
       end
+
       return true
     end
 
