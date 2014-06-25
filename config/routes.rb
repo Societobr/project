@@ -36,8 +36,12 @@ Rails.application.routes.draw do
     patch 'email-expiracao', to: 'contatos#update_email_expiracao'
     get 'email-cadastro', to: 'contatos#edit_email_cadastro_efetuado', as: 'email_cadastro_efetuado'
     patch 'email-cadastro', to: 'contatos#update_email_cadastro_efetuado'
-    get 'email-pagamento-recebido', to: 'contatos#edit_email_pagamento_recebido', as: 'edit_email_pagamento_recebido'
+    get 'email-pagamento-recebido', to: 'contatos#edit_email_pagamento_recebido', as: 'email_pagamento_recebido'
     patch 'email-pagamento-recebido', to: 'contatos#update_email_pagamento_recebido'
+    get 'email-aviso-amigo', to: 'contatos#edit_email_aviso_amigo', as: 'email_aviso_amigo'
+    patch 'email-aviso-amigo', to: 'contatos#update_email_aviso_amigo'
+    get 'email-cpj-ja-cadastrado', to: 'contatos#edit_email_cpf_ja_cadastrado', as: 'email_cpf_ja_cadastrado'
+    patch 'email-cpj-ja-cadastrado', to: 'contatos#update_email_cpf_ja_cadastrado'
     resources :users
   end
 

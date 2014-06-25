@@ -47,7 +47,7 @@ class ContatosController < ApplicationController
 
   def update_email_cadastro_efetuado
     @email = EmailCadastroEfetuado.first
-    if @email.update(email_cadastro_params)
+    if @email.update(email_params(:email_cadastro_efetuado))
       flash.now[:notice] = "Dados gravados com sucesso."
     else
       flash.now[:error] = @email.errors.to_a.join("\n")
@@ -61,12 +61,40 @@ class ContatosController < ApplicationController
 
   def update_email_pagamento_recebido
     @email = EmailPagamentoRecebido.first
-    if @email.update(email_pagamento_params)
+    if @email.update(email_params(:email_pagamento_recebido))
       flash.now[:notice] = "Dados gravados com sucesso."
     else
       flash.now[:error] = @email.errors.to_a.join("\n")
     end
     render :edit_email_pagamento_recebido
+  end
+
+  def edit_email_aviso_amigo
+    @email = EmailAvisoAmigo.first
+  end
+
+  def update_email_aviso_amigo
+    @email = EmailAvisoAmigo.first
+    if @email.update(email_params(:email_aviso_amigo))
+      flash.now[:notice] = "Dados gravados com sucesso."
+    else
+      flash.now[:error] = @email.errors.to_a.join("\n")
+    end
+    render :edit_email_aviso_amigo
+  end
+
+  def edit_email_cpf_ja_cadastrado
+    @email = EmailCpfJaCadastrado.first
+  end
+
+  def update_email_cpf_ja_cadastrado
+    @email = EmailCpfJaCadastrado.first
+    if @email.update(email_params(:email_cpf_ja_cadastrado))
+      flash.now[:notice] = "Dados gravados com sucesso."
+    else
+      flash.now[:error] = @email.errors.to_a.join("\n")
+    end
+    render :edit_email_cpf_ja_cadastrado
   end
 
   # envia email de expiração de plano
@@ -91,6 +119,14 @@ class ContatosController < ApplicationController
       params.require(:contato).permit(:nome, :email, :assunto, :mensagem)
     end
 
+    def email_params(obj=nil)
+      if obj
+        params.require(obj).permit(:assunto, :body)
+      else
+        params.require(:email_expiracao_plano).permit(:assunto, :body, :antec_envio, :recorrencia)
+      end
+    end
+
     def self.log_email_expiracao(cliente, hash)
       lee = LogEmailExpiracao.find_or_initialize_by(cliente_id: cliente.id)
       lee.id? ? lee.touch : lee.save
@@ -103,18 +139,6 @@ class ContatosController < ApplicationController
       WHERE log_email_expiracaos.updated_at > '#{recorrencia.days.ago.to_date}')"
       
       return ActiveRecord::Base.connection.exec_query(query)
-    end
-
-    def email_params
-      params.require(:email_expiracao_plano).permit(:assunto, :body, :antec_envio, :recorrencia)
-    end
-
-    def email_cadastro_params
-      params.require(:email_cadastro_efetuado).permit(:assunto, :body)
-    end
-
-    def email_pagamento_params
-      params.require(:email_pagamento_recebido).permit(:assunto, :body)
     end
 
 end
