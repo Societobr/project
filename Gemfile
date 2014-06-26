@@ -40,6 +40,7 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 # Utilizado para recebimento de notificações do PagSeguro bem como
 # envio de email assincrono.
 gem 'sidekiq'
+gem 'redis'
 
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 # Validador de CPF
