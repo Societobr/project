@@ -55,7 +55,8 @@ class NotificationsController < ApplicationController
       # não faz nada
     when '3' # 'Paga'
       update_status(cliente, plano) { get_data_expiracao(cliente, plano) }
-      ContactMailer.delay.email(EmailPagamentoRecebido.first, cliente)
+      # ContactMailer.delay.email(EmailPagamentoRecebido.first, cliente)
+      ContactMailer.email(EmailPagamentoRecebido.first, cliente).deliver
     when '6' # 'Devolvida'
       update(cliente, plano) { 1.day.ago }
       valPago = -valPago.to_f
