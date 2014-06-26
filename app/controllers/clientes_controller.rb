@@ -81,12 +81,15 @@ class ClientesController < ApplicationController
 
         if sucesso?(resposta)
           envia_email_amigo if session[:plano_duplo]
-          flash.now[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado.'
+          flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
           
           if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
             redirect_to link_pagamento(resp)
             return
           end
+          
+          redirect_to cidades_belo_horizonte_path
+          return
         end
       else
         flash.now[:error] = @cliente.errors.to_a.join("\n")
@@ -97,14 +100,16 @@ class ClientesController < ApplicationController
 
       if sucesso?(resposta)
         envia_email_amigo if session[:plano_duplo]
-        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+        flash[:notice] = 'Cadastro efetuado com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
         # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
           redirect_to link_pagamento(resp)
           return
         end
-
+        
+        redirect_to cidades_belo_horizonte_path
+        return 
       else
         Cliente.delete(@cliente)
       end
@@ -140,9 +145,12 @@ class ClientesController < ApplicationController
       @cliente.save
       contratante.update({cliente_id: @cliente.id})
 
-      flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+      flash[:notice] = 'Cadastro efetuado com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
       # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
       ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+      
+      redirect_to cidades_belo_horizonte_path
+      return
     else
       flash.now[:error] = @cliente.errors.to_a.join("\n")
     end
@@ -157,9 +165,12 @@ class ClientesController < ApplicationController
     if renovacao? # verifica se session[:cliente_id] está setado
 
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.update(cliente_params)
-        flash.now[:notice] = 'Cadastro atualizado com sucesso. Obrigado!'
+        flash[:notice] = 'Cadastro atualizado com sucesso. Aproveite e veja nossa lista de parceiros.'
         # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+        
+        redirect_to cidades_belo_horizonte_path
+        return
       else
         flash.now[:error] = @cliente.errors.to_a.join("\n")
       end
@@ -167,9 +178,12 @@ class ClientesController < ApplicationController
     else
 
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.save
-        flash.now[:notice] = 'Cadastro efetuado com sucesso. Obrigado!'
+        flash[:notice] = 'Cadastro efetuado com sucesso. Aproveite e veja nossa lista de parceiros.'
         # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+
+        redirect_to cidades_belo_horizonte_path
+        return
       elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
         cliente = Cliente.find_by_cpf @cliente.cpf
         notifica_cliente_por_email(cliente)
