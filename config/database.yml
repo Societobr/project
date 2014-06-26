@@ -61,7 +61,7 @@ production:
   adapter: mysql2
   encoding: utf8
   database: production.societo
-  pool: 5
+  pool: 20
   username: root
   password: 'S0c1Et0'
   host: localhost

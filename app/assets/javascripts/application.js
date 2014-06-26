@@ -12,7 +12,7 @@
 //
 //= require ./js/jquery-2.0.0.min
 //= require jquery_ujs
-//= require jquery.maskedinput.min
+//= require jquery.maskedinput
 //= require dataTables/jquery.dataTables
 //= require dataTables/jquery.dataTables.bootstrap3
 //= require_tree .

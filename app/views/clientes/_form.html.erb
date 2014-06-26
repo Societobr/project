@@ -40,7 +40,7 @@
           <%= f.email_field :email, {class: "form-control input-sm", placeholder: "Email"} %>
         </div>
         <div class="col-md-6">
-          <%= email_field_tag :email_confirm, nil, {class: "form-control input-sm", placeholder: "Confirme seu email"} %>
+          <%= email_field_tag :email_confirm, nil, {class: "form-control input-sm", placeholder: "Confirme seu email", value: @email_confirm} %>
         </div>
       </div>
     </div>
@@ -97,10 +97,10 @@
       <div class="row">
         <div class="form-group">
           <div class="col-md-6">
-            <%= email_field_tag 'cliente[email_amigo]', nil, {class: "form-control input-sm", placeholder: "Email do Amigo"} %>
+            <%= email_field_tag 'cliente[email_amigo]', nil, {class: "form-control input-sm", placeholder: "Email do Amigo", value: @email_amigo} %>
           </div>
           <div class="col-md-3">
-            <%= text_field_tag 'cliente[cpf_amigo]', nil, {class: "form-control input-sm", placeholder: "CPF do Amigo"} %>
+            <%= text_field_tag 'cliente[cpf_amigo]', nil, {class: "form-control input-sm", placeholder: "CPF do Amigo", value: @cpf_amigo} %>
           </div>
         </div>
       </div>
@@ -345,6 +345,7 @@
   $('#cep_cartao').mask('99.999-999');
   $('#ddd_cartao').mask('99');
   $('#validade_cartao').mask('99/9999')
+  $("#numero_cartao").mask('9999 9999 9999 9?999', {placeholder: " "})
   $("#email_confirm").bind('paste', function(e) {
     e.preventDefault();
   });
@@ -425,7 +426,7 @@ function copiar(){
 
   function get_bandeira(){
     PagSeguroDirectPayment.getBrand({ 
-      cardBin: $("#numero_cartao").val(), 
+      cardBin: $("#numero_cartao").val().replace(/\s/g, ''), 
       success: function(response) {
         $("#bandeira_cartao").val(response.brand.name)
         $("#invalid_card_number").hide()
@@ -460,7 +461,7 @@ function copiar(){
   (function () {
       var oldVal;
       $('#numero_cartao').on('change keypress paste focus textInput input', function () {
-          var val = this.value;
+          var val = this.value.replace(/\s/g, "");
           if (val != oldVal) {
               oldVal = val;
               if(oldVal.length >= 6){
@@ -489,7 +490,7 @@ function copiar(){
 
   function cartao(){
     PagSeguroDirectPayment.createCardToken({ 
-     cardNumber: $("#numero_cartao").val(), 
+     cardNumber: $("#numero_cartao").val().replace(/\s/g, ''), 
      brand: $("#bandeira_cartao").val(), 
      cvv: $("#cvv_cartao").val(), 
      expirationMonth: $("#validade_cartao").val().substr(0, 2),

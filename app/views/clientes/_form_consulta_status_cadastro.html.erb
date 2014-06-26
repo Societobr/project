@@ -1,9 +1,11 @@
 <%= render partial: 'messages' %>
 
 <%= form_tag consultar_status_cadastro_path, id: 'form' do %>
-  <div class="col-md-3">
-    <%= text_field_tag 'cliente[cpf]', nil, {class: "form-control input-sm", placeholder: "CPF"} %>
-  </div>
+	<%= fields_for @cliente do |f| %>
+	  <div class="col-md-3">
+	    <%= f.text_field 'cpf', {class: "form-control input-sm", placeholder: "CPF"} %>
+	  </div>
+    <% end %>
   <div class="col-md-1">
     <%= submit_tag "Consultar", {class: "btn btn-primary btn-sm"} %>
   </div>

@@ -51,6 +51,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
 
@@ -68,6 +69,7 @@
           <td><%= cliente.estado %></td>
           <td><%= cliente.cidade %></td>
           <td><%= cliente.cupom %></td>
+          <td><%= link_to icon('edit', '', class: 'fa-2x', title: ""), edit_cliente_path(cliente.id) %></td>
           <td><%= link_to icon('money', '', class: 'fa-2x', title: "Pagamentos"), raw("#pagModal#{cliente.id}"), 'data-toggle'=>"modal" %>
 
           <div id="pagModal<%= cliente.id%>" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">

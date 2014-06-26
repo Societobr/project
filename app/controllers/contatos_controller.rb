@@ -14,7 +14,7 @@ class ContatosController < ApplicationController
     @contato = Contato.new(contato_params)
 
     if @contato.valid?
-      ContactMailer.mensagem_contato(@contato).deliver
+      ContactMailer.delay.mensagem_contato(@contato) # Uses sidekiq
       flash.now[:success] = 'Sua mensagem foi recebida com sucesso. Obrigado!'
   	else
   		flash.now[:error] = "<strong>Não foi possível enviar sua mensagem.</strong>\n" + @contato.errors.to_a.join("\n")
@@ -108,7 +108,7 @@ class ContatosController < ApplicationController
         cliente = Cliente.new(clt)
         hash = SecureRandom.urlsafe_base64 32
         log_email_expiracao(cliente, hash)
-        ContactMailer.email_expiracao_plano(email, cliente, hash).deliver
+        ContactMailer.delay.email_expiracao_plano(email, cliente, hash) # Uses sidekiq
       end
     end
   end

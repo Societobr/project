@@ -31,7 +31,7 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-6 col-sm-6">
-        <%= text_field_tag 'filtro[parceiro]', @parc_nome, {id: "Parceiro", class: "form-control input-lg", placeholder: "Parceiro"} %>
+        <%= text_field_tag 'filtro[parceiro]', @parc_nome, {id: "Parceiro", class: "form-control", placeholder: "Parceiro"} %>
       </div>
     </div>
   </div>
@@ -39,16 +39,16 @@
   <div class="row">
     <div class="form-group">
       <div class="col-md-3 col-sm-3">
-        <%= text_field_tag 'filtro[de]', @de.strftime("%d/%m/%Y"), {id: "de", class: "form-control input-lg", placeholder: "De"} %>
+        <%= text_field_tag 'filtro[de]', @de.strftime("%d/%m/%Y"), {id: "de", class: "form-control", placeholder: "De"} %>
       </div>
       <div class="col-md-3 col-sm-3">
-        <%= text_field_tag 'filtro[ate]', @ate.strftime("%d/%m/%Y"), {id: "ate", class: "form-control input-lg", placeholder: "Até"} %>
+        <%= text_field_tag 'filtro[ate]', @ate.strftime("%d/%m/%Y"), {id: "ate", class: "form-control", placeholder: "Até"} %>
       </div>
     </div>
   </div>
 
-  <%= submit_tag "Filtrar", {class: "btn btn-primary btn-lg"} %>
-  <%= submit_tag "Relatório", {class: "btn btn-primary btn-lg"} %>
+  <%= submit_tag "Filtrar", {class: "btn btn-primary"} %>
+  <%= submit_tag "Relatório", {class: "btn btn-primary"} %>
 <% end %>
 
 <br />

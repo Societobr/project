@@ -29,7 +29,7 @@
           <%= f.email_field :email, {class: "form-control input-sm", placeholder: "Email"} %>
         </div>
         <div class="col-md-6">
-          <%= email_field_tag :email_confirmation, nil, {class: "form-control input-sm", placeholder: "Confirme seu email"} %>
+          <%= email_field_tag :email_confirm, nil, {class: "form-control input-sm", placeholder: "Confirme seu email", value: @email_confirm} %>
         </div>
       </div>
     </div>

@@ -37,6 +37,10 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
+# Utilizado para recebimento de notificações do PagSeguro bem como
+# envio de email assincrono.
+gem 'sidekiq'
+
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 # Validador de CPF
 gem "cpf_validator"

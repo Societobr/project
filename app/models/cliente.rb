@@ -59,13 +59,18 @@ class Cliente < ActiveRecord::Base
   end
 
   def status_plano
-    return 'ativo' if self.expira_em > Date.current
-    return 'aguardando pagamento' if self.expira_em.nil?
-    return 'expirado' if self.expira_em <= Date.current
+    if self.expira_em
+      return 'ativo' if self.expira_em > Date.current
+      return 'aguardando pagamento' if self.expira_em.nil?
+      return 'expirado' if self.expira_em <= Date.current
+    else
+      return 'aguardando pagamento'
+    end
   end
 
   def set_registro
-    last_id = Cliente.last.id || 0
+    last_clt = Cliente.last
+    last_id = last_clt.nil? ? 0 : last_clt.id
   	self.registro = '#' + Date.current.strftime("%y%m%d") + last_id.next.to_s.rjust(4,"0")
   end
 
