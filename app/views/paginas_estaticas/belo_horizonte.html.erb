@@ -26,11 +26,15 @@
     <div class="container padding-tb75">
       <% if flash %>
         <% flash.to_hash.each_pair do |key, messages| %>
-          <div class="alert alert-<%= get_message_class(key) %> fade in">
-            <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <ul>
+          <div class="row">
+            <div class="col-md-6" data-appear-animation="bounceInRight">
+              <div class="alert alert-<%= get_message_class(key) %> fade in">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <ul>
                   <%= simple_format(messages) %>
                 </ul>
+              </div>
+            </div>
           </div>
         <% end unless flash.empty? %>
       <% end %>
