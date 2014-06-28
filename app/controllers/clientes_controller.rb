@@ -302,7 +302,6 @@ class ClientesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_params
-      clt_params =
       params.require(:cliente).permit(
         :nome,
         :ddd,
@@ -319,10 +318,8 @@ class ClientesController < ApplicationController
         :complemento,
         :cupom,
         :aceite,
-        :plano_id)
-
-      clt_params.merge({cupom: session[:cupom_code]}) unless session[:cupom_code].nil?
-      return clt_params
+        :plano_id,
+        :cupom)
     end
 
     def cliente_params_admin

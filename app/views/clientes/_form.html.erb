@@ -112,11 +112,11 @@
 
     <div class="row">
       <div class="col-md-4">
-        <%= f.text_field :cupom, {class: "form-control input-sm", placeholder: "Cupom de Desconto", onchange: "validar_cupom()", value: ""} %>
+        <%= f.text_field :cupom, {class: "form-control input-sm", placeholder: "Cupom de Desconto", onchange: "validar_cupom()"} %>
       </div>
 
       <div class="col-md-8" style='display:none' id='cupom_valido_msg'>
-        Cupom validado com suceso! Você receberá 50% de desconto no ato do pagamento.
+        Cupom validado com suceso!
       </div>
 
       <div class="col-md-8" style='display:none' id='cupom_invalido_msg'>
@@ -317,7 +317,9 @@
   <%= hidden_field_tag 'identificador_vendedor', nil, {id: 'identificador_vendedor', name: 'pagamento[identificador_vendedor]'} %>
   <%= hidden_field_tag 'meio_pagamento', nil, {id: 'meio_pagamento', name: 'pagamento[meio_pagamento]', value: 'cartao'} %>
   <%= hidden_field_tag 'preco_plano', nil, {id: 'preco_plano', value: session[:plano_preco]} %>
-  <%= hidden_field_tag 'valor_desconto', nil, {id: 'preco_desconto', value: session[:plano_preco]} %>
+  <%= hidden_field_tag 'valor_desconto', nil, {id: 'preco_desconto', value: (session[:cupom_discount] ?
+                                    (session[:plano_preco].to_f - session[:cupom_discount].to_f) :
+                                    session[:plano_preco])} %>
 
   <%= hidden_field_tag 'preco_total_parcelamento', nil, {id: 'preco_total_parcelamento', name: 'pagamento[preco_total_parcelamento]' } %>
   <%= hidden_field_tag 'valor_parcelas', nil, {id: 'valor_parcelas', name: 'pagamento[valor_parcelas]' } %>
@@ -564,6 +566,10 @@ function copiar(){
         success: function(response){
             if(response.cupom == "valido"){
               $("#preco_desconto").val($("#preco_plano").val()/2)
+              
+              $("#plano_preco").empty()
+              $("#plano_preco").append("Preço: R$ " + parseFloat($("#preco_desconto").val()).toFixed(2))
+
               $("#cupom_valido_msg").show()
               $("#cupom_invalido_msg").hide()
             }else{

@@ -34,8 +34,11 @@
           <div class="col-md-4 sidebar right-sidebar padding-tb75">
             <h3 class="push-top">Plano <%= session[:plano_nome].humanize %></h3>
             <ul>
-              <li></i> Preço: R$ <%= session[:plano_preco] %></li>
-              <li></i> Vigência: <%= session[:plano_vigencia] %> dias </li>
+              <li id="plano_preco"> Preço: R$ 
+                <%= session[:cupom_discount] ?
+                  "%.2f" % (session[:plano_preco].to_f - session[:cupom_discount].to_f) :
+                  session[:plano_preco] %></li>
+              <li id="plano_vigencia"> Vigência: <%= session[:plano_vigencia] %> dias </li>
             </ul>
           </div>
         </div>
