@@ -137,6 +137,7 @@ class ClientesController < ApplicationController
   def create_amigo
     contratante = LogHashEmailAmigo.find_by_rand_hash(session[:hash]).cliente
     @cliente = Cliente.new(cliente_params)
+    @cliente.plano_id = Plano.find_by_nome("AMIGO").id
     
     if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") }
       @cliente.expira_em = contratante.expira_em

@@ -9,7 +9,7 @@ class Cliente < ActiveRecord::Base
   belongs_to :plano
   belongs_to :amigo, class_name: "Cliente", foreign_key: "cliente_id"
   
-  before_save :set_registro
+  after_save :set_registro
 
   scope :expirados, -> { where('expira_em <= ?', Date.current) }
   scope :ativos, -> { where('expira_em > ?', Date.current) }
@@ -69,9 +69,8 @@ class Cliente < ActiveRecord::Base
   end
 
   def set_registro
-    last_clt = Cliente.last
-    last_id = last_clt.nil? ? 0 : last_clt.id
-  	self.registro = '#' + Date.current.strftime("%y%m%d") + last_id.next.to_s.rjust(4,"0")
+    reg = '#' + Date.current.strftime("%y%m%d") + self.id.to_s.rjust(4,"0")
+  	self.update_column(:registro, reg)
   end
 
 end
