@@ -10,16 +10,16 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require ./css/bootstrap
- *= require ./css/style
- *= require settings
- *= require ./colors/green
- *= require font-awesome
  *= require ./css/animations
- *= require prettyPhoto
- *= require owl.carousel
  *= require dataTables/jquery.dataTables
  *= require dataTables/jquery.dataTables.bootstrap3
+ *= require font-awesome
+ *= require ./css/bootstrap
+ *= require ./css/style
+ *= require prettyPhoto
+ *= require owl.carousel
+ *= require settings
+ *= require ./colors/green
  *= require_self
  */
 

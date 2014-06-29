@@ -1,4 +1,6 @@
 /* Stylesheets and Google fonts import */
+/* @import url(<%= asset_data_uri 'font-awesome.css' %>);
+@import url(<%= asset_data_uri 'animations.css' %>); */
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic,300italic,300);
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,700,300);
 @import url(http://fonts.googleapis.com/css?family=Volkhov:400italic);
@@ -1162,7 +1164,7 @@ span.progress-bar-tooltip:after {
 	display:inline-block;
 	width:153px;
 	height:165px;
-	background:url(<%=asset_data_uri 'bg_fact@2x.png' %>) no-repeat;
+	background:url(<%= asset_data_uri 'bg_fact.png' %>) no-repeat;
 	color:#333333;
 	line-height:180px;
 }
