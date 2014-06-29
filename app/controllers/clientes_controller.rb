@@ -81,13 +81,18 @@ class ClientesController < ApplicationController
 
         if sucesso?(resposta)
           envia_email_amigo if session[:plano_duplo]
-          flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
           
-          if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
+          if(pagamento_params[:meio_pagamento] == 'debito')
+            flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
             redirect_to link_pagamento(resp)
+            return
+          elsif(pagamento_params[:meio_pagamento] == 'boleto')
+            flash[:notice] = 'O boleto para pagamento foi enviado para o seu email. Obrigado!'
+            redirect_to cidades_belo_horizonte_path
             return
           end
           
+          flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
           redirect_to cidades_belo_horizonte_path
           return
         end
@@ -100,16 +105,22 @@ class ClientesController < ApplicationController
 
       if sucesso?(resposta)
         envia_email_amigo if session[:plano_duplo]
-        flash[:notice] = 'Cadastro efetuado com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
         # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
-        if(pagamento_params[:meio_pagamento] == 'debito' || pagamento_params[:meio_pagamento] == 'boleto')
-          redirect_to link_pagamento(resp)
-          return
-        end
         
-        redirect_to cidades_belo_horizonte_path
-        return 
+        if(pagamento_params[:meio_pagamento] == 'debito')
+            flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
+            redirect_to link_pagamento(resp)
+            return
+          elsif(pagamento_params[:meio_pagamento] == 'boleto')
+            flash[:notice] = 'O boleto para pagamento foi enviado para o seu email. Obrigado!'
+            redirect_to cidades_belo_horizonte_path
+            return
+          end
+          
+          flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
+          redirect_to cidades_belo_horizonte_path
+          return
       else
         Cliente.delete(@cliente)
       end
