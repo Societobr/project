@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140625131104) do
+ActiveRecord::Schema.define(version: 20140701110238) do
 
   create_table "atividades", force: true do |t|
     t.integer  "user_id"
@@ -88,6 +88,13 @@ ActiveRecord::Schema.define(version: 20140625131104) do
     t.datetime "updated_at"
   end
 
+  create_table "email_pagamento_recusados", force: true do |t|
+    t.string   "assunto"
+    t.string   "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "historicos", force: true do |t|
     t.integer  "cliente_id"
     t.integer  "status_transacao_pag_seguro_id"
@@ -121,14 +128,14 @@ ActiveRecord::Schema.define(version: 20140625131104) do
 
   add_index "log_hash_email_amigos", ["cliente_id"], name: "index_log_hash_email_amigos_on_cliente_id", using: :btree
 
-  create_table "log_hash_email_expiracaos", force: true do |t|
+  create_table "log_hashes", force: true do |t|
     t.integer  "cliente_id"
     t.string   "rand_hash"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "log_hash_email_expiracaos", ["cliente_id"], name: "index_log_hash_email_expiracaos_on_cliente_id", using: :btree
+  add_index "log_hashes", ["cliente_id"], name: "index_log_hashes_on_cliente_id", using: :btree
 
   create_table "planos", force: true do |t|
     t.string   "nome"

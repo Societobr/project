@@ -284,7 +284,7 @@ class ClientesController < ApplicationController
       hash = SecureRandom.urlsafe_base64 32
       # ContactMailer.delay.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash)
       ContactMailer.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash).deliver
-      LogHashEmailExpiracao.create({cliente_id: cliente.id, rand_hash: hash})
+      LogHash.create({cliente_id: cliente.id, rand_hash: hash})
     end
 
     def link_pagamento(resp)

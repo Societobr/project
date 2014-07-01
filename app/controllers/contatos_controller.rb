@@ -42,6 +42,20 @@ class ContatosController < ApplicationController
     render :edit_email_expiracao
   end
 
+  def edit_email_pagamento_recusado
+    @email = EmailPagamentoRecusado.first
+  end
+
+  def update_email_pagamento_recusado
+    @email = EmailPagamentoRecusado.first
+    if @email.update(email_params(:email_pagamento_recusado))
+      flash.now[:notice] = "Dados gravados com sucesso."
+    else
+      flash.now[:error] = @email.errors.to_a.join("\n")
+    end
+    render :edit_email_pagamento_recusado
+  end
+
   def edit_email_cadastro_efetuado
     @email = EmailCadastroEfetuado.first
   end
@@ -132,7 +146,7 @@ class ContatosController < ApplicationController
     def self.log_email_expiracao(cliente, hash)
       lee = LogEmailExpiracao.find_or_initialize_by(cliente_id: cliente.id)
       lee.id? ? lee.touch : lee.save
-      LogHashEmailExpiracao.create({cliente_id: cliente.id, rand_hash: hash})
+      LogHash.create({cliente_id: cliente.id, rand_hash: hash})
     end
 
     def self.clientes_expirando(dataLimite, recorrencia)

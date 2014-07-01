@@ -42,6 +42,8 @@ Rails.application.routes.draw do
     patch 'email-aviso-amigo', to: 'contatos#update_email_aviso_amigo'
     get 'email-cpj-ja-cadastrado', to: 'contatos#edit_email_cpf_ja_cadastrado', as: 'email_cpf_ja_cadastrado'
     patch 'email-cpj-ja-cadastrado', to: 'contatos#update_email_cpf_ja_cadastrado'
+    get 'email-pagamento-recusado', to: 'contatos#edit_email_pagamento_recusado', as: 'email_pagamento_recusado'
+    patch 'email-pagamento-recusado', to: 'contatos#update_email_pagamento_recusado'
     resources :users
   end
 

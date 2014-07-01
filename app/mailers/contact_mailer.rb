@@ -17,6 +17,12 @@ class ContactMailer < ActionMailer::Base
 	  mail(to: cliente.email, subject: email.assunto)
   end
 
+  def email_pagamento_recusado(email, cliente, hash)
+    @hash = hash
+    @email = email
+    mail(to: cliente.email, subject: email.assunto)
+  end
+
   def email_plano_amigo(email, email_cliente, hash)
     @hash = hash
     @email = email

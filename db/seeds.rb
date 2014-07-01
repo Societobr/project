@@ -54,6 +54,10 @@ Role.create([
 	{description: 'ADMIN'},
 	{description: 'PARCEIRO'},
 	])
+EmailPagamentoRecusado.create([
+	{assunto: 'Seu pagamento foi recusado/cancelado',
+	body:'<h2>Seu pagamento foi recusado/cancelado.<h2>.',}
+	])
 EmailExpiracaoPlano.create([
 	{assunto: 'Renove seu plano.',
 	body: '<h2>Seu plano expira em alguns dias.<h2> <br /> Faça a renovação e continue a aproveitando as vantagens que só o societo lhe proporciona.',

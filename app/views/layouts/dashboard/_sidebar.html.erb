@@ -6,10 +6,11 @@
   <ul class="dropdown">
     <li> <%= link_to '#' do %> Emails <%= icon('angle-down') %> <% end %>
         <ul class="dropdown">
-            <li> <%= link_to 'CPF já Cadastrado', email_cpf_ja_cadastrado_path %> </li>
             <li> <%= link_to 'Amigo', email_aviso_amigo_path %> </li>
+            <li> <%= link_to 'CPF já Cadastrado', email_cpf_ja_cadastrado_path %> </li>
             <li> <%= link_to 'Cadastro Realizado', email_cadastro_efetuado_path %> </li>
             <li> <%= link_to 'Pagamento Recebido', email_pagamento_recebido_path %> </li>
+            <li> <%= link_to 'Pagamento Rejeitado', email_pagamento_recusado_path %> </li>
             <li> <%= link_to 'Plano Expirando', email_expiracao_plano_path %> </li>
         </ul>
     </li>

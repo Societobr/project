@@ -39,6 +39,7 @@ class NotificationsController < ApplicationController
       valPago = -valPago.to_f
     when '7' # 'Cancelada'
       update(expira_em, cliente, plano) { 1.day.ago }
+      notifica_cliente(cliente_id)
       valPago = 0
     end
 
@@ -67,6 +68,13 @@ class NotificationsController < ApplicationController
     else                                        # Nunca foi cliente
       plano.vigencia.days.from_now
     end
+  end
+
+  def notifica_cliente(cliente_id)
+    hash = SecureRandom.urlsafe_base64 32
+    LogHash.create({cliente_id: cliente_id, rand_hash: hash})
+    # ContactMailer.delay.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash)
+    ContactMailer.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash).deliver
   end
 
 end
