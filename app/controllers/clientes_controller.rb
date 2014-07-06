@@ -145,9 +145,10 @@ class ClientesController < ApplicationController
   end
 
   def create_amigo
-    contratante = LogHashEmailAmigo.find_by_rand_hash(session[:hash]).cliente
+    log = LogHashEmailAmigo.find_by_rand_hash(session[:hash])
+    contratante = log.cliente
     @cliente = Cliente.new(cliente_params)
-    @cliente.plano_id = Plano.find_by_nome("AMIGO").id
+    @cliente.plano = contratante.plano
     
     if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") }
       @cliente.expira_em = contratante.expira_em
@@ -155,6 +156,8 @@ class ClientesController < ApplicationController
 
       @cliente.save
       contratante.update({cliente_id: @cliente.id})
+
+      log.destroy
 
       flash[:notice] = 'Cadastro efetuado com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
       # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)

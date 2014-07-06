@@ -8,7 +8,7 @@ class CheckoutController
     uri = URI(url)
     req = Net::HTTP::Post.new(uri)
     req.set_form_data(postParams)
-    
+
     resp = Net::HTTP.start(uri.host, uri.port,:use_ssl => uri.scheme == 'https') do |http|
       http.request(req)
     end
