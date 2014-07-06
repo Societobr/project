@@ -64,6 +64,10 @@
 </div>
 
 <div class="form-group">
+  <strong> Amigo: </strong> <%= @cliente.amigo.nome if @cliente.amigo %>
+</div>
+
+<div class="form-group">
   <strong> Vigência: </strong> <%= @cliente.expira_em.strftime("%Y/%m/%d") if @cliente.expira_em %>
 </div>
 

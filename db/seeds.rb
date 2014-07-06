@@ -40,6 +40,8 @@ Cliente.create([
 		nascimento: Date.new(1989, 04, 01),
 		expira_em: Date.new(2014, 06, 01),
 		plano_id: 3,
+		cliente_id: 1,
+		cupom: 'societo50',
 		telefone: '1111-1111',
 		cep: '11.111-111',
 		estado: 'AM',

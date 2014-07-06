@@ -45,6 +45,7 @@ class ClientesController < ApplicationController
   # GET /clientes/new
   def new
     @cliente = (session[:cliente_id] ? Cliente.find(session[:cliente_id]) : Cliente.new)
+    @cliente.cupom = nil
     @id_sessao = CheckoutController.get_id_sessao
     session[:cupom_discount] = nil
     session[:cupom_code] = nil
@@ -80,7 +81,7 @@ class ClientesController < ApplicationController
         resp, resposta = realiza_pagamento()
 
         if sucesso?(resposta)
-          envia_email_amigo if session[:plano_duplo]
+          grava_info_amigo if session[:plano_duplo]
           
           if(pagamento_params[:meio_pagamento] == 'debito')
             flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
@@ -104,7 +105,7 @@ class ClientesController < ApplicationController
       resp, resposta = realiza_pagamento()
 
       if sucesso?(resposta)
-        envia_email_amigo if session[:plano_duplo]
+        grava_info_amigo if session[:plano_duplo]
         # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
         ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         
@@ -140,9 +141,7 @@ class ClientesController < ApplicationController
   def new_amigo
     log = LogHashEmailAmigo.find_by_rand_hash(params[:hash])
     session[:hash] = log.rand_hash
-    cpf = log.cpf
-    email = log.email
-    @cliente = Cliente.new(cpf: cpf, email: email)
+    @cliente = Cliente.new(cpf: log.cpf, email: log.email)
   end
 
   def create_amigo
@@ -392,11 +391,11 @@ class ClientesController < ApplicationController
       end
     end
 
-    def envia_email_amigo
+    def grava_info_amigo
       hash = SecureRandom.urlsafe_base64 32
       LogHashEmailAmigo.create({cliente_id: @cliente.id, rand_hash: hash, cpf: params[:cliente][:cpf_amigo], email: params[:cliente][:email_amigo]})
       # ContactMailer.delay.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash)
-      ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
+      # yyContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
     end
 
     def trata_se_cadastro_amigo_valido?

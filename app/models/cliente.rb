@@ -9,11 +9,12 @@ class Cliente < ActiveRecord::Base
   belongs_to :plano
   belongs_to :amigo, class_name: "Cliente", foreign_key: "cliente_id"
   
-  after_save :set_registro
+  after_create :set_registro
 
   scope :expirados, -> { where('expira_em <= ?', Date.current) }
   scope :ativos, -> { where('expira_em > ?', Date.current) }
   scope :aguard_pag, -> { where('expira_em is NULL', Date.current) }
+  scope :cadastrados_dia, lambda { |dia| where("registro LIKE '##{dia}%'") }
 
   usar_como_cpf :cpf
   validate :cpf_unico
@@ -69,7 +70,11 @@ class Cliente < ActiveRecord::Base
   end
 
   def set_registro
-    reg = '#' + Date.current.strftime("%y%m%d") + self.id.to_s.rjust(4,"0")
+    dataAtual = Date.current.strftime("%y%m%d")
+    clts = Cliente.cadastrados_dia(dataAtual)
+    length = clts.length.next
+    # reg = '#' + Date.current.strftime("%y%m%d") + self.id.to_s.rjust(4,"0")
+    reg = '#' + dataAtual + length.to_s.rjust(4,"0")
   	self.update_column(:registro, reg)
   end
 
