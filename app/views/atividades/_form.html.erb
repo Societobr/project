@@ -89,6 +89,15 @@
       </div>
     </div>
   </div>
+
+  <div class="row" id="cancelButton" style="display:none">
+    <div class="form-group">
+      <div class="col-sm-12">
+        <%= link_to 'Voltar',  atividades_new_path, class: 'btn btn-danger btn-md' %>
+      </div>
+    </div>
+  </div>
+
 <% end %>
 
 <script type="text/javascript">
@@ -157,6 +166,7 @@
             $("#submit").prop("disabled", true);
             $("#nome_cliente").remove()
             $("#status_cliente").remove()
+            $("#cancelButton").show()
           }
           else{
             $("#div_butt_mask").hide()
@@ -169,6 +179,7 @@
               $("#dadosCliente").append("<h4 id=status_cliente> Status: Aguardando Pagamento </h4>")
               $("#divValores").hide();
               $("#submit").prop("disabled", true);
+              $("#cancelButton").show()
             }
             else if (new Date() <= new Date(response.client.expira_em + "(BRT)")){
               calcula_valor_a_pagar()
@@ -181,6 +192,7 @@
               $("#dadosCliente").append("<h4 id=status_cliente> Status: Inativo </h4>")
               $("#divValores").hide();
               $("#submit").prop("disabled", true);
+              $("#cancelButton").show()
             }
           }
         }
