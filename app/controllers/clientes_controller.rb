@@ -125,7 +125,10 @@ class ClientesController < ApplicationController
       else
         Cliente.delete(@cliente)
       end
-
+    elsif @cliente.errors[:email].include? "já cadastrado em nossa base de dados."
+      cliente = Cliente.find_by_email @cliente.email
+      notifica_cliente_por_email(cliente)
+      flash.now[:error] = "Email já cadastrado em nossa base de dados. Para prosseguir, acesse seu e-mail e siga as instruções."
     elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
       cliente = Cliente.find_by_cpf @cliente.cpf
       notifica_cliente_por_email(cliente)
@@ -198,6 +201,10 @@ class ClientesController < ApplicationController
 
         redirect_to cidades_belo_horizonte_path
         return
+      elsif @cliente.errors[:email].include? "já cadastrado em nossa base de dados."
+        cliente = Cliente.find_by_email @cliente.email
+        notifica_cliente_por_email(cliente)
+        flash.now[:error] = "Email já cadastrado em nossa base de dados. Para prosseguir, acesse seu e-mail e siga as instruções."
       elsif @cliente.errors[:cpf].include? "já está cadastrado em nossa base de dados."
         cliente = Cliente.find_by_cpf @cliente.cpf
         notifica_cliente_por_email(cliente)
