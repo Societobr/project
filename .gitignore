@@ -16,4 +16,4 @@
 /tmp
 
 # Ignora o arquivo que leva as variáveis de sistema, as quais guardam senhas
-# /config/application.yml #desmarcar essa linha ao final para que senha do Thiago não vá para produção
+/config/application.yml

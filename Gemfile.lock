@@ -159,7 +159,6 @@ GEM
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
-    pg (0.17.1)
     polyglot (0.3.4)
     rack (1.5.2)
     rack-mini-profiler (0.9.1)
@@ -262,7 +261,6 @@ DEPENDENCIES
   jquery-turbolinks
   mysql2 (~> 0.3.15)
   pagseguro-oficial!
-  pg
   rack-mini-profiler
   rails (= 4.1.0)
   recaptcha
