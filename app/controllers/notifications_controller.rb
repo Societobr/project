@@ -32,8 +32,8 @@ class NotificationsController < ApplicationController
       # não faz nada
     when '3' # 'Paga'
       update_status(cliente, plano) { get_data_expiracao(cliente, plano) }
-      # ContactMailer.delay.email(EmailPagamentoRecebido.first, cliente)
-      ContactMailer.email(EmailPagamentoRecebido.first, cliente).deliver
+      ContactMailer.delay.email(EmailPagamentoRecebido.first, cliente)
+      # ContactMailer.email(EmailPagamentoRecebido.first, cliente).deliver
       envia_email_amigo(cliente) if plano.duplo?
     when '6' # 'Devolvida'
       update(cliente, plano) { 1.day.ago }
@@ -74,14 +74,14 @@ class NotificationsController < ApplicationController
   def notifica_cliente(cliente_id)
     hash = SecureRandom.urlsafe_base64 32
     LogHash.create({cliente_id: cliente_id, rand_hash: hash})
-    # ContactMailer.delay.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash)
-    ContactMailer.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash).deliver
+    ContactMailer.delay.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash)
+    # ContactMailer.email_pagamento_recusado(EmailPagamentoRecusado.first, cliente, hash).deliver
   end
 
   def envia_email_amigo(contratante)
     log = LogHashEmailAmigo.where(cliente_id: contratante.id).last
-    # ContactMailer.delay.email_plano_amigo(EmailAvisoAmigo.first, log.email, log.rand_hash)
-    ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, log.email, log.rand_hash).deliver
+    ContactMailer.delay.email_plano_amigo(EmailAvisoAmigo.first, log.email, log.rand_hash)
+    # ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, log.email, log.rand_hash).deliver
   end
 
 end

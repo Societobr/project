@@ -7,50 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.create([
-	{username: 'admin', password: '123456', role_id: 1},
-	{username: 'parceiro', password: '123456', role_id: 2},
-	])
-Atividade.create([
-	{user_id: 2, cliente_id: 1, preco_total: 200.20, valor_desconto: 20.02},
-	{user_id: 2, cliente_id: 1, preco_total: 500.50, valor_desconto: 50.05},
-	])
-LogEmailExpiracao.create([
-	{cliente_id: 1},
-	{cliente_id: 2}
-	])
-Cliente.create([
-	{nome: 'Cristiano Alencar',
-		email: 'cristiano.souza.mendonca+1@gmail.com',
-		cpf: '064.427.786-65',
-		nascimento: Date.new(1989, 04, 25),
-		expira_em: Date.new(2014, 07, 01),
-		plano_id: 1,
-		telefone: '8782-7703',
-		cep: '32.240-060',
-		estado: 'MG',
-		cidade: 'Contagem',
-		ddd: '31',
-		bairro: 'Amazonas',
-		numero: '353',
-		rua: 'Tapajós',
-		aceite: true},
-	{nome: 'Souza Mendonça',
-		email: 'cristiano.souza.mendonca+2@gmail.com',
-		cpf: '665.655.148-36',
-		nascimento: Date.new(1989, 04, 01),
-		expira_em: Date.new(2014, 06, 01),
-		plano_id: 3,
-		cliente_id: 1,
-		cupom: 'societo50',
-		telefone: '1111-1111',
-		cep: '11.111-111',
-		estado: 'AM',
-		cidade: 'Arial',
-		ddd: '11',
-		bairro: 'Arara',
-		numero: '111',
-		rua: 'Aruanã',
-		aceite: true}
+	{username: 'admin', password: '123456', role_id: 1}
 	])
 Role.create([
 	{description: 'ADMIN'},
