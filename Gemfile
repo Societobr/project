@@ -41,6 +41,10 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 # envio de email assincrono.
 gem 'sidekiq'
 
+gem 'thin'
+
+gem 'mina'
+
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 # Validador de CPF
 gem "cpf_validator"
