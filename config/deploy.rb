@@ -57,7 +57,7 @@ task :deploy => :environment do
 
     to :launch do
       queue "touch #{deploy_to}/tmp/restart.txt"
-      queue "rvmsudo thin start --threaded -p 80"
+      queue "rvmsudo thin start -e production --threaded -p 80"
     end
   end
 end
