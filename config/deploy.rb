@@ -6,7 +6,7 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 set :domain, 'societo.com.br'
 set :deploy_to, '/root/societo'
 set :repository, 'https://github.com/cristianocasm/societo.git'
-set :branch, 'ProducaoMode'
+set :branch, 'master'
 set :term_mode, nil
 set :rvm_path, '/usr/local/rvm/scripts/rvm'
 set :rails_env, 'production'
