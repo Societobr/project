@@ -15,4 +15,8 @@ every 1.day, at: '06:00am' do
   runner "ContatosController.send_email_expiracao"
 end
 
+every :reboot do
+  runner "/usr/local/rvm/gems/ruby-2.0.0-p481/bin/sidekiq -e production"
+end
+
 # Learn more: http://github.com/javan/whenever
