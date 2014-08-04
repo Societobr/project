@@ -9,7 +9,7 @@
 require 'shellwords'
 
 set :output, File.expand_path('../../log/cron.log', __FILE__).shellescape
-set :environment, "development"
+# set :environment, "development"
 
 every 1.day, at: '06:00am' do
   runner "ContatosController.send_email_expiracao"
