@@ -6,7 +6,7 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 set :domain, 'societo.com.br'
 set :deploy_to, '/root/societo'
 set :repository, 'https://github.com/cristianocasm/societo.git'
-set :branch, 'ProducaoMode'
+set :branch, 'tmpDeploy'
 set :term_mode, nil
 set :rvm_path, '/usr/local/rvm/scripts/rvm'
 set :rails_env, 'production'
@@ -57,7 +57,8 @@ task :deploy => :environment do
 
     to :launch do
       queue "touch #{deploy_to}/tmp/restart.txt"
-      queue "rvmsudo thin start -e production --threaded -p 80"
+      # queue "rvmsudo thin start -e production --threaded -p 80"
+      queue "RAILS_ENV=production rails server thin -d -p 80"
     end
   end
 end
