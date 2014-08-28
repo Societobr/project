@@ -55,7 +55,7 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
     invoke :'rails_db_migrate_production'
-    invoke :rails_assets_precompile_production
+    invoke :'rails_assets_precompile_production'
     invoke :'sidekiq:restart'
 
     to :launch do
