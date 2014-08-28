@@ -56,6 +56,7 @@ task :deploy => :environment do
     invoke :'bundle:install'
     invoke :'rails_db_migrate_production'
     invoke :rails_assets_precompile_production
+    invoke :'sidekiq:restart'
 
     to :launch do
       #queue "RAILS_ENV=production bundle exec rake db:migrate"
@@ -63,7 +64,6 @@ task :deploy => :environment do
       queue "touch #{deploy_to}/tmp/restart.txt"
       # queue "rvmsudo thin start -e production --threaded -p 80"
       queue "RAILS_ENV=production rails server thin -d -p 80"
-      invoke :'sidekiq:restart'
     end
   end
 end
