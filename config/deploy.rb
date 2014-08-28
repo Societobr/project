@@ -52,15 +52,26 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
-    invoke :'rails:db_migrate'
-    invoke :'rails:assets_precompile'
+    invoke :'rails_db_migrate_production'
+    invoke :rails_assets_precompile_production
 
     to :launch do
+      #queue "RAILS_ENV=production bundle exec rake db:migrate"
+      # queue "RAILS_ENV=production bundle exec rake assets:precompile"
       queue "touch #{deploy_to}/tmp/restart.txt"
-      queue "rvmsudo thin start -e production --threaded -p 80"
+      # queue "rvmsudo thin start -e production --threaded -p 80"
+      queue "RAILS_ENV=production rails server thin -d -p 80"
     end
   end
 end
+
+  task :rails_db_migrate_production do
+    queue "RAILS_ENV=production bundle exec rake db:migrate"
+  end
+
+  task :rails_assets_precompile_production do
+    queue "RAILS_ENV=production bundle exec rake assets:precompile"
+  end
 
 # For help in making your deploy script, see the Mina documentation:
 #
