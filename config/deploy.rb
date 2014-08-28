@@ -2,7 +2,6 @@ require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
-require 'mina_sidekiq/tasks'
 
 set :domain, 'societo.com.br'
 set :deploy_to, '/root/societo'
@@ -50,13 +49,11 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
-    invoke :'sidekiq:quiet'
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
     invoke :'rails_db_migrate_production'
-    invoke :'rails_assets_precompile_production'
-    invoke :'sidekiq:restart'
+    invoke :rails_assets_precompile_production
 
     to :launch do
       #queue "RAILS_ENV=production bundle exec rake db:migrate"
