@@ -45,7 +45,7 @@ gem 'thin'
 
 gem 'mina'
 
-#gem 'mina-sidekiq'
+gem 'mina-sidekiq'
 
 gem 'therubyracer', :platform => :ruby
 gem 'execjs'
