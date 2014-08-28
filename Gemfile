@@ -47,6 +47,9 @@ gem 'mina'
 
 #gem 'mina-sidekiq'
 
+gem 'therubyracer', :platform => :ruby
+gem 'execjs'
+
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 # Validador de CPF
 gem "cpf_validator"
