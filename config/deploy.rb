@@ -53,7 +53,7 @@ task :deploy => :environment do
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
     invoke :'rails_db_migrate_production'
-    invoke :rails_assets_precompile_production
+    invoke :'rails_assets_precompile_production'
 
     to :launch do
       #queue "RAILS_ENV=production bundle exec rake db:migrate"
