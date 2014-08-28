@@ -2,6 +2,7 @@ require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rvm'    # for rvm support. (http://rvm.io)
+require 'mina_sidekiq/tasks'
 
 set :domain, 'societo.com.br'
 set :deploy_to, '/root/societo'
@@ -49,6 +50,7 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
+    invoke :'sidekiq:quiet'
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -61,6 +63,7 @@ task :deploy => :environment do
       queue "touch #{deploy_to}/tmp/restart.txt"
       # queue "rvmsudo thin start -e production --threaded -p 80"
       queue "RAILS_ENV=production rails server thin -d -p 80"
+      invoke :'sidekiq:restart'
     end
   end
 end

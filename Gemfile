@@ -45,6 +45,8 @@ gem 'thin'
 
 gem 'mina'
 
+gem 'mina-sidekiq'
+
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 # Validador de CPF
 gem "cpf_validator"
