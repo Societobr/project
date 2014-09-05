@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   # post '/notificacoes', to: 'notifications#create'
   # get 'login', to: 'sessions#new', as: 'login'
   # get 'logout', to: 'sessions#destroy', as: 'logout'
-  # get '/contato', to: 'contatos#new', as: 'contatos'
-  # post '/contato', to: 'contatos#create'
+  get '/contato', to: 'contatos#new', as: 'contatos'
+  post '/contato', to: 'contatos#create'
   # get '/cadastre-se', to: 'clientes#new', as: 'cadastre-se'
   # post '/cadastre-se', to: 'clientes#create', as: 'public_cliente'
 
