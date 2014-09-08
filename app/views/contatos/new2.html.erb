@@ -1,0 +1,52 @@
+<% content_for :head do %>
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><%= full_title "Contato" %></title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <!-- CSS
+      ================================================== -->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <!-- SCRIPTS
+      ================================================== -->
+  </head>
+<% end %>
+
+<div class="main" role="main">
+  <div id="content" class="content page-content full">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <h2>Entre em contato conosco</h2>
+          <p>Envie-nos um e-mail com sua sugestão, crítica ou elogio.</p>
+          <%= render 'form_contato' %>
+          <div class="clearfix"></div>
+          <div id="message"></div>
+        </div>
+        <div class="col-md-5 sidebar right-sidebar">
+          <h3>Social</h3>
+          <ul class="social-icons-list">
+            <li><%= link_to icon("facebook-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("twitter-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("linkedin-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("google-plus-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("youtube-square", '', class: "fa-3x"), '#' %></li>
+          </ul>
+          <ul>
+            <li><strong><%= icon('phone') %> Telefone</strong> XXX XXX XXX</li>
+            <li><strong><%= icon('envelope') %> Email</strong> <%= mail_to 'enquiries@tentered.com', 'XXXX@XXXX.com' %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
