@@ -106,8 +106,8 @@ class ClientesController < ApplicationController
 
       if sucesso?(resposta)
         grava_info_amigo if session[:plano_duplo]
-        ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
-        # ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+        # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         
         if(pagamento_params[:meio_pagamento] == 'debito')
             flash[:notice] = 'Dados atualizados com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
@@ -163,8 +163,8 @@ class ClientesController < ApplicationController
       log.destroy
 
       flash[:notice] = 'Cadastro efetuado com sucesso. Você receberá um email de confirmação quando o pagamento for identificado. Aproveite e veja nossa lista de parceiros.'
-      ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
-      # ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+      # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
+      ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
       
       redirect_to cidades_belo_horizonte_path
       return
@@ -183,8 +183,8 @@ class ClientesController < ApplicationController
 
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.update(cliente_params)
         flash[:notice] = 'Cadastro atualizado com sucesso. Aproveite e veja nossa lista de parceiros.'
-        ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
-        # ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+        # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
         
         redirect_to cidades_belo_horizonte_path
         return
@@ -196,8 +196,8 @@ class ClientesController < ApplicationController
 
       if validate_entries { verify_recaptcha(:model => @cliente, :message => "Captcha incorreto") } && @cliente.save
         flash[:notice] = 'Cadastro efetuado com sucesso. Aproveite e veja nossa lista de parceiros.'
-        ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
-        # ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
+        # ContactMailer.delay.email(EmailCadastroEfetuado.first, @cliente)
+        ContactMailer.email(EmailCadastroEfetuado.first, @cliente).deliver
 
         redirect_to cidades_belo_horizonte_path
         return
@@ -291,8 +291,8 @@ class ClientesController < ApplicationController
 
     def notifica_cliente_por_email(cliente)
       hash = SecureRandom.urlsafe_base64 32
-      ContactMailer.delay.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash)
-      # ContactMailer.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash).deliver
+      # ContactMailer.delay.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash)
+      ContactMailer.email_expiracao_plano(EmailCpfJaCadastrado.first, cliente, hash).deliver
       LogHash.create({cliente_id: cliente.id, rand_hash: hash})
     end
 
@@ -404,8 +404,8 @@ class ClientesController < ApplicationController
     def grava_info_amigo
       hash = SecureRandom.urlsafe_base64 32
       LogHashEmailAmigo.create({cliente_id: @cliente.id, rand_hash: hash, cpf: params[:cliente][:cpf_amigo], email: params[:cliente][:email_amigo]})
-      ContactMailer.delay.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash)
-      # ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
+      # ContactMailer.delay.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash)
+      ContactMailer.email_plano_amigo(EmailAvisoAmigo.first, params[:cliente][:email_amigo], hash).deliver
     end
 
     def trata_se_cadastro_amigo_valido?
