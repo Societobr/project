@@ -174,7 +174,7 @@ a.list-group-item.active:focus,
 	border-top-color:#33cc66;
 }
 .portfolio-item:hover .project-overlay, .blog-image:hover .blog-overlay, .team-item:hover .team-overlay, .parallax-overlay, .services-overlay{
-	background-color:rgba(51,204,102)
+	background-color:rgba(51,204,102,1)
 }
 .reading-block, blockquote{
 	border-left-color:#33cc66;
