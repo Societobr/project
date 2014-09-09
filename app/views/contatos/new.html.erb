@@ -1,304 +1,52 @@
-<!DOCTYPE HTML>
-<!--[if lte IE 9 ]><html class="ie lt-ie9" lang="pt-BR"> <![endif]-->
-
-<head>
 <% content_for :head do %>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= full_title "A maneira elegante de se economizar"%></title>
-    <meta name="description" content="Com o Societo, você vai mais a lugares sofisticados gastando menos!">
-    <meta name="keywords" content="Descontos restaurantes lojas grife comprar societo clube beneficios vantagens">
-    <meta name="author" content="Societo">
-    <!-- CSS  ================================================== -->
+  <head>
+  <!-- Basic Page Needs
+    ================================================== -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><%= full_title "Contato" %></title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <!-- Mobile Specific Metas
+      ================================================== -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <!-- CSS
+      ================================================== -->
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
-
-    <!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="css/ie8.css" media="screen" /><![endif]-->
-
-    <!-- SCRIPTS  ================================================== -->
-    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
-    <!--ícone-->
-    <!--[if lt IE 9]>
-    <script src="js/html5shiv.js"></script>
-    <script src="js/respond.min.js"></script>
-<![endif]-->
-    <script src="js/modernizr.js"></script>
-    <script>
-        <!-- Google Analytics -->
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-50855263-1', 'societo.com.br');
-        ga('send', 'pageview');
-    </script>
-</head>
+    <!-- SCRIPTS
+      ================================================== -->
+  </head>
 <% end %>
 
-<body>
-    <!--[if lt IE 7]>
-	<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-<![endif]-->
-    <!-- Preloader -->
-    <!-- Start Body Container -->
-    <div class="body footer-style3 header-style6 one-pager-alt">
-        <!-- Start Content -->
-        <div class="main pages" role="main">
-            <div class="content full">
-                <section id="slide-1" class="heading-fs-bg">
-                    <div class="bcg">
-                        <!-- Start Header -->
-                        <header class="site-header heading-fs-bg nav-green" id="sticky-nav" name="sticky-nav">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                         <h1 class="logo">
-                                            <%= image_tag("societo.png", :alt => "Societo clube de beneficios") %></h1>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="mmenu-toggle"><i class="fa fa-bars fa-lg"></i>
-                                        </button>
-                                        <nav class="main-menu">
-                                            <ul class="sf-menu" id="main-menu">
-                                                <li><%= link_to 'Societo', http://www.societo.com.br/ %></li>
-
-                                                <li><a href="#">Associar-se </a>
-                                                    <ul class="dropdown">
-                                                        <li><a href="#">Em Breve</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-
-                                                <li><a href="#">Parceiros <i class="fa fa-angle-down"></i></a>
-                                                    <ul class="dropdown">
-                                                        <li><a href="#">Belo Horizonte</a>
-                                                            <ul class="dropdown">
-                                                                <li><a href="#">Em breve</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                            <nav class="mobile-menu">
-                                <div class="container">
-                                    <div class="row"></div>
-                                </div>
-                            </nav>
-                        </header>
-                        <!--SLIDER-->
-                        <div class="header1 padding-tb75" id="content">
-                            <div data-appear-animation="fadeIn" data-appear-animation-delay=".2">
-                                 <h1>Todo cliente é importante</h1>
-                                 <h2>O Societo é uma maneira gratuita para que estabelecimentos de alta qualidade possam atrair e fidelizar clientes relevantes para seu negócio.</h2>
-                            </div>
-                            <ul class="intro-social padding-t125">
-                                <li><a href="#"><i class="fa fa-sm fa-facebook"></i> Facebook</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-sm fa-twitter"></i> Twitter</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-sm fa-google-plus"></i> Google+</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-sm fa-instagram"></i> Instagram</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-                <!--Citação-->
-                <div class="lgray-color text-align-center padding-t75 heading-fs-bg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <article class="quotes mgray-color-text">
-                                    <p>Estabeleça uma relação de fidelidade com clientes que valorizem seu produto.</p>
-                                </article>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--SOCIETO-->
-                <div class="pages lgray-color padding-tb20" id="parc-func">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20">
-                                    <%= image_tag("handshake-g.png", :alt => "Societo") %>
-                                     <h4>Relacione com o cliente</h4>
-                                    <p>Dê a eles um motivo a mais para retornarem. Aumente sua receita, aumentando simultaneamente a fidelidade de seus clientes.</p>
-                                </div>
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20"> <%= image_tag("check-g.png", :alt => "Societo") %>
-                                     <h4>O cliente certo</h4>
-                                    <p>Nossos clientes se associam ao Societo por se identificarem com nossos parceiros. Por isso têm grande potencial de se tornarem clientes fiéis de sua marca.</p>
-                                </div>
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20"> <%= image_tag("premium-g.png", :alt => "Societo") %>
-                                     <h4>Parceiros de qualidade</h4>
-                                    <p>Fazemos parcerias apenas com estabelecimentos de alta qualidade, compatíveis com o perfil de nossos associados.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--SOCIETO-->
-                <div class="pages green-color heading-fs-bg padding-tb45" id="parc-sobre">
-                    <div class="container">
-                            <div class="col-md-3 col-sm-3 text-align-center padding-tb20"> <%= image_tag("grafico-w.png", :alt => "Societo") %>
-                                 <h4>Aumente seus ganhos</h4>
-                                <p>Um cliente recorrente gasta em média 10x mais que um cliente regular a longo prazo, e são responsáveis por até 80% das vendas.</p>
-                            </div>
-                            <div class="col-md-3 col-sm-3 text-align-center padding-tb20"> <%= image_tag("contrato-w.png", :alt => "Societo") %>
-                                 <h4>Sem burocracia</h4>
-                                <p>Não há risco. Caso você não queira mais receber nossos valiosos clientes, o desligamento é muito simples, sem multa ou carência.</p>
-                            </div>
-                            <div class="col-md-3 col-sm-3 text-align-center padding-tb20"> <%= image_tag("cifrao-w.png", :alt => "Societo") %>
-                                 <h4>Gratuito</h4>
-                                <p>Não há risco, mesmo! O custo é <strong>zero</strong> e nós não recebemos comissão. Tudo o que você precisa fazer é oferecer os incentivos acordados.</p>
-                            </div>
-                            <div class="col-md-3 col-sm-3 text-align-center padding-tb20"> <%= image_tag("speaker-w.png", :alt => "Societo") %>
-                                 <h4>Mais Publicidade</h4>
-                                <p>Publicidade gratuita junto a outras marcas de alta qualidade. Além de valorizar ainda mais sua marca, você mantém seus clientes sempre por perto.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--SOCIETO-->
-                <div class="pages padding-t75 lgray-color heading-fs-bg" id="parc-func">
-                    <div class="container">
-                        <div class="col-md-12 text-align-center">
-                             <h2>Experiência agradável para o cliente</h2>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 color-text ">
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20">
-                                     <span class="fa-stack fa-lg fa-3x">
-
-                      <i class="fa fa-circle fa-stack-2x"></i>
-
-                      <i class="fa fa-stack-1x lgray-color-text">1</i>
-
-                    </span>
-                                     <h4>Nosso associado escolhe seu estabelecimento dentre os parceiros do Societo</h4>
-                                </div>
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20">
-                                     <span class="fa-stack fa-lg fa-3x">
-
-                      <i class="fa fa-circle fa-stack-2x"></i>
-
-                      <i class="fa fa-stack-1x lgray-color-text">2</i>
-
-                    </span>
-                                     <h4>Tudo que o cliente precisa fazer é apresentar o cartão de sócio ou CPF ao efetuar o pagamento</h4>
-                                </div>
-                                <div class="col-md-4 col-sm-4 text-align-center padding-tb20">
-                                     <span class="fa-stack fa-lg fa-3x">
-
-                      <i class="fa fa-circle fa-stack-2x"></i>
-
-                      <i class="fa fa-stack-1x lgray-color-text">3</i>
-
-                    </span>
-                                     <h4>Após o atendente checar o cadastro, o cliente já pode receber o benefício.</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="container">
-                        <div class="col-md-12 text-align-center padding-t75">
-                             <h2>Solução simples</h2>
-                        </div>
-                        <div class="col-md-8 col-xs-offset-2">
-                            <div class="col-md-6 col-sm-6 text-align-center padding-tb20"> <i class="fa fa-tablet fa-5x margin-20"></i>
-                                 <h4>PC ou tablet</h4>
-                                <p>Não há necessidade de integrações complicadas. Você já tem o necessário.</p>
-                            </div>
-                            <div class="col-md-6 col-sm-6 text-align-center padding-tb20"> <i class="fa fa-desktop fa-5x margin-20"></i>
-                                 <h4>Acesso à internet</h4>
-                                <p>Você só precisa de acesso à internet e um browser (Internet Explorer 9+ ou Chrome).</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- CONTATO -->
-                <div class="pages" id="parc-func">
-                    <div class="padding-b75 lgray-color text-align-center">
-                        <div class="col-md-12 text-align-center">
-                             <h2>Entre em contato</h2>
-                             <p>Saiba mais sobre o funcionamento e sobre como se tornar parceiro
-                        </div>
-                        <div class="container">
-                            <div class="row col-md-6 col-xs-offset-3 padding-t20">
-                            <%= render 'form_contato' %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Start Footer -->
-                <footer class="site-footer-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <%= image_tag("societo-green.png", :alt => "Societo", :class=>"site-logo") %>
-                            </div>
-                            <div class="col-md-4">
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="social-icons-bar pull-right">
-                                    <li><a href="#"><i class="fa fa-lg fa-facebook"></i></a>
-                                    </li>
-                                    <li><a href="#"><i class="fa fa-lg fa-twitter"></i></a>
-                                    </li>
-                                    <li><a href="#"><i class="fa fa-lg fa-google-plus"></i></a>
-                                    </li>
-                                    <li><a href="#"><i class="fa fa-lg fa-instagram"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-                <!-- End Footer -->                
-            </div>
+<div class="main" role="main">
+  <div id="content" class="content page-content full">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <h2>Entre em contato conosco</h2>
+          <p>Envie-nos um e-mail com sua sugestão, crítica ou elogio.</p>
+          <%= render 'form_contato' %>
+          <div class="clearfix"></div>
+          <div id="message"></div>
         </div>
+        <div class="col-md-5 sidebar right-sidebar">
+          <h3>Social</h3>
+          <ul class="social-icons-list">
+            <li><%= link_to icon("facebook-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("twitter-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("linkedin-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("google-plus-square", '', class: "fa-3x"), '#' %></li>
+            <li><%= link_to icon("youtube-square", '', class: "fa-3x"), '#' %></li>
+          </ul>
+          <ul>
+            <li><strong><%= icon('phone') %> Telefone</strong> XXX XXX XXX</li>
+            <li><strong><%= icon('envelope') %> Email</strong> <%= mail_to 'enquiries@tentered.com', 'XXXX@XXXX.com' %></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <!-- End Body Container -->
-    <script src="js/jquery-2.0.0.min.js"></script>
-    <script>
-        if (typeof jQuery == 'undefined') {
-            document.write(unescape("%3Cscript src='js/jquery-2.0.0.min.js' type='text/javascript'%3E%3C/script%3E"));
-        }
-    </script>
-    <script src="plugins/prettyphoto/js/prettyphoto.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <!-- UI -->
-    <script src="plugins/owl-carousel/js/owl.carousel.min.js"></script>
-    <script src="plugins/page-scroller/jquery.pagescroller.js"></script>
-    <script src="js/helper-plugins.js"></script>
-    <!-- Plugins -->
-    <script src="js/init.js"></script>
-    <!-- All Scripts -->
-    <script src="js/jquery.gmap.js"></script>
-    <script src="js/imagesloaded.js"></script>
-    <!-- Parallax -->
-    <script src="js/skrollr.js"></script>
-    <!-- Parallax -->
-    <script src="js/enquire.min.js"></script>
-    <!-- Parallax -->
-    <!-- End Js -->
-</body>
-</html>
+  </div>
+</div>
