@@ -4,7 +4,7 @@
     <!-- Basic Page Needs
       ================================================== -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> <%= full_title("O Clube de Vantagens mais Completo") %> </title>
+    <title> <%= full_title("") %> </title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
@@ -63,48 +63,4 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script> <!-- Jquery Library Call --> 
 <script>if (typeof jQuery == 'undefined') {document.write(unescape("%3Cscript src='js/jquery-2.0.0.min.js' type='text/javascript'%3E%3C/script%3E"));}</script> 
 <script src="plugins/prettyphoto/js/prettyphoto.js"></script>
-<script src="plugins/prettyphoto/js/prettyphoto.js"></script> 
-<script src="js/bootstrap.js"></script> <!-- UI -->  
-<script src="plugins/owl-carousel/js/owl.carousel.min.js"></script> 
-<script src="plugins/page-scroller/jquery.pagescroller.js"></script> 
-<script src="js/helper-plugins.js"></script> <!-- Plugins --> 
-<script src="plugins/countdown/js/jquery.countdown.min.js"></script> <!-- Plugins --> 
 <script src="js/init.js"></script> <!-- All Scripts -->  
-<script type="text/javascript">
-$(document).ready(function(){
-    var expiryDate = $('#counter').data('date');
-  var target = new Date(expiryDate),
-  finished = false,
-  availiableExamples = {
-    set15daysFromNow: 15 * 24 * 60 * 60 * 1000,
-    set5minFromNow  : 5 * 60 * 1000,
-    set1minFromNow  : 1 * 60 * 1000
-  };
-
-  function callback(event) {
-    $this = $(this);
-    switch(event.type) {
-      case "seconds":
-      case "minutes":
-      case "hours":
-      case "days":
-      case "weeks":
-      case "daysLeft":
-        $this.find('div span#'+event.type).html(event.value);
-        if(finished) {
-          $this.fadeTo(0, 1);
-          finished = false;
-        }
-
-        break;
-      case "finished":
-        $this.fadeTo('slow', .5);
-        finished = true;
-
-        break;
-    }
-  }
-  
-  $('#counter').countdown(target.valueOf(), callback);
-});
-</script>

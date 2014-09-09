@@ -62,16 +62,15 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-3">
-                                         <h1 class="logo"> <a href="index.html">
-                                            <%= image_tag("societo.png", :alt => "Societo clube de beneficios") %> </a> </h1>
+                                         <h1 class="logo">
+                                            <%= image_tag("societo.png", :alt => "Societo clube de beneficios") %></h1>
                                     </div>
                                     <div class="col-md-9">
                                         <button class="mmenu-toggle"><i class="fa fa-bars fa-lg"></i>
                                         </button>
                                         <nav class="main-menu">
                                             <ul class="sf-menu" id="main-menu">
-                                                <li><a href="default.html">Societo </i></a>
-                                                </li>
+                                                <li><%= link_to 'Societo', root_path %></li>
 
                                                 <li><a href="#">Associar-se </a>
                                                     <ul class="dropdown">
